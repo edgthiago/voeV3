@@ -131,57 +131,113 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// POST /api/auth/verificar-token - Verificar se token é válido
-router.post('/verificar-token', async (req, res) => {
+// GET /api/auth/verificar-token - Verificar se o token é válido
+router.get('/verificar-token', verificarAutenticacao, async (req, res) => {
   try {
-    let token = null;
+    // Se chegou até aqui, o middleware verificarAutenticacao já validou o token
+    // e adicionou as informações do usuário ao objeto req.usuario
     
-    // Tentar pegar o token do corpo da requisição
-    if (req.body && req.body.token) {
-      token = req.body.token;
-    }
-    // Se não existir no corpo, tentar pegar do cabeçalho
-    else {
-      token = req.header('Authorization')?.replace('Bearer ', '');
-    }
-
-    if (!token) {
-      return res.status(400).json({
-        sucesso: false,
-        mensagem: 'Token é obrigatório'
-      });
-    }
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'chave_super_secreta_loja_tenis_2024');
-    const usuario = await Usuario.buscarPorId(decoded.userId);
+    // Buscar informações atualizadas do usuário
+    const usuario = await Usuario.buscarPorId(req.usuario.id);
     
-    // Verificar se o usuário existe e está ativo
     if (!usuario) {
-      return res.status(401).json({
+      return res.status(404).json({
         sucesso: false,
         mensagem: 'Usuário não encontrado'
       });
     }
     
+    // Se o usuário foi desativado ou bloqueado após o token ser emitido
     if (usuario.status !== 'ativo') {
-      return res.status(401).json({
+      return res.status(403).json({
         sucesso: false,
-        mensagem: 'Usuário desativado'
+        mensagem: 'Conta desativada ou bloqueada'
       });
     }
-
+    
+    // Token é válido e usuário está ativo
     res.json({
       sucesso: true,
+      mensagem: 'Token válido',
       dados: {
-        usuario,
-        valido: true
+        usuario: {
+          id: usuario.id,
+          nome: usuario.nome,
+          email: usuario.email,
+          tipo_usuario: usuario.tipo_usuario || usuario.nivel_acesso,
+          status: usuario.status
+        }
       }
     });
   } catch (erro) {
     console.error('Erro ao verificar token:', erro);
-    res.status(401).json({
+    res.status(500).json({
       sucesso: false,
-      mensagem: 'Token inválido ou usuário desativado'
+      mensagem: 'Erro interno do servidor ao verificar token'
+    });
+  }
+});
+
+// POST /api/auth/verificar-token - Para compatibilidade com implementações existentes
+router.post('/verificar-token', async (req, res) => {
+  try {
+    const { token } = req.body;
+    
+    if (!token) {
+      return res.status(400).json({
+        sucesso: false,
+        mensagem: 'Token não fornecido'
+      });
+    }
+    
+    // Verificar token
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      
+      // Token válido, buscar usuário
+      const usuario = await Usuario.buscarPorId(decoded.userId);
+      
+      if (!usuario) {
+        return res.status(404).json({
+          sucesso: false,
+          mensagem: 'Usuário não encontrado'
+        });
+      }
+      
+      // Se o usuário foi desativado ou bloqueado após o token ser emitido
+      if (usuario.status !== 'ativo') {
+        return res.status(403).json({
+          sucesso: false,
+          mensagem: 'Conta desativada ou bloqueada'
+        });
+      }
+      
+      // Token é válido e usuário está ativo
+      res.json({
+        sucesso: true,
+        mensagem: 'Token válido',
+        dados: {
+          usuario: {
+            id: usuario.id,
+            nome: usuario.nome,
+            email: usuario.email,
+            tipo_usuario: usuario.tipo_usuario || usuario.nivel_acesso,
+            status: usuario.status
+          }
+        }
+      });
+    } catch (jwtError) {
+      // Token inválido ou expirado
+      return res.status(401).json({
+        sucesso: false,
+        mensagem: 'Token inválido ou expirado'
+      });
+    }
+  } catch (erro) {
+    console.error('Erro ao verificar token:', erro);
+    res.status(500).json({
+      sucesso: false,
+      mensagem: 'Erro interno do servidor ao verificar token'
     });
   }
 });
