@@ -9,7 +9,7 @@ export default function Login() {
     e.preventDefault();
     
     console.log('Iniciando processo de login...');
-    console.log('Endpoint de login:', 'http://localhost:9999/api/auth/login');
+    console.log('Endpoint de login:', 'http://localhost:5000/api/auth/login');
     console.log('Dados de login:', { email: login });
 
     try {
@@ -19,7 +19,7 @@ export default function Login() {
       
       // Usar o serviço de API em vez de fetch diretamente
       // Isso garante que o token seja configurado corretamente
-      const resposta = await fetch('http://localhost:9999/api/auth/login', {
+      const resposta = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -57,7 +57,7 @@ export default function Login() {
         
         // Redirecionar com base no nível de acesso
         const tipoUsuario = dados.dados.usuario?.tipo_usuario || dados.dados.usuario?.nivel_acesso || 'usuario';
-        let destino = '/home';
+        let destino = '/';
         
         // Redirecionamento baseado no tipo de usuário
         switch (tipoUsuario) {
@@ -71,7 +71,7 @@ export default function Login() {
             destino = '/admin/colaborador';
             break;
           default:
-            destino = '/home'; // usuário comum
+            destino = '/'; // usuário comum
         }
         
         alert('Login realizado com sucesso!');

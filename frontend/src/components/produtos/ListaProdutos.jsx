@@ -1,24 +1,37 @@
-// Componente de Lista de Produtos integrado com backend
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom'; // ✅ useEffect e useLocation
 import { useProdutos } from '../../hooks/useApiIntegration';
 import { useUtils } from '../../hooks/useApiIntegration';
 import { useCarrinho } from '../../context/ContextoCarrinho';
 
 const ListaProdutos = () => {
+  const location = useLocation(); // ✅ pega os parâmetros da URL
+
   const [filtros, setFiltros] = useState({
     categoria: '',
     marca: '',
     preco_min: '',
     preco_max: '',
     ordem: 'nome'
-  });  const [termoBusca, setTermoBusca] = useState('');
+  });
+
+  const [termoBusca, setTermoBusca] = useState('');
 
   const { produtos, loading, error, buscarProdutos } = useProdutos(filtros);
   const { adicionarAoCarrinho } = useCarrinho();
   const [carrinhoLoading, setCarrinhoLoading] = useState(false);
   const { formatarPreco } = useUtils();
 
+  // ✅ Busca o termo passado na URL (?search=xxx) e faz a busca automaticamente
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const busca = params.get('search') || '';
+
+    if (busca) {
+      setTermoBusca(busca);
+      buscarProdutos({ ...filtros, busca });
+    }
+  }, [location.search]);
   const handleFiltroChange = (e) => {
     const { name, value } = e.target;
     setFiltros(prev => ({
@@ -46,7 +59,7 @@ const ListaProdutos = () => {
     try {
       setCarrinhoLoading(true);
       const sucesso = await adicionarAoCarrinho(produto);
-      
+
       if (sucesso) {
         // Mostrar notificação de sucesso
         alert('Produto adicionado ao carrinho!');
@@ -72,14 +85,14 @@ const ListaProdutos = () => {
             alt={produto.nome}
             style={{ height: '200px', objectFit: 'cover' }}
           />
-          
+
           {/* Badge de promoção */}
           {produto.em_promocao && (
             <span className="badge bg-danger position-absolute top-0 start-0 m-2">
               OFERTA
             </span>
           )}
-          
+
           {/* Badge de novo */}
           {produto.is_novo && (
             <span className="badge bg-success position-absolute top-0 end-0 m-2">
@@ -130,11 +143,10 @@ const ListaProdutos = () => {
                 {[...Array(5)].map((_, i) => (
                   <i
                     key={i}
-                    className={`bi ${
-                      i < Math.floor(produto.avaliacao_media)
+                    className={`bi ${i < Math.floor(produto.avaliacao_media)
                         ? 'bi-star-fill text-warning'
                         : 'bi-star text-muted'
-                    }`}
+                      }`}
                   ></i>
                 ))}
                 <span className="ms-1 text-muted small">
@@ -163,7 +175,7 @@ const ListaProdutos = () => {
                 <i className="bi bi-eye me-1"></i>
                 Ver Detalhes
               </Link>
-                <button
+              <button
                 onClick={() => handleAdicionarAoCarrinho(produto)}
                 disabled={produto.quantidade_estoque === 0 || carrinhoLoading}
                 className="btn btn-primary btn-sm"
@@ -298,7 +310,7 @@ const ListaProdutos = () => {
                       <option value="lancamentos">Lançamentos</option>
                     </select>
                   </div>
-                  
+
                   <div className="col-md-3 d-flex align-items-end">
                     <button
                       type="button"

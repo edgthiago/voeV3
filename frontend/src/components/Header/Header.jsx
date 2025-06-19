@@ -86,6 +86,8 @@ const Header = () => {
                   </ul>
                 </div>
               )}
+
+              
               
               {/* Botão específico para finalizar compras - apenas usuários nível 2+ */}
               {(isUsuarioCompleto || isAdmin) && (
