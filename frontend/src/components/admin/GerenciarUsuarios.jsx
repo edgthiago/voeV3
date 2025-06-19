@@ -17,54 +17,59 @@ const GerenciarUsuarios = () => {
   useEffect(() => {
     carregarUsuarios();
   }, [filtros]);
-
   const carregarUsuarios = async () => {
     try {
       setLoading(true);
+      console.log('Buscando usuários com filtros:', filtros);
       const response = await adminService.buscarUsuarios(filtros);
+      console.log('Resposta da API:', response);
       
-      if (response.data.sucesso) {
-        setUsuarios(response.data.dados);
+      if (response.sucesso) {
+        setUsuarios(response.dados);
+        console.log('Usuários carregados:', response.dados.length);
       } else {
-        setError('Erro ao carregar usuários');
+        console.error('Erro na resposta:', response);
+        setError('Erro ao carregar usuários: ' + response.mensagem || 'Resposta inválida');
       }
     } catch (error) {
       console.error('Erro ao carregar usuários:', error);
-      setError('Erro ao conectar com o servidor');
+      setError('Erro ao conectar com o servidor: ' + (error.message || 'Erro desconhecido'));
     } finally {
       setLoading(false);
     }
   };
-
   const alterarNivelAcesso = async (userId, novoNivel) => {
     try {
+      console.log(`Alterando nível de acesso do usuário ${userId} para ${novoNivel}`);
       const response = await adminService.alterarNivelAcesso(userId, novoNivel);
+      console.log('Resposta:', response);
       
-      if (response.data.sucesso) {
+      if (response.sucesso) {
         carregarUsuarios();
         setShowModal(false);
         setSelectedUser(null);
       } else {
-        setError(response.data.mensagem || 'Erro ao alterar nível de acesso');
+        setError(response.mensagem || 'Erro ao alterar nível de acesso');
       }
     } catch (error) {
       console.error('Erro ao alterar nível de acesso:', error);
-      setError('Erro ao conectar com o servidor');
+      setError('Erro ao conectar com o servidor: ' + (error.message || 'Erro desconhecido'));
     }
   };
-
   const alterarStatusUsuario = async (userId, novoStatus) => {
     try {
+      console.log(`Alterando status do usuário ${userId} para ${novoStatus ? 'ativo' : 'inativo'}`);
       const response = await adminService.alterarStatusUsuario(userId, novoStatus);
+      console.log('Resposta:', response);
       
-      if (response.data.sucesso) {
+      if (response.sucesso) {
         carregarUsuarios();
       } else {
-        setError(response.data.mensagem || 'Erro ao alterar status do usuário');
+        setError(response.mensagem || 'Erro ao alterar status do usuário');
       }
     } catch (error) {
       console.error('Erro ao alterar status:', error);
-      setError('Erro ao conectar com o servidor');
+      setError('Erro ao conectar com o servidor: ' + (error.message || 'Erro desconhecido'));
     }
   };
 
@@ -72,22 +77,30 @@ const GerenciarUsuarios = () => {
     setSelectedUser(usuario);
     setShowModal(true);
   };
-
   const getBadgeVariant = (nivel) => {
-    switch (nivel) {
+    switch (nivel?.toLowerCase()) {
       case 'diretor':
         return 'primary';
       case 'supervisor':
         return 'warning';
       case 'colaborador':
         return 'secondary';
+      case 'usuario':
+        return 'info';
+      case 'visitante':
+        return 'dark';
       default:
-        return 'light';
+        return 'danger'; // Vermelho para casos não tratados, para tornar visível
     }
-  };
-
-  const getStatusBadge = (ativo) => {
-    return ativo ? (
+  };  const getStatusBadge = (ativo) => {
+    // Lógica mais robusta para verificar o status
+    const isAtivo = ativo === true || 
+                    ativo === "ativo" || 
+                    ativo === "true" || 
+                    ativo === 1 || 
+                    String(ativo).toLowerCase() === "ativo";
+                    
+    return isAtivo ? (
       <Badge bg="success">Ativo</Badge>
     ) : (
       <Badge bg="danger">Inativo</Badge>
@@ -140,8 +153,9 @@ const GerenciarUsuarios = () => {
                 <Form.Select
                   value={filtros.nivel_acesso}
                   onChange={(e) => setFiltros({ ...filtros, nivel_acesso: e.target.value })}
-                >
-                  <option value="">Todos</option>
+                >                  <option value="">Todos</option>
+                  <option value="visitante">Visitante</option>
+                  <option value="usuario">Usuário</option>
                   <option value="colaborador">Colaborador</option>
                   <option value="supervisor">Supervisor</option>
                   <option value="diretor">Diretor</option>
@@ -210,13 +224,12 @@ const GerenciarUsuarios = () => {
                         )}
                       </div>
                     </td>
-                    <td>{usuario.email}</td>
-                    <td>
-                      <Badge bg={getBadgeVariant(usuario.nivel_acesso)}>
-                        {usuario.nivel_acesso?.toUpperCase()}
+                    <td>{usuario.email}</td>                    <td>
+                      <Badge bg={getBadgeVariant(usuario.tipo_usuario || usuario.nivel_acesso)} className="text-uppercase">
+                        {(usuario.tipo_usuario || usuario.nivel_acesso || "desconhecido")}
                       </Badge>
                     </td>
-                    <td>{getStatusBadge(usuario.ativo)}</td>
+                    <td>{getStatusBadge(usuario.status || usuario.ativo)}</td>
                     <td>
                       {new Date(usuario.data_criacao).toLocaleDateString('pt-BR')}
                     </td>
@@ -275,20 +288,22 @@ const GerenciarUsuarios = () => {
                 <strong>Email:</strong> {selectedUser.email}
               </div>
               <Form.Group>
-                <Form.Label>Nível de Acesso</Form.Label>
-                <Form.Select
+                <Form.Label>Nível de Acesso</Form.Label>                <Form.Select
                   defaultValue={selectedUser.nivel_acesso}
                   onChange={(e) => setSelectedUser({ 
                     ...selectedUser, 
                     nivel_acesso: e.target.value 
                   })}
                 >
+                  <option value="visitante">Visitante</option>
+                  <option value="usuario">Usuário</option>
                   <option value="colaborador">Colaborador</option>
                   <option value="supervisor">Supervisor</option>
                   <option value="diretor">Diretor</option>
-                </Form.Select>
-                <Form.Text className="text-muted">
-                  Colaborador: Gerenciar produtos<br />
+                </Form.Select>                <Form.Text className="text-muted">
+                  Visitante: Apenas navegação<br />
+                  Usuário: Carrinho e compras<br />
+                  Colaborador: + Gerenciar produtos<br />
                   Supervisor: + Criar promoções e ver relatórios<br />
                   Diretor: + Gerenciar usuários e ver logs
                 </Form.Text>

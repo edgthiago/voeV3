@@ -10,24 +10,55 @@ const DashboardHome = () => {
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  // Garantir que o token está disponível antes de carregar o dashboard
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      // Verificar se o token é válido
+      import('../../services/api').then(module => {
+        const apiService = module.default;
+        apiService.setToken(token);
+      });
+    }
+    
     carregarDashboard();
-  }, []);
-
-  const carregarDashboard = async () => {
+  }, []);const carregarDashboard = async () => {
     try {
       setLoading(true);
-      const response = await adminService.obterDashboard();
+      console.log('Iniciando carregamento do dashboard...');
+      console.log('Usuário atual:', usuario);
       
-      if (response.data.sucesso) {
-        setDashboardData(response.data.dados);
+      // Verificar token antes de fazer a requisição
+      const token = localStorage.getItem('token');
+      console.log('Token disponível:', !!token);
+      
+      const response = await adminService.obterDashboard();
+      console.log('Resposta do dashboard:', response);
+      
+      if (response && response.sucesso) {
+        console.log('Dados do dashboard recebidos com sucesso:', response.dados);
+        
+        if (!response.dados) {
+          console.error('Resposta sem dados!');
+          setError('Erro: O servidor retornou uma resposta vazia.');
+          return;
+        }
+        
+        // Verificação detalhada dos dados recebidos
+        const { usuarios, produtos, carrinho, promocoes } = response.dados;
+        console.log('Usuários details:', JSON.stringify(usuarios));
+        console.log('Produtos details:', JSON.stringify(produtos));
+        console.log('Carrinho details:', JSON.stringify(carrinho));
+        console.log('Promoções details:', JSON.stringify(promocoes));
+        
+        setDashboardData(response.dados);
       } else {
-        setError('Erro ao carregar dados do dashboard');
+        console.error('Erro na resposta do dashboard:', response);
+        setError('Erro ao carregar dados do dashboard: ' + (response?.mensagem || 'Resposta inválida'));
       }
     } catch (error) {
       console.error('Erro ao carregar dashboard:', error);
-      setError('Erro ao conectar com o servidor');
+      setError('Erro ao conectar com o servidor: ' + (error.message || 'Erro desconhecido'));
     } finally {
       setLoading(false);
     }
@@ -51,17 +82,43 @@ const DashboardHome = () => {
       </div>
     );
   }
-
   if (error) {
     return (
       <Alert variant="danger" className="admin-alert">
         <Alert.Heading>Erro</Alert.Heading>
         <p>{error}</p>
+        <hr />
+        <div className="d-flex justify-content-between">
+          <button 
+            className="btn btn-outline-danger" 
+            onClick={() => window.location.href = '/entrar'}
+          >
+            Voltar ao Login
+          </button>
+          <button 
+            className="btn btn-primary" 
+            onClick={() => {
+              carregarDashboard();
+            }}
+          >
+            Tentar Novamente
+          </button>
+        </div>
       </Alert>
     );
   }
 
   const { usuarios, produtos, carrinho, promocoes } = dashboardData || {};
+
+  // Função para verificar se o usuário tem a permissão necessária
+  const hasPermission = (role) => {
+    if (!usuario) return false;
+    const userRole = usuario.tipo_usuario || usuario.nivel_acesso || usuario.tipo;
+    if (role === 'colaborador') return ['colaborador', 'supervisor', 'diretor'].includes(userRole);
+    if (role === 'supervisor') return ['supervisor', 'diretor'].includes(userRole);
+    if (role === 'diretor') return ['diretor'].includes(userRole);
+    return false;
+  };
 
   return (
     <div>
@@ -71,21 +128,20 @@ const DashboardHome = () => {
           Dashboard Administrativo
         </h2>
         <div className="text-muted">
-          Bem-vindo, {user?.nome}!
+          Bem-vindo, {usuario?.nome}!
         </div>
       </div>
 
       {/* Cards de estatísticas principais */}
-      <Row className="mb-4">
-        <Col md={3} className="mb-3">
+      <Row className="mb-4">        <Col md={3} className="mb-3">
           <Card className="dashboard-card stat-card">
             <Card.Body>
               <i className="bi bi-people fs-1 text-primary mb-3"></i>
-              <div className="stat-number">{usuarios?.total || 0}</div>
+              <div className="stat-number">{usuarios?.total_usuarios || 0}</div>
               <div className="stat-label">Total de Usuários</div>
               {hasPermission('diretor') && (
                 <small className="text-muted">
-                  {usuarios?.ativos || 0} ativos
+                  {usuarios?.usuarios_ativos || 0} ativos
                 </small>
               )}
             </Card.Body>
@@ -96,10 +152,10 @@ const DashboardHome = () => {
           <Card className="dashboard-card stat-card">
             <Card.Body>
               <i className="bi bi-box fs-1 text-success mb-3"></i>
-              <div className="stat-number">{produtos?.total || 0}</div>
+              <div className="stat-number">{produtos?.total_produtos || 0}</div>
               <div className="stat-label">Total de Produtos</div>
               <small className="text-muted">
-                {produtos?.com_estoque || 0} em estoque
+                {produtos?.produtos_em_estoque || 0} em estoque
               </small>
             </Card.Body>
           </Card>
@@ -112,7 +168,7 @@ const DashboardHome = () => {
               <div className="stat-number">{carrinho?.total_itens || 0}</div>
               <div className="stat-label">Itens em Carrinhos</div>
               <small className="text-muted">
-                {carrinho?.carrinhos_ativos || 0} carrinhos ativos
+                {carrinho?.carrinho_ativos || 0} carrinhos ativos
               </small>
             </Card.Body>
           </Card>
@@ -122,10 +178,10 @@ const DashboardHome = () => {
           <Card className="dashboard-card stat-card">
             <Card.Body>
               <i className="bi bi-tag fs-1 text-danger mb-3"></i>
-              <div className="stat-number">{promocoes?.total || 0}</div>
+              <div className="stat-number">{promocoes?.promocoes_totais || 0}</div>
               <div className="stat-label">Promoções</div>
               <small className="text-muted">
-                {promocoes?.ativas || 0} ativas
+                {promocoes?.promocoes_ativas || 0} ativas
               </small>
             </Card.Body>
           </Card>
@@ -140,27 +196,37 @@ const DashboardHome = () => {
               <i className="bi bi-graph-up me-2"></i>
               Visão Geral do Sistema
             </Card.Header>
-            <Card.Body>
-              <Row>
-                <Col md={6}>
+            <Card.Body>              <Row>                <Col md={6}>
                   <h6>Produtos</h6>
                   <ul className="list-unstyled">
-                    <li>• Total: {produtos?.total || 0}</li>
-                    <li>• Com estoque: {produtos?.com_estoque || 0}</li>
-                    <li>• Estoque baixo: {produtos?.estoque_baixo || 0}</li>
-                    <li>• Sem estoque: {produtos?.sem_estoque || 0}</li>
+                    <li>• Total: {produtos?.total_produtos || 0}</li>
+                    <li>• Com estoque: {produtos?.produtos_em_estoque || 0}</li>
+                    <li>• Estoque baixo: {produtos?.produtos_estoque_baixo || 0}</li>
+                    <li>• Sem estoque: {produtos?.produtos_sem_estoque || 0}</li>
+                  </ul>
+                  
+                  <h6 className="mt-4">Carrinhos</h6>
+                  <ul className="list-unstyled">
+                    <li>• Carrinhos ativos: {carrinho?.carrinho_ativos || 0}</li>
+                    <li>• Total de itens: {carrinho?.total_itens || 0}</li>
+                    <li>• Valor médio: R$ {parseFloat(carrinho?.valor_medio_carrinho || 0).toFixed(2)}</li>
                   </ul>
                 </Col>
                 <Col md={6}>
                   <h6>Usuários</h6>
                   <ul className="list-unstyled">
-                    <li>• Total: {usuarios?.total || 0}</li>
-                    <li>• Ativos: {usuarios?.ativos || 0}</li>
-                    <li>• Colaboradores: {usuarios?.colaboradores || 0}</li>
-                    <li>• Supervisores: {usuarios?.supervisores || 0}</li>
-                    {hasPermission('diretor') && (
-                      <li>• Diretores: {usuarios?.diretores || 0}</li>
-                    )}
+                    <li>• Total: {usuarios?.total_usuarios || 0}</li>
+                    <li>• Ativos: {usuarios?.usuarios_ativos || 0}</li>
+                    <li>• Colaboradores: {usuarios?.usuarios_por_nivel?.colaborador || 0}</li>
+                    <li>• Supervisores: {usuarios?.usuarios_por_nivel?.supervisor || 0}</li>
+                    <li>• Diretores: {usuarios?.usuarios_por_nivel?.diretor || 0}</li>
+                  </ul>
+                  
+                  <h6 className="mt-4">Promoções</h6>
+                  <ul className="list-unstyled">
+                    <li>• Ativas: {promocoes?.promocoes_ativas || 0}</li>
+                    <li>• Total: {promocoes?.promocoes_totais || 0}</li>
+                    <li>• Desconto médio: {promocoes?.desconto_medio ? `${parseFloat(promocoes.desconto_medio).toFixed(0)}%` : '0%'}</li>
                   </ul>
                 </Col>
               </Row>
@@ -174,17 +240,16 @@ const DashboardHome = () => {
               <i className="bi bi-person-badge me-2"></i>
               Meu Perfil
             </Card.Header>
-            <Card.Body>
-              <div className="text-center">
+            <Card.Body>              <div className="text-center">
                 <i className="bi bi-person-circle fs-1 text-primary mb-3"></i>
-                <h6>{user?.nome}</h6>
-                <span className={`badge nivel-${user?.nivel_acesso}`}>
-                  {user?.nivel_acesso?.toUpperCase()}
+                <h6>{usuario?.nome}</h6>
+                <span className={`badge nivel-${usuario?.tipo_usuario || usuario?.nivel_acesso}`}>
+                  {(usuario?.tipo_usuario || usuario?.nivel_acesso || '')?.toUpperCase()}
                 </span>
                 <hr />
                 <small className="text-muted">
                   <i className="bi bi-envelope me-1"></i>
-                  {user?.email}
+                  {usuario?.email}
                 </small>
               </div>
             </Card.Body>
@@ -197,24 +262,23 @@ const DashboardHome = () => {
                 Alertas
               </Card.Header>
               <Card.Body>
-                <div className="d-grid gap-2">
-                  {produtos?.estoque_baixo > 0 && (
+                <div className="d-grid gap-2">                  {produtos?.produtos_estoque_baixo > 0 && (
                     <Alert variant="warning" className="mb-2 py-2">
                       <small>
                         <i className="bi bi-box me-1"></i>
-                        {produtos.estoque_baixo} produtos com estoque baixo
+                        {produtos.produtos_estoque_baixo} produtos com estoque baixo
                       </small>
                     </Alert>
                   )}
-                  {promocoes?.expirando > 0 && (
+                  {promocoes?.promocoes_expirando > 0 && (
                     <Alert variant="info" className="mb-2 py-2">
                       <small>
                         <i className="bi bi-clock me-1"></i>
-                        {promocoes.expirando} promoções expirando
+                        {promocoes.promocoes_expirando} promoções expirando
                       </small>
                     </Alert>
                   )}
-                  {!produtos?.estoque_baixo && !promocoes?.expirando && (
+                  {!produtos?.produtos_estoque_baixo && !promocoes?.promocoes_expirando && (
                     <div className="text-center text-muted">
                       <i className="bi bi-check-circle me-1"></i>
                       Nenhum alerta
@@ -240,10 +304,9 @@ const DashboardHome = () => {
                 <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
                   {dashboardData.logs_recentes.length > 0 ? (
                     dashboardData.logs_recentes.map((log, index) => (
-                      <div key={index} className="d-flex align-items-center py-2 border-bottom">
-                        <div className="flex-grow-1">
+                      <div key={index} className="d-flex align-items-center py-2 border-bottom">                        <div className="flex-grow-1">
                           <small className="text-muted">
-                            {new Date(log.data_criacao).toLocaleString('pt-BR')}
+                            {new Date(log.data_acao).toLocaleString('pt-BR')}
                           </small>
                           <div>{log.acao}</div>
                         </div>
