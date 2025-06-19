@@ -6,8 +6,7 @@ class ApiService {
   constructor() {
     this.baseURL = API_BASE_URL;
     this.token = localStorage.getItem('token');
-  }
-  // Método para fazer requisições HTTP
+  }  // Método para fazer requisições HTTP
   async request(endpoint, options = {}) {
     const url = `${this.baseURL}${endpoint}`;
     
@@ -22,15 +21,21 @@ class ApiService {
     // Sempre buscar o token mais recente do localStorage
     const currentToken = this.getToken();
     if (currentToken) {
+      console.log('Enviando requisição com token:', endpoint);
       config.headers.Authorization = `Bearer ${currentToken}`;
+    } else {
+      console.warn('Requisição sem token de autenticação:', endpoint);
     }
 
     try {
+      console.log(`Requisição para ${url}`, config);
       const response = await fetch(url, config);
       const data = await response.json();
+      console.log(`Resposta de ${url}:`, data);
 
       if (!response.ok) {
-        throw new Error(data.mensagem || 'Erro na requisição');
+        console.error(`Erro na requisição ${url}:`, data);
+        throw new Error(data.mensagem || `Erro ${response.status}: ${response.statusText}`);
       }
 
       return data;

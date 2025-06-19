@@ -109,18 +109,57 @@ export const promocoesService = {
   
   // Comprar produto em promoção
   comprar: (id, quantidade) => api.post(`/promocoes/${id}/comprar`, { quantidade }),
-  
-  // Admin: Buscar todas as promoções (apenas supervisor+)
-  buscarTodas: (filtros = {}) => api.get('/promocoes/admin/todas', filtros),
-  
-  // Admin: Criar promoção (apenas supervisor+)
-  criar: (dadosPromocao) => api.post('/promocoes', dadosPromocao),
+    // Admin: Buscar todas as promoções (apenas supervisor+)
+  buscarTodas: async (filtros = {}) => {
+    console.log('Chamando buscarTodas com filtros:', filtros);
+    try {
+      const response = await api.get('/promocoes/admin/todas', filtros);
+      console.log('Resposta de buscarTodas:', response);
+      return response;
+    } catch (error) {
+      console.error('Erro em buscarTodas:', error);
+      // Retorna um objeto com formato compatível para evitar erros na UI
+      return { sucesso: false, mensagem: error.message, dados: [] };
+    }
+  },
+    // Admin: Criar promoção (apenas supervisor+)
+  criar: async (dadosPromocao) => {
+    console.log('Tentando criar promoção:', dadosPromocao);
+    try {
+      const response = await api.post('/promocoes', dadosPromocao);
+      console.log('Promoção criada com sucesso:', response);
+      return response;
+    } catch (error) {
+      console.error('Erro ao criar promoção:', error);
+      throw error;
+    }
+  },
   
   // Admin: Atualizar promoção (apenas supervisor+)
-  atualizar: (id, dadosPromocao) => api.put(`/promocoes/${id}`, dadosPromocao),
+  atualizar: async (id, dadosPromocao) => {
+    console.log(`Tentando atualizar promoção ${id}:`, dadosPromocao);
+    try {
+      const response = await api.put(`/promocoes/${id}`, dadosPromocao);
+      console.log('Promoção atualizada com sucesso:', response);
+      return response;
+    } catch (error) {
+      console.error('Erro ao atualizar promoção:', error);
+      throw error;
+    }
+  },
   
   // Admin: Deletar promoção (apenas supervisor+)
-  deletar: (id) => api.delete(`/promocoes/${id}`),
+  deletar: async (id) => {
+    console.log(`Tentando excluir promoção ${id}`);
+    try {
+      const response = await api.delete(`/promocoes/${id}`);
+      console.log('Promoção excluída com sucesso:', response);
+      return response;
+    } catch (error) {
+      console.error('Erro ao excluir promoção:', error);
+      throw error;
+    }
+  },
   
   // Admin: Alterar status da promoção (apenas supervisor+)
   alterarStatus: (id, ativa) => api.patch(`/promocoes/${id}/status`, { ativa }),
@@ -136,9 +175,32 @@ export const promocoesService = {
 };
 
 // Serviços administrativos
-export const adminService = {
-  // Dashboard principal (apenas colaborador+)
-  obterDashboard: () => api.get('/admin/dashboard'),
+export const adminService = {  // Dashboard principal (apenas colaborador+)
+  obterDashboard: async () => {
+    try {
+      console.log('Chamando API para obter dashboard...');
+      const response = await api.get('/admin/dashboard');
+      console.log('Dados do dashboard recebidos:', response);
+      
+      // Verificação adicional dos dados para depuração
+      if (response && response.dados) {
+        const { usuarios, produtos, carrinho, promocoes } = response.dados;
+        console.log('Usuários:', usuarios);
+        console.log('Produtos:', produtos);
+        console.log('Carrinho:', carrinho);
+        console.log('Promoções:', promocoes);
+      }
+      
+      return response;
+    } catch (error) {
+      console.error('Erro ao obter dashboard:', error);
+      return { 
+        sucesso: false, 
+        mensagem: error.message || 'Erro ao comunicar com servidor',
+        dados: null
+      };
+    }
+  },
   
   // Gerenciar usuários (apenas diretor)
   buscarUsuarios: (filtros = {}) => api.get('/admin/usuarios', filtros),
@@ -151,14 +213,33 @@ export const adminService = {
   
   // Visualizar logs do sistema (apenas diretor)
   buscarLogs: (filtros = {}) => api.get('/admin/logs', filtros),
-  
-  // Relatórios
+    // Relatórios
   relatorios: {
     // Relatório de vendas (apenas supervisor+)
-    vendas: (filtros = {}) => api.get('/admin/relatorios/vendas', filtros),
+    vendas: async (filtros = {}) => {
+      try {
+        console.log('Solicitando relatório de vendas com filtros:', filtros);
+        const response = await api.get('/admin/relatorios/vendas', filtros);
+        console.log('Resposta relatório de vendas:', response);
+        return response;
+      } catch (error) {
+        console.error('Erro ao obter relatório de vendas:', error);
+        throw error;
+      }
+    },
     
     // Relatório de estoque (apenas colaborador+)
-    estoque: () => api.get('/admin/relatorios/estoque'),
+    estoque: async () => {
+      try {
+        console.log('Solicitando relatório de estoque');
+        const response = await api.get('/admin/relatorios/estoque');
+        console.log('Resposta relatório de estoque:', response);
+        return response;
+      } catch (error) {
+        console.error('Erro ao obter relatório de estoque:', error);
+        throw error;
+      }
+    },
   },
   
   // Fazer backup dos dados (apenas diretor)
