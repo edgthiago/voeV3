@@ -16,17 +16,36 @@ const VisualizarLogs = () => {
 
   useEffect(() => {
     carregarLogs();
-  }, [filtros]);
+  }, []); // Removido o efeito secundário nos filtros para evitar múltiplas chamadas
+
+  const aplicarFiltros = () => {
+    carregarLogs();
+  };
 
   const carregarLogs = async () => {
     try {
       setLoading(true);
-      const response = await adminService.buscarLogs(filtros);
+      setError(null); // Limpa erros anteriores
       
-      if (response.data.sucesso) {
-        setLogs(response.data.dados);
+      const filtrosParaEnvio = { ...filtros };
+      
+      // Remover campos vazios
+      Object.keys(filtrosParaEnvio).forEach(key => {
+        if (!filtrosParaEnvio[key]) {
+          delete filtrosParaEnvio[key];
+        }
+      });
+      
+      console.log('Enviando filtros para API:', filtrosParaEnvio);
+      
+      const response = await adminService.buscarLogs(filtrosParaEnvio);
+      
+      if (response.sucesso) {
+        console.log('Logs recebidos:', response.dados);
+        setLogs(response.dados);
       } else {
-        setError('Erro ao carregar logs do sistema');
+        console.error('Erro na resposta:', response);
+        setError(response.mensagem || 'Erro ao carregar logs do sistema');
       }
     } catch (error) {
       console.error('Erro ao carregar logs:', error);
@@ -37,10 +56,16 @@ const VisualizarLogs = () => {
   };
 
   const formatarData = (data) => {
-    return new Date(data).toLocaleString('pt-BR');
+    try {
+      return new Date(data).toLocaleString('pt-BR');
+    } catch (e) {
+      return 'Data inválida';
+    }
   };
 
   const getAcaoBadge = (acao) => {
+    if (!acao) return <Badge bg="secondary">Desconhecida</Badge>;
+    
     const acaoLower = acao.toLowerCase();
     
     if (acaoLower.includes('login') || acaoLower.includes('autenticacao')) {
@@ -144,6 +169,12 @@ const VisualizarLogs = () => {
               </Form.Group>
             </Col>
           </Row>
+          <div className="d-flex justify-content-end">
+            <Button variant="outline-primary" onClick={aplicarFiltros}>
+              <i className="bi bi-funnel-fill me-2"></i>
+              Aplicar Filtros
+            </Button>
+          </div>
         </Card.Body>
       </Card>
 
@@ -177,7 +208,7 @@ const VisualizarLogs = () => {
                         <small className="text-muted">#{log.id}</small>
                       </td>
                       <td>
-                        <small>{formatarData(log.data_criacao)}</small>
+                        <small>{formatarData(log.data_acao || log.data_criacao)}</small>
                       </td>
                       <td>
                         <div>
@@ -192,7 +223,7 @@ const VisualizarLogs = () => {
                         {getAcaoBadge(log.acao)}
                       </td>
                       <td>
-                        <small className="text-muted">{log.ip || 'N/A'}</small>
+                        <small className="text-muted">{log.ip_usuario || log.ip || 'N/A'}</small>
                       </td>
                       <td>
                         {log.detalhes_json && (

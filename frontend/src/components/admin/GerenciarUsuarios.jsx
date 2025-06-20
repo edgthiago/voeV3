@@ -211,10 +211,10 @@ const GerenciarUsuarios = () => {
             </thead>
             <tbody>
               {usuarios.length > 0 ? (
-                usuarios.map((usuario) => (
-                  <tr key={usuario.id}>
+                usuarios.map((usuario) => (                  <tr key={usuario.id}>
                     <td>{usuario.id}</td>
-                    <td>                      <div>
+                    <td>
+                      <div>
                         <strong>{usuario.nome}</strong>
                         {usuario.telefone && (
                           <>
@@ -224,7 +224,8 @@ const GerenciarUsuarios = () => {
                         )}
                       </div>
                     </td>
-                    <td>{usuario.email}</td>                    <td>
+                    <td>{usuario.email}</td>
+                    <td>
                       <Badge bg={getBadgeVariant(usuario.tipo_usuario || usuario.nivel_acesso)} className="text-uppercase">
                         {(usuario.tipo_usuario || usuario.nivel_acesso || "desconhecido")}
                       </Badge>
