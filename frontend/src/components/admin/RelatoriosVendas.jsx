@@ -96,13 +96,13 @@ const RelatoriosVendas = () => {
                   {/* Estatísticas resumidas */}
                   <Row className="mb-4">
                     <Col md={3}>
-                      <div className="stat-card text-center">
-                        <div className="stat-number text-primary">
+                      <div className="stat-card text-center">                        <div className="stat-number text-primary">
                           {vendas_por_dia.reduce((total, item) => total + item.total_promocoes, 0)}
                         </div>
                         <div className="stat-label">Total de Promoções</div>
                       </div>
-                    </Col>                    <Col md={3}>
+                    </Col>
+                    <Col md={3}>
                       <div className="stat-card text-center">
                         <div className="stat-number text-success">
                           {vendas_por_dia.reduce((total, item) => total + parseInt(item.produtos_vendidos || 0), 0)}
@@ -126,18 +126,17 @@ const RelatoriosVendas = () => {
                         <div className="stat-label">Dias com Vendas</div>
                       </div>
                     </Col>
-                  </Row>
-
-                  {/* Tabela detalhada */}
+                  </Row>                  {/* Tabela detalhada */}
                   <div className="table-responsive">
-                    <Table striped hover>                      <thead>
-                      <tr>
-                        <th>Data</th>
-                        <th>Promoções</th>
-                        <th>Produtos Vendidos</th>
-                        <th>Receita</th>
-                        <th>Ticket Médio</th>
-                      </tr>
+                    <Table striped hover>
+                      <thead>
+                        <tr>
+                          <th>Data</th>
+                          <th>Promoções</th>
+                          <th>Produtos Vendidos</th>
+                          <th>Receita</th>
+                          <th>Ticket Médio</th>
+                        </tr>
                       </thead>
                       <tbody>
                         {vendas_por_dia.map((item, index) => (<tr key={index}>
@@ -185,9 +184,9 @@ const RelatoriosVendas = () => {
               Top 10 Produtos Mais Vendidos
             </Card.Header>
             <Card.Body>
-              {top_produtos && top_produtos.length > 0 ? (
-                <div className="table-responsive">
-                  <Table striped hover>                    <thead>
+              {top_produtos && top_produtos.length > 0 ? (                <div className="table-responsive">
+                  <Table striped hover>
+                    <thead>
                       <tr>
                         <th>#</th>
                         <th>Produto</th>

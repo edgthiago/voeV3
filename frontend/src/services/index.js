@@ -212,7 +212,22 @@ export const adminService = {  // Dashboard principal (apenas colaborador+)
   alterarStatusUsuario: (id, ativo) => api.put(`/admin/usuarios/${id}/status`, { ativo }),
   
   // Visualizar logs do sistema (apenas diretor)
-  buscarLogs: (filtros = {}) => api.get('/admin/logs', filtros),
+  buscarLogs: async (filtros = {}) => {
+    try {
+      console.log('Solicitando logs do sistema com filtros:', filtros);
+      const response = await api.get('/admin/logs', filtros); // Passa os filtros diretamente, sem o objeto params
+      console.log('Resposta de logs do sistema:', response);
+      return response;
+    } catch (error) {
+      console.error('Erro ao buscar logs:', error);
+      // Retorna um objeto com formato compatível para evitar erros na UI
+      return { 
+        sucesso: false, 
+        mensagem: error.message || 'Erro ao conectar com o servidor', 
+        dados: []
+      };
+    }
+  },
     // Relatórios
   relatorios: {
     // Relatório de vendas (apenas supervisor+)
