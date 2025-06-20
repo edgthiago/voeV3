@@ -10,7 +10,7 @@ const Header = () => {
   const navigate = useNavigate();
   const path = location.pathname;
   const [searchTerm, setSearchTerm] = useState('');
-  //ao atualizar a pagina, o que esta na barra de pesquisa é apagado
+  //ao atualizar a pagina, o que esta na barra de pesquisa é apaga
   useEffect(() => {
     setSearchTerm('');
   }, []);
