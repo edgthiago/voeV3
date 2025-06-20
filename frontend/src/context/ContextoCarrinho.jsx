@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 import { carrinhoService, authService } from '../services';
 
 // Criando o contexto do carrinho
-const ContextoCarrinho = createContext();
+export const ContextoCarrinho = createContext();
 
 // Hook personalizado para usar o contexto do carrinho
 export const useCarrinho = () => useContext(ContextoCarrinho);
@@ -236,12 +236,9 @@ export const ProvedorCarrinho = ({ children }) => {
     obterTotalCarrinho,
     obterCarrinho
   };
-
   return (
     <ContextoCarrinho.Provider value={valor}>
       {children}
     </ContextoCarrinho.Provider>
   );
 };
-
-export default ContextoCarrinho;

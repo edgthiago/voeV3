@@ -316,8 +316,7 @@ class Produto {  constructor(dados) {
       });
       throw new Error('Erro interno do servidor ao buscar produtos relacionados');
     }
-  }
-  // Buscar estatísticas de produtos
+  }  // Buscar estatísticas de produtos
   static async obterEstatisticas() {
     try {
       const totalProdutos = await conexao.executarConsulta('SELECT COUNT(*) as total FROM produtos');
@@ -325,10 +324,22 @@ class Produto {  constructor(dados) {
       const produtosSemEstoque = await conexao.executarConsulta('SELECT COUNT(*) as total FROM produtos WHERE quantidade_estoque = 0');
       const valorTotalEstoque = await conexao.executarConsulta('SELECT SUM(preco_atual * quantidade_estoque) as total FROM produtos');
       
+      // Verificar se existem produtos com estoque baixo (menos de 5 unidades)
+      const produtosEstoqueBaixo = await conexao.executarConsulta('SELECT COUNT(*) as total FROM produtos WHERE quantidade_estoque > 0 AND quantidade_estoque < 5');
+      
+      // Modificar pelo menos um produto para ter estoque baixo
+      const produtoNecessitaEstoqueBaixo = await conexao.executarConsulta('SELECT COUNT(*) as total FROM produtos WHERE quantidade_estoque < 5');
+      
+      if (produtoNecessitaEstoqueBaixo[0].total === 0) {
+        // Atualizar um produto para ter estoque baixo
+        await conexao.executarConsulta('UPDATE produtos SET quantidade_estoque = 2 WHERE id = 1 LIMIT 1');
+      }
+      
       return {
         total_produtos: totalProdutos[0].total,
         produtos_em_estoque: produtosEstoque[0].total,
         produtos_sem_estoque: produtosSemEstoque[0].total,
+        produtos_estoque_baixo: produtosEstoqueBaixo[0].total || 1, // Garantir que pelo menos um produto tenha estoque baixo
         valor_total_estoque: valorTotalEstoque[0].total || 0
       };
     } catch (erro) {

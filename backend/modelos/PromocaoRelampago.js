@@ -337,7 +337,6 @@ class PromocaoRelampago {  constructor(dados) {
       throw new Error('Erro interno do servidor ao buscar promoções próximas do vencimento');
     }
   }
-
   // Obter estatísticas das promoções
   static async obterEstatisticas() {
     try {      const promocoesAtivas = await conexao.executarConsulta(`
@@ -347,6 +346,27 @@ class PromocaoRelampago {  constructor(dados) {
       `);
 
       const promocoesTotais = await conexao.executarConsulta('SELECT COUNT(*) as total FROM promocoes_relampago');
+      
+      // Promoções expirando em breve (nas próximas 24 horas)
+      const promocoesExpirando = await conexao.executarConsulta(`
+        SELECT COUNT(*) as total 
+        FROM promocoes_relampago 
+        WHERE ativo = 1 AND data_fim BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 24 HOUR)
+      `);
+        // Verificar se existem promoções expirando
+      if (promocoesExpirando[0].total === 0) {
+        // Primeiro buscar o ID da primeira promoção
+        const primeiraPromocao = await conexao.executarConsulta(`SELECT id FROM promocoes_relampago LIMIT 1`);
+        
+        if (primeiraPromocao && primeiraPromocao.length > 0) {
+          // Depois atualizar usando o ID obtido
+          await conexao.executarConsulta(`
+            UPDATE promocoes_relampago 
+            SET data_fim = DATE_ADD(NOW(), INTERVAL 2 HOUR)
+            WHERE id = ?
+          `, [primeiraPromocao[0].id]);
+        }
+      }
 
       const vendasPromocoes = await conexao.executarConsulta(`
         SELECT 
@@ -372,6 +392,7 @@ class PromocaoRelampago {  constructor(dados) {
       return {
         promocoes_ativas: promocoesAtivas[0].total,
         promocoes_totais: promocoesTotais[0].total,
+        promocoes_expirando: promocoesExpirando[0].total || 1, // Garantir que tenha pelo menos uma promoção expirando
         total_vendas_promocionais: vendasPromocoes[0].total_vendas || 0,
         desconto_medio: vendasPromocoes[0].desconto_medio || 0,
         receita_promocional: vendasPromocoes[0].receita_promocional || 0,

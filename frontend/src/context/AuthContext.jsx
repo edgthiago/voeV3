@@ -75,39 +75,60 @@ const authReducer = (state, action) => {
 };
 
 // Criando o contexto
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
 // Provider do contexto de autenticação
 export const AuthProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(authReducer, authInitialState);
-  // Verificar autenticação ao inicializar
+  const [state, dispatch] = useReducer(authReducer, authInitialState);  // Verificar autenticação ao inicializar
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
+        console.log('Verificando status de autenticação...');
         dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: true });
         
         const isLoggedIn = authService.isLoggedIn();
         const currentUser = authService.getCurrentUser();
+        
+        console.log('isLoggedIn:', isLoggedIn);
+        console.log('currentUser:', currentUser);
 
         if (isLoggedIn && currentUser) {
+          console.log('Token e usuário encontrados no localStorage');
           // Verificar se o token ainda é válido fazendo uma chamada para o backend
           try {
+            console.log('Verificando validade do token com o backend...');
             const tokenValid = await authService.verificarToken();
+            console.log('Resposta da verificação de token:', tokenValid);
+            
             if (tokenValid && tokenValid.sucesso) {
+              console.log('Token válido, estabelecendo sessão');
               dispatch({
                 type: AUTH_ACTIONS.LOGIN_SUCCESS,
                 payload: { usuario: currentUser }
               });
             } else {
-              // Token inválido, fazer logout
+              console.warn('Token inválido ou expirado, fazendo logout');
               authService.logout();
               dispatch({ type: AUTH_ACTIONS.LOGOUT });
-            }          } catch {
-            // Se a verificação falhar, considerar como não autenticado
-            authService.logout();
-            dispatch({ type: AUTH_ACTIONS.LOGOUT });
+            }
+          } catch (error) {
+            console.error('Erro ao verificar token:', error);
+            // Aqui decidimos ser mais tolerantes - se existir o usuário no localStorage,
+            // confiamos nessa informação mesmo que a verificação falhe (ex: problemas de rede)
+            if (currentUser && Object.keys(currentUser).length > 0) {
+              console.log('Usando dados armazenados localmente como contingência');
+              dispatch({
+                type: AUTH_ACTIONS.LOGIN_SUCCESS,
+                payload: { usuario: currentUser }
+              });
+            } else {
+              console.warn('Falha na verificação sem dados locais válidos, fazendo logout');
+              authService.logout();
+              dispatch({ type: AUTH_ACTIONS.LOGOUT });
+            }
           }
         } else {
+          console.log('Usuário não está logado');
           dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: false });
         }
       } catch (error) {
@@ -301,8 +322,5 @@ export const withAuth = (Component, requiredPermission = null) => {
       );
     }
 
-    return <Component {...props} />;
-  };
+    return <Component {...props} />;  };
 };
-
-export default AuthContext;

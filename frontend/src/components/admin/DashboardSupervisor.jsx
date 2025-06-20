@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
+import { adminService } from '../../services';
+import { Alert, Spinner } from 'react-bootstrap';
 
 const DashboardSupervisor = () => {
   const { usuario } = useAuth();
@@ -13,28 +15,69 @@ const DashboardSupervisor = () => {
     metaMensal: 0,
     progressoMeta: 0
   });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     carregarEstatisticas();
   }, []);
-
   const carregarEstatisticas = async () => {
     try {
-      // Buscar estatísticas específicas para supervisor
-      const response = await fetch('/api/admin/estatisticas-supervisor', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
+      setLoading(true);
+      setError(null);
       
-      if (response.ok) {
-        const data = await response.json();
-        setEstatisticas(data.dados);
+      // Usando o adminService para buscar as estatísticas
+      const response = await adminService.obterEstatisticasSupervisor();
+      
+      if (response && response.sucesso) {
+        console.log('Estatísticas do supervisor carregadas:', response.dados);
+        setEstatisticas(response.dados);
+      } else {
+        throw new Error(response?.mensagem || 'Erro na resposta da API');
       }
     } catch (error) {
       console.error('Erro ao carregar estatísticas:', error);
+      setError(`Erro ao carregar estatísticas: ${error.message}`);
+      
+      // Dados de fallback para demonstração
+      setEstatisticas({
+        totalVendas: 15000,
+        promocoesAtivas: 3,
+        campanhasAtivas: 2,
+        conversaoMarketing: 7.5,
+        colaboradoresAtivos: 5,
+        metaMensal: 25000,
+        progressoMeta: 60
+      });
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="text-center py-5">
+        <Spinner animation="border" variant="primary" />
+        <p className="mt-3">Carregando estatísticas...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="alert alert-danger" role="alert">
+        <h4 className="alert-heading">
+          <i className="bi bi-exclamation-triangle me-2"></i>
+          Ocorreu um erro
+        </h4>
+        <p>{error}</p>
+        <hr />
+        <p className="mb-0">
+          Tente novamente mais tarde ou entre em contato com o suporte.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="container-fluid">

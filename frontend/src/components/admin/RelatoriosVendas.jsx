@@ -10,30 +10,35 @@ const RelatoriosVendas = () => {
   useEffect(() => {
     carregarRelatorio();
   }, []);
-
   const carregarRelatorio = async () => {
     try {
       setLoading(true);
+      console.log('Solicitando relatório de vendas...');
       const response = await adminService.relatorios.vendas();
+      console.log('Resposta do relatório:', response);
       
-      if (response.data.sucesso) {
-        setRelatorioData(response.data.dados);
+      if (response && response.sucesso) {
+        setRelatorioData(response.dados);
+        console.log('Dados do relatório carregados:', response.dados);
       } else {
-        setError('Erro ao carregar relatório de vendas');
+        const errorMsg = response?.mensagem || 'Erro ao carregar relatório de vendas';
+        console.error('Erro na resposta:', errorMsg);
+        setError(errorMsg);
       }
     } catch (error) {
       console.error('Erro ao carregar relatório:', error);
-      setError('Erro ao conectar com o servidor');
+      setError(`Erro ao conectar com o servidor: ${error.message || 'Verifique a conexão'}`);
     } finally {
       setLoading(false);
     }
   };
-
   const formatarMoeda = (valor) => {
+    // Certificar-se de que o valor é um número
+    const valorNumerico = parseFloat(valor);
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
       currency: 'BRL'
-    }).format(valor || 0);
+    }).format(isNaN(valorNumerico) ? 0 : valorNumerico);
   };
 
   const formatarData = (data) => {
@@ -91,8 +96,7 @@ const RelatoriosVendas = () => {
                   {/* Estatísticas resumidas */}
                   <Row className="mb-4">
                     <Col md={3}>
-                      <div className="stat-card text-center">
-                        <div className="stat-number text-primary">
+                      <div className="stat-card text-center">                        <div className="stat-number text-primary">
                           {vendas_por_dia.reduce((total, item) => total + item.total_promocoes, 0)}
                         </div>
                         <div className="stat-label">Total de Promoções</div>
@@ -101,7 +105,7 @@ const RelatoriosVendas = () => {
                     <Col md={3}>
                       <div className="stat-card text-center">
                         <div className="stat-number text-success">
-                          {vendas_por_dia.reduce((total, item) => total + item.produtos_vendidos, 0)}
+                          {vendas_por_dia.reduce((total, item) => total + parseInt(item.produtos_vendidos || 0), 0)}
                         </div>
                         <div className="stat-label">Produtos Vendidos</div>
                       </div>
@@ -109,7 +113,7 @@ const RelatoriosVendas = () => {
                     <Col md={3}>
                       <div className="stat-card text-center">
                         <div className="stat-number text-warning">
-                          {formatarMoeda(vendas_por_dia.reduce((total, item) => total + item.receita, 0))}
+                          {formatarMoeda(vendas_por_dia.reduce((total, item) => total + parseFloat(item.receita || 0), 0))}
                         </div>
                         <div className="stat-label">Receita Total</div>
                       </div>
@@ -122,9 +126,7 @@ const RelatoriosVendas = () => {
                         <div className="stat-label">Dias com Vendas</div>
                       </div>
                     </Col>
-                  </Row>
-
-                  {/* Tabela detalhada */}
+                  </Row>                  {/* Tabela detalhada */}
                   <div className="table-responsive">
                     <Table striped hover>
                       <thead>
@@ -137,24 +139,23 @@ const RelatoriosVendas = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {vendas_por_dia.map((item, index) => (
-                          <tr key={index}>
+                        {vendas_por_dia.map((item, index) => (<tr key={index}>
                             <td>{formatarData(item.data)}</td>
                             <td>
                               <span className="badge bg-primary">
-                                {item.total_promocoes}
+                                {parseInt(item.total_promocoes || 0)}
                               </span>
                             </td>
                             <td>
                               <span className="badge bg-success">
-                                {item.produtos_vendidos}
+                                {parseInt(item.produtos_vendidos || 0)}
                               </span>
                             </td>
                             <td>
-                              <strong>{formatarMoeda(item.receita)}</strong>
+                              <strong>{formatarMoeda(parseFloat(item.receita || 0))}</strong>
                             </td>
                             <td>
-                              {formatarMoeda(item.receita / (item.produtos_vendidos || 1))}
+                              {formatarMoeda(parseFloat(item.receita || 0) / (parseInt(item.produtos_vendidos || 1)))}
                             </td>
                           </tr>
                         ))}
@@ -183,8 +184,7 @@ const RelatoriosVendas = () => {
               Top 10 Produtos Mais Vendidos
             </Card.Header>
             <Card.Body>
-              {top_produtos && top_produtos.length > 0 ? (
-                <div className="table-responsive">
+              {top_produtos && top_produtos.length > 0 ? (                <div className="table-responsive">
                   <Table striped hover>
                     <thead>
                       <tr>

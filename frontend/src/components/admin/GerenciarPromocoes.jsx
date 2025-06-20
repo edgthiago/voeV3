@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { adminService } from '../../services';
+import { adminService, promocoesService, produtosService } from '../../services';
 
 const GerenciarPromocoes = ({ userPermissions }) => {
     const [promocoes, setPromocoes] = useState([]);
     const [produtos, setProdutos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [errorDetail, setErrorDetail] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [editingPromocao, setEditingPromocao] = useState(null);
     const [filtroStatus, setFiltroStatus] = useState('all');
@@ -31,19 +32,42 @@ const GerenciarPromocoes = ({ userPermissions }) => {
 
     useEffect(() => {
         carregarDados();
-    }, []);
-
-    const carregarDados = async () => {
+    }, []);    const carregarDados = async () => {
         try {
             setLoading(true);
+            console.log('Carregando promoções e produtos...');
+            
             const [promocoesData, produtosData] = await Promise.all([
-                adminService.obterPromocoes(),
-                adminService.obterProdutos()
+                promocoesService.buscarTodas(),
+                produtosService.buscarTodos()
             ]);
-            setPromocoes(promocoesData);
-            setProdutos(produtosData);
-        } catch (err) {
-            setError('Erro ao carregar dados: ' + err.message);
+            
+            console.log('Dados recebidos - Promoções:', promocoesData);
+            console.log('Dados recebidos - Produtos:', produtosData);
+            
+            // Verifica se os dados vieram no formato esperado e extrai apenas o que precisamos
+            const promocoesArray = promocoesData?.dados || [];
+            const produtosArray = produtosData?.dados || [];
+            
+            setPromocoes(promocoesArray);
+            setProdutos(produtosArray);
+            
+            if (promocoesArray.length === 0) {
+                console.warn('Nenhuma promoção encontrada. Verifique se o usuário tem permissões adequadas.');
+            }
+            
+            if (produtosArray.length === 0) {
+                console.warn('Nenhum produto encontrado. Verifique se há produtos cadastrados.');
+            }        } catch (err) {
+            console.error('Erro ao carregar dados:', err);
+            const mensagemErro = 'Erro ao carregar dados: ' + (err.message || 'Erro de comunicação com o servidor');
+            setError(mensagemErro);
+            setErrorDetail({
+                mensagem: mensagemErro,
+                permissao: mensagemErro.toLowerCase().includes('permissão') || 
+                           mensagemErro.toLowerCase().includes('autorização'),
+                timestamp: new Date().toISOString()
+            });
         } finally {
             setLoading(false);
         }
@@ -59,12 +83,10 @@ const GerenciarPromocoes = ({ userPermissions }) => {
                 valor: parseFloat(formData.valor),
                 limite_uso: formData.limite_uso ? parseInt(formData.limite_uso) : null,
                 produto_id: formData.produto_id || null
-            };
-
-            if (editingPromocao) {
-                await adminService.atualizarPromocao(editingPromocao.id, promocaoData);
+            };            if (editingPromocao) {
+                await promocoesService.atualizar(editingPromocao.id, promocaoData);
             } else {
-                await adminService.criarPromocao(promocaoData);
+                await promocoesService.criar(promocaoData);
             }
 
             await carregarDados();
@@ -99,21 +121,20 @@ const GerenciarPromocoes = ({ userPermissions }) => {
         
         try {
             setLoading(true);
-            await adminService.deletarPromocao(id);
+            await promocoesService.deletar(id);
             await carregarDados();
         } catch (err) {
             setError('Erro ao excluir promoção: ' + err.message);
         } finally {
             setLoading(false);
         }
-    };
-
-    const toggleStatus = async (id, novoStatus) => {
+    };    const toggleStatus = async (id, novoStatus) => {
         try {
-            await adminService.atualizarPromocao(id, { ativo: novoStatus });
+            await promocoesService.alterarStatus(id, novoStatus);
             await carregarDados();
         } catch (err) {
-            setError('Erro ao atualizar status: ' + err.message);
+            console.error('Erro ao atualizar status:', err);
+            setError('Erro ao atualizar status: ' + (err.message || 'Erro de comunicação com o servidor'));
         }
     };
 
@@ -161,10 +182,20 @@ const GerenciarPromocoes = ({ userPermissions }) => {
         if (agora < inicio) return { status: 'agendada', label: 'Agendada', class: 'status-scheduled' };
         if (agora > fim) return { status: 'expirada', label: 'Expirada', class: 'status-expired' };
         return { status: 'ativa', label: 'Ativa', class: 'status-active' };
-    };
-
-    if (loading && promocoes.length === 0) {
+    };    if (loading && promocoes.length === 0) {
         return <div className="loading">Carregando promoções...</div>;
+    }
+    
+    // Verifica se o usuário não tem permissão para acessar promoções
+    const permissaoInsuficiente = error && error.includes("não tem permissão");
+    if (permissaoInsuficiente) {
+        return (
+            <div className="error-container">
+                <h2>Acesso Restrito</h2>
+                <p>Você não possui permissão para visualizar ou gerenciar promoções.</p>
+                <p>Entre em contato com um administrador para solicitar acesso.</p>
+            </div>
+        );
     }
 
     return (
@@ -287,7 +318,15 @@ const GerenciarPromocoes = ({ userPermissions }) => {
 
             {promocoesFiltradas.length === 0 && (
                 <div className="empty-state">
-                    <p>Nenhuma promoção encontrada.</p>
+                    <div className="no-data-message">
+                        <p>Nenhuma promoção encontrada.</p>
+                        {canCreate && (
+                            <p>Clique em "Nova Promoção" para criar a primeira promoção.</p>
+                        )}
+                        {!canCreate && (
+                            <p>Você não possui permissão para criar promoções. Entre em contato com um administrador.</p>
+                        )}
+                    </div>
                 </div>
             )}
 

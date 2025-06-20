@@ -10,30 +10,45 @@ const RelatoriosEstoque = () => {
   useEffect(() => {
     carregarRelatorio();
   }, []);
-
   const carregarRelatorio = async () => {
     try {
       setLoading(true);
+      console.log('Solicitando relatório de estoque...');
       const response = await adminService.relatorios.estoque();
+      console.log('Resposta do relatório de estoque:', response);
       
-      if (response.data.sucesso) {
-        setRelatorioData(response.data.dados);
+      if (response && response.sucesso) {
+        setRelatorioData(response.dados);
+        console.log('Dados do relatório de estoque carregados:', response.dados);
       } else {
-        setError('Erro ao carregar relatório de estoque');
+        const errorMsg = response?.mensagem || 'Erro ao carregar relatório de estoque';
+        console.error('Erro na resposta:', errorMsg);
+        setError(errorMsg);
       }
     } catch (error) {
       console.error('Erro ao carregar relatório:', error);
-      setError('Erro ao conectar com o servidor');
+      setError(`Erro ao conectar com o servidor: ${error.message || 'Verifique a conexão'}`);
     } finally {
       setLoading(false);
     }
   };
-
   const formatarMoeda = (valor) => {
+    // Garante que o valor seja sempre um número
+    const valorNumerico = Number(valor || 0);
+    
+    // Verifica se é um número válido, não NaN ou Infinity
+    if (!isFinite(valorNumerico)) {
+      console.warn('Valor inválido detectado:', valor);
+      return new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+      }).format(0);
+    }
+    
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
       currency: 'BRL'
-    }).format(valor || 0);
+    }).format(valorNumerico);
   };
 
   const getEstoqueBadge = (estoque) => {
@@ -138,11 +153,9 @@ const RelatoriosEstoque = () => {
                           <td>
                             {getEstoqueBadge(produto.estoque)}
                           </td>
-                          <td>
-                            <strong>
-                              {formatarMoeda(produto.estoque * produto.preco_atual)}
-                            </strong>
-                          </td>
+                          <td><strong>
+                              {formatarMoeda(Number(produto.estoque || 0) * Number(produto.preco_atual || 0))}
+                            </strong></td>
                         </tr>
                       ))}
                     </tbody>
@@ -191,16 +204,11 @@ const RelatoriosEstoque = () => {
                             <Badge bg="primary">{categoria.total_produtos}</Badge>
                           </td>
                           <td>
-                            <Badge bg="info">{categoria.total_estoque}</Badge>
-                          </td>
-                          <td>
-                            <span className="text-muted">
-                              {Math.round(categoria.estoque_medio)}
-                            </span>
-                          </td>
-                          <td>
-                            <strong>{formatarMoeda(categoria.valor_total)}</strong>
-                          </td>
+                            <Badge bg="info">{categoria.total_estoque}</Badge>                          </td>
+                          <td><span className="text-muted">
+                              {Math.round(Number(categoria.estoque_medio || 0))}
+                            </span></td>
+                          <td><strong>{formatarMoeda(Number(categoria.valor_total || 0))}</strong></td>
                         </tr>
                       ))}
                     </tbody>
@@ -245,13 +253,10 @@ const RelatoriosEstoque = () => {
                             <Badge bg="primary">{marca.total_produtos}</Badge>
                           </td>
                           <td>
-                            <Badge bg="info">{marca.total_estoque}</Badge>
-                          </td>
-                          <td>
-                            <span className="text-muted">
-                              {formatarMoeda(marca.preco_medio)}
-                            </span>
-                          </td>
+                            <Badge bg="info">{marca.total_estoque}</Badge>                          </td>
+                          <td><span className="text-muted">
+                              {formatarMoeda(Number(marca.preco_medio || 0))}
+                            </span></td>
                         </tr>
                       ))}
                     </tbody>
@@ -277,19 +282,17 @@ const RelatoriosEstoque = () => {
               Resumo Geral do Estoque
             </Card.Header>
             <Card.Body>
-              <Row>
-                <Col md={3}>
+              <Row>                <Col md={3}>
                   <div className="stat-card text-center">
                     <div className="stat-number text-primary">
-                      {estoque_por_categoria?.reduce((total, cat) => total + cat.total_produtos, 0) || 0}
+                      {estoque_por_categoria?.reduce((total, cat) => total + Number(cat.total_produtos || 0), 0) || 0}
                     </div>
                     <div className="stat-label">Total de Produtos</div>
                   </div>
-                </Col>
-                <Col md={3}>
+                </Col>                <Col md={3}>
                   <div className="stat-card text-center">
                     <div className="stat-number text-success">
-                      {estoque_por_categoria?.reduce((total, cat) => total + cat.total_estoque, 0) || 0}
+                      {estoque_por_categoria?.reduce((total, cat) => total + Number(cat.total_estoque || 0), 0) || 0}
                     </div>
                     <div className="stat-label">Unidades em Estoque</div>
                   </div>
@@ -301,11 +304,10 @@ const RelatoriosEstoque = () => {
                     </div>
                     <div className="stat-label">Produtos com Estoque Baixo</div>
                   </div>
-                </Col>
-                <Col md={3}>
+                </Col>                <Col md={3}>
                   <div className="stat-card text-center">
                     <div className="stat-number text-warning">
-                      {formatarMoeda(estoque_por_categoria?.reduce((total, cat) => total + cat.valor_total, 0) || 0)}
+                      {formatarMoeda(estoque_por_categoria?.reduce((total, cat) => total + Number(cat.valor_total || 0), 0) || 0)}
                     </div>
                     <div className="stat-label">Valor Total em Estoque</div>
                   </div>
