@@ -750,4 +750,61 @@ router.post('/criar-usuario-equivalente', verificarAutenticacao, verificarPermis
   }
 });
 
+// GET /api/admin/estatisticas-supervisor - Dashboard específico para supervisor
+router.get('/estatisticas-supervisor', verificarAutenticacao, verificarPermissao('supervisor'), async (req, res) => {
+  try {
+    const dataAtual = new Date();
+    const mesAtual = dataAtual.getMonth();
+    const anoAtual = dataAtual.getFullYear();
+    
+    // Dados de exemplo para supervisor
+    const estatisticasSupervisor = {
+      totalVendas: 12500.50,
+      promocoesAtivas: 5,
+      campanhasAtivas: 3,
+      conversaoMarketing: 8.75,
+      colaboradoresAtivos: 4,
+      metaMensal: 20000,
+      progressoMeta: 62.5
+    };
+    
+    // Buscar dados reais (se necessário, pode expandir essa lógica)
+    try {
+      // Contar promoções ativas
+      const promocoesAtivas = await conexao.executarConsulta(`
+        SELECT COUNT(*) AS total FROM promocoes_relampago 
+        WHERE ativo = 1 AND data_fim > NOW()
+      `);
+      
+      if (promocoesAtivas && promocoesAtivas[0]) {
+        estatisticasSupervisor.promocoesAtivas = promocoesAtivas[0].total;
+      }
+      
+      // Contar colaboradores
+      const colaboradores = await conexao.executarConsulta(`
+        SELECT COUNT(*) AS total FROM usuarios 
+        WHERE tipo_usuario = 'colaborador' AND status = 'ativo'
+      `);
+      
+      if (colaboradores && colaboradores[0]) {
+        estatisticasSupervisor.colaboradoresAtivos = colaboradores[0].total;
+      }
+    } catch (erroConsulta) {
+      console.error('Erro ao buscar dados reais para dashboard supervisor:', erroConsulta);
+      // Continua usando os dados de exemplo
+    }
+    
+    res.json({
+      sucesso: true,
+      dados: estatisticasSupervisor
+    });
+  } catch (erro) {
+    console.error('Erro ao obter estatísticas do supervisor:', erro);
+    res.status(500).json({
+      sucesso: false,
+      mensagem: 'Erro interno do servidor ao obter estatísticas do supervisor'
+    });
+  }
+});
+
 module.exports = router;

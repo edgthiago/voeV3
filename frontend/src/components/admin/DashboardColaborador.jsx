@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
+import { produtosService } from '../../services';
 
 const DashboardColaborador = () => {
   const { usuario } = useAuth();
@@ -10,6 +11,7 @@ const DashboardColaborador = () => {
     pedidosPendentes: 0,
     vendasHoje: 0
   });
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     carregarEstatisticas();
@@ -17,19 +19,21 @@ const DashboardColaborador = () => {
 
   const carregarEstatisticas = async () => {
     try {
-      // Buscar estatísticas específicas para colaborador
-      const response = await fetch('/api/produtos/admin/estatisticas', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
+      setError(null);
+      // Buscar estatísticas específicas para colaborador usando o serviço
+      const response = await produtosService.obterEstatisticas();
       
-      if (response.ok) {
-        const data = await response.json();
-        setEstatisticas(data.dados);
+      if (response && response.sucesso) {
+        console.log('Estatísticas recebidas:', response.dados);
+        setEstatisticas(response.dados);
+      } else {
+        const errMsg = response?.mensagem || 'Erro ao obter estatísticas';
+        console.error('Resposta com erro:', errMsg);
+        setError(errMsg);
       }
     } catch (error) {
       console.error('Erro ao carregar estatísticas:', error);
+      setError(`Erro ao carregar estatísticas: ${error.message}`);
     }
   };
 
@@ -48,6 +52,21 @@ const DashboardColaborador = () => {
           </div>
         </div>
       </div>
+
+      {/* Exibir mensagem de erro caso ocorra */}
+      {error && (
+        <div className="alert alert-danger mb-4" role="alert">
+          <i className="bi bi-exclamation-triangle-fill me-2"></i>
+          {error}
+          <button 
+            className="btn btn-sm btn-outline-danger float-end" 
+            onClick={carregarEstatisticas}
+          >
+            <i className="bi bi-arrow-clockwise me-2"></i>
+            Tentar novamente
+          </button>
+        </div>
+      )}
 
       {/* Cards de estatísticas rápidas */}
       <div className="row mb-4">

@@ -175,7 +175,8 @@ export const promocoesService = {
 };
 
 // Serviços administrativos
-export const adminService = {  // Dashboard principal (apenas colaborador+)
+export const adminService = {
+  // Dashboard principal (apenas colaborador+)
   obterDashboard: async () => {
     try {
       console.log('Chamando API para obter dashboard...');
@@ -194,6 +195,23 @@ export const adminService = {  // Dashboard principal (apenas colaborador+)
       return response;
     } catch (error) {
       console.error('Erro ao obter dashboard:', error);
+      return { 
+        sucesso: false, 
+        mensagem: error.message || 'Erro ao comunicar com servidor',
+        dados: null
+      };
+    }
+  },
+  
+  // Estatísticas específicas para supervisor
+  obterEstatisticasSupervisor: async () => {
+    try {
+      console.log('Chamando API para obter estatísticas do supervisor...');
+      const response = await api.get('/admin/estatisticas-supervisor');
+      console.log('Estatísticas do supervisor recebidas:', response);
+      return response;
+    } catch (error) {
+      console.error('Erro ao obter estatísticas do supervisor:', error);
       return { 
         sucesso: false, 
         mensagem: error.message || 'Erro ao comunicar com servidor',
