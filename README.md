@@ -1,5 +1,7 @@
 # Projeto FGT - E-commerce
 
+Esse é o projeto final do GT01-Bezerra. Desenvolvido por, Thiago, João Victor e Jefferson
+
 Uma plataforma de e-commerce completa para venda de tênis, desenvolvida com React no frontend e Node.js no backend.
 
 ## 🚀 Funcionalidades
