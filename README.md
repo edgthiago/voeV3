@@ -1,24 +1,26 @@
-# Projeto FGT - E-commerce
+# 🌸 Voe Papel - Papelaria Online
 
-Esse é o projeto final do GT01-Bezerra. Desenvolvido por, Thiago, João Victor e Jefferson
+![Voe Papel](./frontend/img/voePapel/voePapel.jpeg)
 
-Uma plataforma de e-commerce completa para venda de tênis, desenvolvida com React no frontend e Node.js no backend.
+Uma plataforma de e-commerce completa especializada em papelaria, materiais de escritório e produtos de arte. Desenvolvida com React no frontend e Node.js no backend, com design moderno em tons pastéis.
 
 ## 🚀 Funcionalidades
 
-- 📦 Catálogo de produtos com filtros e busca
-- 🛒 Carrinho de compras integrado
-- 💳 Checkout completo com múltiplas formas de pagamento
+- � Catálogo completo de produtos de papelaria com filtros e busca
+- 🛒 Carrinho de compras integrado e persistente
+- 💳 Checkout completo com múltiplas formas de pagamento (PIX, Cartão, Boleto)
 - 👤 Autenticação e registro de usuários
-- 📊 Painel administrativo para gestão
-- 📋 Sistema completo de pedidos
-- ⭐ Sistema de avaliações
-- 🏷️ Promoções e descontos
+- 📊 Painel administrativo para gestão completa
+- 📋 Sistema completo de pedidos e acompanhamento
+- ⭐ Sistema de avaliações e comentários
+- 🏷️ Promoções e descontos especiais
+- 🎨 Design responsivo com tema rosa pastel
+- 🔍 Filtros por categoria, marca, preço e tipo de material
 
 ## 🛠️ Tecnologias Utilizadas
 
 ### Frontend
-- React 18
+- React 19
 - Vite
 - React Router DOM
 - Context API para gerenciamento de estado
