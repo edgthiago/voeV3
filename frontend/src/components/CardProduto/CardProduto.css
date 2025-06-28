@@ -40,8 +40,8 @@
 /* 2. Estado Selecionado
    ========================================================================== */
 .card_produto--selected {
-  border: 2px solid #C92071;
-  box-shadow: 0 8px 20px rgba(201, 32, 113, 0.15);
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 8px 20px rgba(232, 197, 216, 0.25);
 }
 
 .card_produto--selected::after {
@@ -49,7 +49,7 @@
   position: absolute;
   width: 30px;
   height: 30px;
-  background-color: #C92071;
+  background-color: var(--primary-color);
   color: white;
   border-radius: 50%;
   display: flex;
@@ -59,7 +59,7 @@
   font-weight: bold;
   top: -10px;
   right: -10px;
-  box-shadow: 0 3px 8px rgba(201, 32, 113, 0.3);
+  box-shadow: 0 3px 8px rgba(232, 197, 216, 0.4);
   animation: pulseEffect 1.5s infinite;
   z-index: 2;
 }
@@ -187,7 +187,7 @@
   opacity: 0;
   transition: all 0.3s ease;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  border-left: 3px solid #C92071;
+  border-left: 3px solid var(--primary-color);
 }
 
 .card_produto:hover .card_produto__visualizacao_rapida {
@@ -229,14 +229,14 @@
   color: #333333;
   text-decoration: none;
   transition: color 0.2s ease;
-  background-image: linear-gradient(transparent 97%, #C92071 3%);
+  background-image: linear-gradient(transparent 97%, var(--primary-color) 3%);
   background-repeat: no-repeat;
   background-size: 0% 100%;
   transition: background-size 0.3s ease;
 }
 
 .card_produto__titulo a:hover {
-  color: #C92071;
+  color: var(--primary-color);
   background-size: 100% 100%;
 }
 
@@ -290,7 +290,7 @@
 }
 
 .card_produto:hover .card_produto__preco_atual {
-  color: #C92071;
+  color: var(--primary-color);
   transform: scale(1.03);
 }
 
@@ -302,7 +302,7 @@
   justify-content: center;
   gap: 8px;
   padding: 12px 24px;
-  background-color: #C92071;
+  background: var(--gradient-primary);
   color: white;
   border: none;
   border-radius: 8px;
@@ -311,9 +311,9 @@
 }
 
 .card_produto__botao_carrinho:hover {
-  background-color: #a01956;
+  background: var(--primary-hover);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(201, 32, 113, 0.2);
+  box-shadow: 0 4px 12px rgba(232, 197, 216, 0.3);
 }
 
 .card_produto__botao_comparar {
@@ -330,22 +330,22 @@
 }
 
 .card_produto__botao_comparar:hover {
-  background-color: #e9ecef;
-  color: #C92071;
-  border-color: #C92071;
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+  border-color: var(--primary-color);
 }
 
 .card_produto__botao_comparar--selecionado {
-  background-color: #C92071;
-  border-color: #C92071;
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
   color: white;
-  box-shadow: 0 4px 10px rgba(201, 32, 113, 0.2);
+  box-shadow: 0 4px 10px rgba(232, 197, 216, 0.3);
 }
 
 .card_produto__botao_comparar--selecionado:hover {
-  background-color: #a01a5f;
-  border-color: #a01a5f;
-  box-shadow: 0 4px 12px rgba(201, 32, 113, 0.3);
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+  box-shadow: 0 4px 12px rgba(232, 197, 216, 0.4);
 }
 
 /* 11. Animações
@@ -353,15 +353,15 @@
 @keyframes pulseEffect {
   0% {
     transform: scale(1);
-    box-shadow: 0 3px 8px rgba(201, 32, 113, 0.3);
+    box-shadow: 0 3px 8px rgba(232, 197, 216, 0.4);
   }
   50% {
     transform: scale(1.1);
-    box-shadow: 0 5px 12px rgba(201, 32, 113, 0.4);
+    box-shadow: 0 5px 12px rgba(232, 197, 216, 0.5);
   }
   100% {
     transform: scale(1);
-    box-shadow: 0 3px 8px rgba(201, 32, 113, 0.3);
+    box-shadow: 0 3px 8px rgba(232, 197, 216, 0.4);
   }
 }
 

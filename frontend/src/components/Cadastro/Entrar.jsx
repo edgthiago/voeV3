@@ -9,7 +9,7 @@ export default function Login() {
     e.preventDefault();
     
     console.log('Iniciando processo de login...');
-    console.log('Endpoint de login:', 'http://localhost:5000/api/auth/login');
+    console.log('Endpoint de login:', 'http://localhost:8080/api/auth/login');
     console.log('Dados de login:', { email: login });
 
     try {
@@ -19,7 +19,7 @@ export default function Login() {
       
       // Usar o serviço de API em vez de fetch diretamente
       // Isso garante que o token seja configurado corretamente
-      const resposta = await fetch('http://localhost:5000/api/auth/login', {
+      const resposta = await fetch('http://localhost:8080/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -87,70 +87,94 @@ export default function Login() {
   };
 
   return (
-    <div className="login-page d-flex align-items-center justify-content-center min-vh-100">
-      <div className="card shadow border-0" style={{ maxWidth: '900px', width: '100%' }}>
+    <div className="login-page d-flex align-items-center justify-content-center min-vh-100" style={{background: 'var(--bg-light)'}}>
+      <div className="card shadow-lg border-0" style={{ maxWidth: '900px', width: '100%', borderRadius: '20px' }}>
         <div className="row g-0">
 
           {/* Formulário */}
           <div className="col-md-6 p-5">
-            <h2 className="fw-bold mb-2">Acesse sua conta</h2>
-            <p className="text-muted mb-4">
-              Novo cliente? Então registre-se <a href="/cadastro">aqui</a>.
-            </p>
+            <div className="text-center mb-4">
+              <img src="../../img/voePapel/voePapel.jpeg" alt="Voe Papel" style={{height: '60px', borderRadius: '12px', marginBottom: '1rem'}} />
+              <h2 className="fw-bold mb-2" style={{color: 'var(--primary-color)'}}>📝 Entre na sua conta</h2>
+              <p className="text-muted mb-4">
+                Novo na Voe Papel? <a href="/cadastro" style={{color: 'var(--primary-color)'}}>Cadastre-se aqui</a> e descubra nosso mundo de papelaria! ✨
+              </p>
+            </div>
 
-            {erro && <div className="alert alert-danger">{erro}</div>}
+            {erro && <div className="alert alert-danger" style={{backgroundColor: 'var(--primary-light)', borderColor: 'var(--primary-color)', color: 'var(--primary-dark)'}}>{erro}</div>}
 
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
-                <label className="form-label">Login *</label>
+                <label className="form-label fw-semibold" style={{color: 'var(--text-dark)'}}>📧 Email *</label>
                 <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Insira seu login ou email"
+                  type="email"
+                  className="form-control rounded-pill"
+                  placeholder="Digite seu email"
                   value={login}
                   onChange={(e) => setLogin(e.target.value)}
                   required
+                  style={{border: '2px solid var(--border-color)', padding: '12px 20px'}}
                 />
               </div>
 
               <div className="mb-3">
-                <label className="form-label">Senha *</label>
+                <label className="form-label fw-semibold" style={{color: 'var(--text-dark)'}}>🔒 Senha *</label>
                 <input
                   type="password"
-                  className="form-control"
-                  placeholder="Insira sua senha"
+                  className="form-control rounded-pill"
+                  placeholder="Digite sua senha"
                   value={senha}
                   onChange={(e) => setSenha(e.target.value)}
                   required
+                  style={{border: '2px solid var(--border-color)', padding: '12px 20px'}}
                 />
                 <div className="mt-2">
-                  <a href="#" className="small">Esqueci minha senha</a>
+                  <a href="#" className="small" style={{color: 'var(--primary-color)'}}>💭 Esqueci minha senha</a>
                 </div>
               </div>
 
-              <div className="d-grid">
-                <button type="submit" className="btn btn-danger">Acessar Conta</button>
+              <div className="d-grid mb-3">
+                <button type="submit" className="btn btn-primary rounded-pill py-3 fw-semibold" style={{background: 'var(--gradient-primary)', border: 'none', fontSize: '16px'}}>
+                  🚀 Entrar na Voe Papel
+                </button>
               </div>
             </form>
 
             <div className="text-center mt-4">
-              <small className="text-muted">Ou faça login com</small>
-              <div className="d-flex justify-content-center gap-3 mt-2">
-                <img src="img/Microsoft_logo.svg.png" alt="Microsoft" height="20" />
-                <img src="img/Google__G__logo.svg.png" alt="Google" height="20" />
-                <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png" alt="Facebook" height="20" />
+              <small className="text-muted">🌟 Ou entre com suas redes sociais</small>
+              <div className="d-flex justify-content-center gap-3 mt-3">
+                <div className="social-login-btn">
+                  <img src="img/Microsoft_logo.svg.png" alt="Microsoft" height="24" />
+                </div>
+                <div className="social-login-btn">
+                  <img src="img/Google__G__logo.svg.png" alt="Google" height="24" />
+                </div>
+                <div className="social-login-btn">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png" alt="Facebook" height="24" />
+                </div>
               </div>
             </div>
           </div>
 
           {/* Imagem */}
-          <div className="col-md-6 d-none d-md-flex align-items-center justify-content-center">
-            <img
-              src="img/cadastro.png"
-              alt="Banner"
-              className="img-fluid p-4"
-              style={{ maxHeight: '900px' }}
-            />
+          <div className="col-md-6 d-none d-md-flex align-items-center justify-content-center" style={{background: 'var(--gradient-primary)', borderRadius: '0 20px 20px 0'}}>
+            <div className="text-center text-white p-4">
+              <img
+                src="img/voePapel/IMG_8431.jpg"
+                alt="Voe Papel - Sua papelaria online"
+                className="img-fluid rounded-4 shadow-lg mb-4"
+                style={{ maxHeight: '300px', objectFit: 'cover' }}
+              />
+              <h3 className="fw-bold mb-3">✨ Bem-vindo à Voe Papel!</h3>
+              <p className="lead">
+                Sua papelaria online completa! 📚 Materiais escolares, 🎨 arte & criatividade, 💼 escritório e muito mais!
+              </p>
+              <div className="mt-4">
+                <span className="badge bg-light text-primary me-2 p-2">📝 Cadernos</span>
+                <span className="badge bg-light text-primary me-2 p-2">🖊️ Canetas</span>
+                <span className="badge bg-light text-primary me-2 p-2">🎨 Tintas</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -19,7 +19,7 @@
 }
 
 .empty-cart i {
-  color: #C92071;
+  color: var(--primary-color);
   opacity: 0.7;
 }
 
@@ -29,23 +29,23 @@
 
 /* Estilização dos botões */
 .btn-primary, .btn-success {
-  background-color: #C92071;
-  border-color: #C92071;
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
 }
 
 .btn-primary:hover, .btn-success:hover {
-  background-color: #a01a5f;
-  border-color: #a01a5f;
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
 }
 
 .btn-outline-primary {
-  border-color: #C92071;
-  color: #C92071;
+  border-color: var(--primary-color);
+  color: var(--primary-color);
 }
 
 .btn-outline-primary:hover {
-  background-color: #C92071;
-  border-color: #C92071;
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
 }
 
 /* Responsividade */

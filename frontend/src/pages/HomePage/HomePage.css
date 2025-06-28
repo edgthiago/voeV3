@@ -27,16 +27,16 @@
 }
 
 .home-button {
-  background-color: #C92071;
-  border-color: #C92071;
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
   font-weight: 600;
   padding: 0.75rem 2rem;
   border-radius: 8px;
 }
 
 .home-button:hover {
-  background-color: #991956;
-  border-color: #991956;
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
 }
 
 .home-hero-image {
@@ -113,14 +113,14 @@
 }
 
 .home-card-button {
-  background-color: #C92071;
-  border-color: #C92071;
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
   width: 100%;
 }
 
 .home-card-button:hover {
-  background-color: #991956;
-  border-color: #991956;
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
 }
 
 .home-categories-section {

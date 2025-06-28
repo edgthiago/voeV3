@@ -5,25 +5,29 @@ import './FiltroProduto.css';
 
 const FiltroProduto = ({ onFilterChange }) => {
   const [marcas, setMarcas] = useState({
-    nike: false,
-    adidas: false,
-    puma: false,
-    kswiss: false,
-    balenciaga: false,
+    faber_castell: false,
+    stabilo: false,
+    pilot: false,
+    bic: false,
+    tilibra: false,
+    spiral: false,
+    paperflex: false,
   });
 
   const [categorias, setCategorias] = useState({
-    sport: false,
-    casual: false,
-    utility: false,
-    running: false,
-    training: false,
+    escolar: false,
+    escritorio: false,
+    arte: false,
+    cadernos: false,
+    canetas: false,
+    organizacao: false,
   });
 
-  const [generos, setGeneros] = useState({
-    male: false,
-    female: false,
-    unisex: false,
+  const [tipoMaterial, setTipoMaterial] = useState({
+    basico: false,
+    premium: false,
+    profissional: false,
+    infantil: false,
   });
 
   const [condicao, setCondicao] = useState('new');
@@ -42,7 +46,7 @@ const FiltroProduto = ({ onFilterChange }) => {
     const filtros = {
       brands: Object.entries(marcas).filter(([, v]) => v).map(([k]) => k.toLowerCase()),
       categories: Object.entries(categorias).filter(([, v]) => v).map(([k]) => k),
-      genders: Object.entries(generos).filter(([, v]) => v).map(([k]) => k),
+      tipoMaterial: Object.entries(tipoMaterial).filter(([, v]) => v).map(([k]) => k),
       condition: condicaoBackend,
       priceRange: { min: precoMinimo, max: precoMaximo },
       minRating: avaliacaoMinima,
@@ -53,29 +57,33 @@ const FiltroProduto = ({ onFilterChange }) => {
       previousFilters.current = stringFiltros;
       onFilterChange(filtros);
     }
-  }, [marcas, categorias, generos, condicao, precoMinimo, precoMaximo, avaliacaoMinima, onFilterChange]);  useEffect(() => {
+  }, [marcas, categorias, tipoMaterial, condicao, precoMinimo, precoMaximo, avaliacaoMinima, onFilterChange]);  useEffect(() => {
     aplicarFiltros();
   }, [aplicarFiltros]);
 
   const limparFiltros = () => {
     setMarcas({
-      nike: false,
-      adidas: false,
-      puma: false,
-      kswiss: false,
-      balenciaga: false,
+      faber_castell: false,
+      stabilo: false,
+      pilot: false,
+      bic: false,
+      tilibra: false,
+      spiral: false,
+      paperflex: false,
     });
     setCategorias({
-      sport: false,
-      casual: false,
-      utility: false,
-      running: false,
-      training: false,
+      escolar: false,
+      escritorio: false,
+      arte: false,
+      cadernos: false,
+      canetas: false,
+      organizacao: false,
     });
-    setGeneros({
-      male: false,
-      female: false,
-      unisex: false,
+    setTipoMaterial({
+      basico: false,
+      premium: false,
+      profissional: false,
+      infantil: false,
     });
     setCondicao('new');
     setPrecoMinimo(0);
@@ -90,49 +98,85 @@ const FiltroProduto = ({ onFilterChange }) => {
   return (
     <aside className="barra-lateral-filtro-produto p-3 bg-white shadow-sm rounded">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2 className="fs-5 fw-bold">Filtros</h2>
-        <Button variant="link" className="text-muted p-0" onClick={limparFiltros}>Limpar</Button>
+        <h2 className="fs-5 fw-bold" style={{color: 'var(--primary-color)'}}>🔍 Filtros</h2>
+        <Button 
+          variant="link" 
+          className="p-0" 
+          onClick={limparFiltros}
+          style={{color: 'var(--primary-color)', textDecoration: 'none'}}
+        >
+          🗑️ Limpar
+        </Button>
       </div>
 
-      <h5>Marca</h5>
-      {Object.keys(marcas).map(marca => (
-        <Form.Check
-          key={marca}
-          type="checkbox"
-          label={marca.charAt(0).toUpperCase() + marca.slice(1)}
-          checked={marcas[marca]}
-          onChange={() => alterarCheckbox(marcas, setMarcas, marca)}
-        />
-      ))}
+      <h5>🏷️ Marca</h5>
+      {Object.entries(marcas).map(([key, value]) => {
+        const labelMap = {
+          faber_castell: 'Faber-Castell',
+          stabilo: 'Stabilo',
+          pilot: 'Pilot',
+          bic: 'BIC',
+          tilibra: 'Tilibra',
+          spiral: 'Spiral',
+          paperflex: 'Paperflex'
+        };
+        return (
+          <Form.Check
+            key={key}
+            type="checkbox"
+            label={labelMap[key]}
+            checked={value}
+            onChange={() => alterarCheckbox(marcas, setMarcas, key)}
+          />
+        );
+      })}
 
-      <h5 className="mt-4">Categoria</h5>
-      {Object.keys(categorias).map(cat => (
-        <Form.Check
-          key={cat}
-          type="checkbox"
-          label={cat.charAt(0).toUpperCase() + cat.slice(1)}
-          checked={categorias[cat]}
-          onChange={() => alterarCheckbox(categorias, setCategorias, cat)}
-        />
-      ))}
+      <h5 className="mt-4">📂 Categoria</h5>
+      {Object.entries(categorias).map(([key, value]) => {
+        const labelMap = {
+          escolar: '📚 Material Escolar',
+          escritorio: '💼 Escritório',
+          arte: '🎨 Arte & Criatividade',
+          cadernos: '📔 Cadernos & Agendas',
+          canetas: '🖊️ Canetas & Lápis',
+          organizacao: '📋 Organização'
+        };
+        return (
+          <Form.Check
+            key={key}
+            type="checkbox"
+            label={labelMap[key]}
+            checked={value}
+            onChange={() => alterarCheckbox(categorias, setCategorias, key)}
+          />
+        );
+      })}
 
-      <h5 className="mt-4">Gênero</h5>
-      {Object.keys(generos).map(gen => (
-        <Form.Check
-          key={gen}
-          type="checkbox"
-          label={gen.charAt(0).toUpperCase() + gen.slice(1)}
-          checked={generos[gen]}
-          onChange={() => alterarCheckbox(generos, setGeneros, gen)}
-        />
-      ))}
+      <h5 className="mt-4">⭐ Tipo de Material</h5>
+      {Object.entries(tipoMaterial).map(([key, value]) => {
+        const labelMap = {
+          basico: '📝 Básico',
+          premium: '✨ Premium',
+          profissional: '💼 Profissional',
+          infantil: '🧸 Infantil'
+        };
+        return (
+          <Form.Check
+            key={key}
+            type="checkbox"
+            label={labelMap[key]}
+            checked={value}
+            onChange={() => alterarCheckbox(tipoMaterial, setTipoMaterial, key)}
+          />
+        );
+      })}
 
-      <h5 className="mt-4">Condição</h5>
+      <h5 className="mt-4">📦 Condição</h5>
       <Form.Check
         type="radio"
         id="new"
         name="condicao"
-        label="Novo"
+        label="✨ Novo"
         checked={condicao === 'new'}
         onChange={() => setCondicao('new')}
       />
@@ -140,19 +184,29 @@ const FiltroProduto = ({ onFilterChange }) => {
         type="radio"
         id="used"
         name="condicao"
-        label="Usado"
+        label="🔄 Usado"
         checked={condicao === 'used'}
         onChange={() => setCondicao('used')}
       />
 
-      <h5 className="mt-4">Preço</h5>
+      <h5 className="mt-4">💰 Preço</h5>
       <Form.Group className="mb-2">
-        <Form.Label>Mínimo</Form.Label>
-        <Form.Control type="number" value={precoMinimo} onChange={e => setPrecoMinimo(Number(e.target.value))} />
+        <Form.Label>💵 Mínimo</Form.Label>
+        <Form.Control 
+          type="number" 
+          value={precoMinimo} 
+          onChange={e => setPrecoMinimo(Number(e.target.value))}
+          style={{border: '2px solid var(--border-color)', borderRadius: '8px'}}
+        />
       </Form.Group>
       <Form.Group className="mb-4">
-        <Form.Label>Máximo</Form.Label>
-        <Form.Control type="number" value={precoMaximo} onChange={e => setPrecoMaximo(Number(e.target.value))} />
+        <Form.Label>💸 Máximo</Form.Label>
+        <Form.Control 
+          type="number" 
+          value={precoMaximo} 
+          onChange={e => setPrecoMaximo(Number(e.target.value))}
+          style={{border: '2px solid var(--border-color)', borderRadius: '8px'}}
+        />
       </Form.Group>
 
       <FiltroAvaliacao valor={avaliacaoMinima} aoMudar={setAvaliacaoMinima} />

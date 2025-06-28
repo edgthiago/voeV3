@@ -5,9 +5,9 @@
 }
 
 .dropdown-item.active {
-  background-color: #C92071;
+  background-color: var(--primary-dark);
 }
 
 .dropdown-item:active {
-  background-color: #C92071;
+  background-color: var(--primary-dark);
 }

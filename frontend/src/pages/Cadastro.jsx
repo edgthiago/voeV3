@@ -1,13 +1,17 @@
 import React from 'react'
+import Header from '../components/Header/Header'
+import Footer from '../components/Footer/Footer'
 import Cadastro from '../components/Cadastro/Cadastro'
 
 
-const Login = () => {
+const CadastroPage = () => {
   return (
     <>
+    <Header/>
     <Cadastro/>
+    <Footer/>
     </> 
   )
 } 
 
-export default Login
+export default CadastroPage

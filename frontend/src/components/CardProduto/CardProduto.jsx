@@ -188,13 +188,13 @@ const CardProduto = ({ produto, estaSelecionado = false, aoAlternarComparacao })
         <Toast 
           onClose={() => setMostrarToast(false)} 
           show={mostrarToast} 
-          bg="success"
+          style={{backgroundColor: 'var(--primary-color)', borderColor: 'var(--primary-color)'}}
         >
-          <Toast.Header>
-            <strong className="me-auto">Produto adicionado</strong>
+          <Toast.Header style={{backgroundColor: 'var(--primary-light)', borderColor: 'var(--primary-color)'}}>
+            <strong className="me-auto" style={{color: 'var(--primary-color)'}}>✅ Produto adicionado</strong>
           </Toast.Header>
           <Toast.Body className="text-white">
-            {nome} foi adicionado ao carrinho com sucesso!
+            🛍️ {nome} foi adicionado ao carrinho com sucesso!
           </Toast.Body>
         </Toast>
       </ToastContainer>

@@ -27,7 +27,7 @@
 }
 
 .dashboard-sidebar .nav-link.active {
-  background-color: #C92071;
+  background-color: var(--primary-color);
   color: #fff !important;
 }
 
@@ -44,7 +44,7 @@
 }
 
 .user-info .fs-1 {
-  color: #C92071;
+  color: var(--primary-color);
 }
 
 /* Cards do Dashboard */
@@ -61,7 +61,7 @@
 }
 
 .dashboard-card .card-header {
-  background: linear-gradient(135deg, #C92071, #a01a5f);
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
   border-radius: 12px 12px 0 0;
   color: white;
   font-weight: 600;
@@ -75,7 +75,7 @@
 .stat-number {
   font-size: 2.5rem;
   font-weight: bold;
-  color: #C92071;
+  color: var(--primary-color);
   display: block;
 }
 
@@ -138,7 +138,7 @@
 }
 
 .admin-loading .spinner-border {
-  color: #C92071;
+  color: var(--primary-color);
 }
 
 /* Alerts */
@@ -371,11 +371,11 @@
 
 .config-tabs .tab:hover {
   background-color: rgba(201, 32, 113, 0.1);
-  color: #C92071;
+  color: var(--primary-color);
 }
 
 .config-tabs .tab.active {
-  background-color: #C92071;
+  background-color: var(--primary-color);
   color: #fff;
 }
 
@@ -416,8 +416,8 @@
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #C92071;
-  box-shadow: 0 0 0 3px rgba(201, 32, 113, 0.1);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(212, 165, 192, 0.25);
 }
 
 .form-group input:disabled,

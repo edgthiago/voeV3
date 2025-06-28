@@ -9,14 +9,14 @@
 }
 
 .pagination .page-item.active .page-link {
-  background-color: #C92071;
-  border-color: #C92071;
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
   color: white;
 }
 
 .pagination .page-item .page-link:hover {
   background-color: #f2f2f2;
-  color: #C92071;
+  color: var(--primary-color);
 }
 
 .pagination .page-item.disabled .page-link {
@@ -58,17 +58,17 @@
 }
 
 .secao-filtro .form-range::-webkit-slider-thumb {
-  background-color: #C92071;
+  background-color: var(--primary-color);
 }
 
 .secao-filtro .form-range::-moz-range-thumb {
-  background-color: #C92071;
+  background-color: var(--primary-color);
 }
 
 /* Estilos para o botão de comparação e tabela de comparação de produtos */
 .item-lista-produto__botao-carrinho:hover {
-  background-color: #a01a5f;
-  border-color: #a01a5f;
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
 }
 
 .item-lista-produto__botao-comparar {

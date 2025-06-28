@@ -34,7 +34,7 @@
 }
 
 .item-miniatura-produto.ativo {
-  border-color: #C92071;
+  border-color: var(--primary-color);
 }
 
 .item-miniatura-produto img {
@@ -97,7 +97,7 @@
 }
 
 .preco-atual-produto {
-  color: #C92071;
+  color: var(--primary-color);
   font-size: 1.8rem;
   font-weight: 700;
   margin-right: 10px;
@@ -145,13 +145,13 @@
 
 /* Botões de ação */
 .btn-adicionar-carrinho {
-  background-color: #C92071;
-  border-color: #C92071;
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
 }
 
 .btn-adicionar-carrinho:hover {
-  background-color: #a01a5f;
-  border-color: #a01a5f;
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
 }
 
 .btn-comprar-agora {
@@ -177,9 +177,9 @@
 }
 
 .tabs-detalhes-produto .nav-link.active {
-  color: #C92071;
+  color: var(--primary-color);
   background-color: transparent;
-  border-bottom: 3px solid #C92071;
+  border-bottom: 3px solid var(--primary-color);
 }
 
 /* Especificações */

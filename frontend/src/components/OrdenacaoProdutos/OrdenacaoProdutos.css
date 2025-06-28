@@ -9,12 +9,12 @@
 .ordenacao-produtos .dropdown-toggle:hover,
 .ordenacao-produtos .dropdown-toggle:focus {
   background-color: #f8f9fa;
-  border-color: #c92071;
+  border-color: var(--primary-dark);
   color: #474747;
 }
 
 .ordenacao-produtos .dropdown-toggle::after {
-  color: #c92071;
+  color: var(--primary-dark);
   margin-left: 0.5rem;
 }
 
@@ -32,17 +32,17 @@
 
 .ordenacao-produtos .dropdown-item:hover {
   background-color: #f8f9fa;
-  color: #c92071;
+  color: var(--primary-dark);
 }
 
 .ordenacao-produtos .dropdown-item.active {
   background-color: #f8f9fa;
-  color: #c92071;
+  color: var(--primary-dark);
   font-weight: 500;
 }
 
 .ordenacao-produtos .dropdown-item.active i {
-  color: #c92071;
+  color: var(--primary-dark);
 }
 
 /* Estilo para ordenação em dispositivos móveis */

@@ -1,22 +1,31 @@
 /* Estilos globais */
 body {
   font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
-  color: #474747;
-  background-color: #F9F8FE;
+  color: #5A6C7D;
+  background-color: var(--bg-light);
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
 :root {
-  --primary-color: #C92071;
-  --primary-hover: #991956;
-  --secondary-color: #E7FF86;
-  --text-dark: #1F1F1F;
-  --text-medium: #474747;
-  --text-light: #8F8F8F;
-  --bg-light: #F5F5F5;
-  --border-color: #EFEFEF;
+  --primary-color: #E8C5D8; /* Rosa pastel principal */
+  --primary-hover: #DFB3C8; /* Rosa hover */
+  --primary-light: #F2D9E6; /* Rosa claro para backgrounds */
+  --primary-dark: #D4A5C0; /* Rosa escuro */
+  --primary-accent: #E099C7; /* Rosa mais vibrante para destaques */
+  --secondary-color: #F4E4C1; /* Amarelo pastel complementar */
+  --accent-color: #E8C5D8; /* Mudando azul para rosa */
+  --success-color: #E8C5D8; /* Mudando verde para rosa */
+  --text-dark: #2C3E50;
+  --text-medium: #5A6C7D;
+  --text-light: #95A5A6;
+  --bg-light: #FDF8FB; /* Background com toque rosa */
+  --bg-card: #FFFFFF;
+  --border-color: #F2D9E6;
+  --gradient-primary: linear-gradient(135deg, #E8C5D8, #F2D9E6);
+  --gradient-secondary: linear-gradient(135deg, #E8C5D8, #DFB3C8);
+  --gradient-accent: linear-gradient(135deg, #E099C7, #E8C5D8);
 }
 
 /* Personalização das cores do Bootstrap */
@@ -49,4 +58,167 @@ a:hover {
 /* Padding para o conteúdo principal para evitar que fique sob o header fixo */
 main {
   padding-top: 1rem;
+}
+
+/* Classes para padronização de cores - Voe Papel */
+.btn-danger,
+.bg-danger,
+.text-danger {
+  background-color: var(--primary-dark) !important;
+  border-color: var(--primary-dark) !important;
+  color: white !important;
+}
+
+.btn-danger:hover,
+.btn-danger:focus,
+.btn-danger:active {
+  background-color: var(--primary-hover) !important;
+  border-color: var(--primary-hover) !important;
+}
+
+.text-danger {
+  color: var(--primary-dark) !important;
+}
+
+/* Progress bars personalizadas */
+.progress-bar.bg-danger {
+  background-color: var(--primary-dark) !important;
+}
+
+/* Badges personalizados */
+.badge.bg-danger {
+  background-color: var(--primary-dark) !important;
+}
+
+/* Botões outline personalizados */
+.btn-outline-danger {
+  color: var(--primary-dark) !important;
+  border-color: var(--primary-dark) !important;
+}
+
+.btn-outline-danger:hover,
+.btn-outline-danger:focus,
+.btn-outline-danger:active {
+  background-color: var(--primary-dark) !important;
+  border-color: var(--primary-dark) !important;
+  color: white !important;
+}
+
+.btn-warning {
+  background-color: var(--primary-accent) !important;
+  border-color: var(--primary-accent) !important;
+  color: white !important;
+}
+
+.btn-warning:hover {
+  background-color: var(--primary-hover) !important;
+  border-color: var(--primary-hover) !important;
+}
+
+.btn-success {
+  background-color: var(--primary-dark) !important;
+  border-color: var(--primary-dark) !important;
+  color: white !important;
+}
+
+.btn-success:hover {
+  background-color: var(--primary-hover) !important;
+  border-color: var(--primary-hover) !important;
+}
+
+/* Form controls personalizados */
+.form-select:focus,
+.form-control:focus {
+  border-color: var(--primary-dark) !important;
+  box-shadow: 0 0 0 0.25rem rgba(212, 165, 192, 0.25) !important;
+}
+
+.form-check-input:checked {
+  background-color: var(--primary-dark) !important;
+  border-color: var(--primary-dark) !important;
+}
+
+.form-check-input:focus {
+  border-color: var(--primary-dark) !important;
+  box-shadow: 0 0 0 0.25rem rgba(212, 165, 192, 0.25) !important;
+}
+
+/* Range sliders */
+.form-range::-webkit-slider-thumb {
+  background-color: var(--primary-dark) !important;
+}
+
+.form-range::-moz-range-thumb {
+  background-color: var(--primary-dark) !important;
+}
+
+.form-range:focus::-webkit-slider-thumb {
+  box-shadow: 0 0 0 1px #fff, 0 0 0 0.25rem rgba(212, 165, 192, 0.25) !important;
+}
+
+/* Dropdowns personalizados */
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background-color: var(--primary-light) !important;
+  color: var(--primary-dark) !important;
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+  background-color: var(--primary-dark) !important;
+  color: white !important;
+}
+
+/* Classes especiais para intensificar o rosa */
+.rosa-intenso {
+  background-color: var(--primary-accent) !important;
+  color: white !important;
+}
+
+.rosa-intenso:hover {
+  background-color: var(--primary-dark) !important;
+  transform: scale(1.05);
+}
+
+.texto-rosa-intenso {
+  color: var(--primary-accent) !important;
+}
+
+.borda-rosa-intenso {
+  border-color: var(--primary-accent) !important;
+}
+
+.gradiente-rosa-principal {
+  background: var(--gradient-accent) !important;
+}
+
+/* Badges e alertas com rosa predominante */
+.badge {
+  background-color: var(--primary-accent) !important;
+  color: white !important;
+}
+
+.alert-info {
+  background-color: var(--primary-light) !important;
+  color: var(--primary-dark) !important;
+  border-color: var(--primary-color) !important;
+}
+
+/* Links com rosa mais intenso */
+.link-rosa {
+  color: var(--primary-accent) !important;
+}
+
+.link-rosa:hover {
+  color: var(--primary-dark) !important;
+  text-decoration: underline !important;
+}
+
+/* Elementos de destaque com rosa */
+.destaque-rosa {
+  background: var(--gradient-accent);
+  padding: 1rem;
+  border-radius: 12px;
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 4px 15px rgba(224, 153, 199, 0.3);
 }

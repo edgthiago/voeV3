@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { produtosService } from '../../services';
+import CardProduto from '../CardProduto/CardProduto';
 import './HomeProdutos.modules.css';
 
-const ProdutosEmAlta = () => {
+const ProdutosEmDestaque = () => {
   const [produtos, setProdutos] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState(null);
 
   useEffect(() => {
-    const buscarProdutosEmAlta = async () => {
+    const buscarProdutosEmDestaque = async () => {
       try {
         setCarregando(true);
-        // Buscar produtos mais vendidos ou com melhor avaliação
+        // Buscar produtos mais bem avaliados ou em destaque
         const resposta = await produtosService.buscarTodos({
           // Usando o nome correto do parâmetro conforme esperado pelo backend
           ordenar_por: 'avaliacao_desc',
@@ -25,14 +26,14 @@ const ProdutosEmAlta = () => {
           setErro('Erro ao carregar produtos');
         }
       } catch (error) {
-        console.error('Erro ao buscar produtos em alta:', error);
+        console.error('Erro ao buscar produtos em destaque:', error);
         setErro('Erro ao carregar produtos');
       } finally {
         setCarregando(false);
       }
     };
 
-    buscarProdutosEmAlta();
+    buscarProdutosEmDestaque();
   }, []);
 
   if (carregando) {
@@ -60,12 +61,17 @@ const ProdutosEmAlta = () => {
   if (produtos.length === 0) {
     return (
       <section className="container mb-5">
-        <div className="d-flex justify-content-between align-items-center mb-3">
-          <h4 className="fw-bold mb-0">Produtos em alta</h4>
-          <Link to="/produtos" style={{ textDecoration: 'none' }}>Ver todos →</Link>
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h4 className="fw-bold mb-0 text-primary">🌟 Produtos em destaque</h4>
+          <Link to="/produtos" className="link-rosa fw-semibold text-decoration-none">
+            Ver todos os produtos →
+          </Link>
         </div>
-        <div className="alert alert-info">
-          Nenhum produto em destaque no momento
+        <div className="alert alert-info destaque-rosa">
+          <div className="text-center">
+            <h5 className="mb-2">📦 Novos produtos chegando em breve!</h5>
+            <p className="mb-0">Estamos preparando novidades incríveis para você. Volte em breve!</p>
+          </div>
         </div>
       </section>
     );
@@ -73,44 +79,23 @@ const ProdutosEmAlta = () => {
 
   return (
     <section className="container mb-5">
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h4 className="fw-bold mb-0">Produtos em alta</h4>
-        <Link to="/produtos" style={{ textDecoration: 'none' }}>Ver todos →</Link>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h4 className="fw-bold mb-0 text-primary">🌟 Produtos em destaque</h4>
+        <Link to="/produtos" className="link-rosa fw-semibold text-decoration-none">
+          Ver todos os produtos →
+        </Link>
       </div>
 
-      <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3">
+      <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
         {produtos.map((produto) => (
-          <div className="col card-pro" key={produto.id}>
-            <div className="card product-card p-3 border-0 rounded-2 text-center bg-white">
-              {produto.desconto && produto.desconto > 0 && (
-                <span
-                  className="badge badge-sale align-self-start"
-                  style={{ backgroundColor: '#ffc107', color: '#000', alignSelf: 'flex-start' }}
-                >
-                  {produto.desconto}% OFF
-                </span>
-              )}
-              <img 
-                src={produto.imagem || '/tenis_produtos.png'} 
-                className="w-100 my-2" 
-                alt={produto.nome}
-                onError={(e) => {e.target.src = '/tenis_produtos.png'}}
-              />
-            </div>
-            <div className="mt-2 text-start">
-              <h6 style={{ color: '#828080' }}>{produto.categoria || 'Tênis'}</h6>
-              <Link to={`/produto/${produto.id}`} style={{ textDecoration: 'none', color: '#000' }}>
-                {produto.nome}
-              </Link>              <p className="text-muted mb-1">
-                {produto.preco_antigo && <s>R$ {Number(produto.preco_antigo).toFixed(2)}</s>}{' '}
-                <strong>R$ {Number(produto.preco_atual).toFixed(2)}</strong>
-              </p>
-            </div>
-          </div>
+          <CardProduto 
+            key={produto.id} 
+            produto={produto}
+          />
         ))}
       </div>
     </section>
   );
 };
 
-export default ProdutosEmAlta;
+export default ProdutosEmDestaque;

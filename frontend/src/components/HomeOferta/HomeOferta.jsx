@@ -8,16 +8,16 @@ const OfertaExclusiva = () => {
         <div
           className="col-md-6 col-12 mb-4 mb-md-0 d-flex justify-content-center"
           style={{backgroundImage: "url('img/Ellipse 11.svg')",backgroundRepeat: "no-repeat",backgroundPosition: "center", width: '466px', height:'466px',}}>
-          <img src="img/Laye 1.svg"  className="img-fluid mt-5" alt="Air Jordan"style={{ maxHeight: "300px" }}/>
+          <img src="img/voePapel/IMG_8431.jpg"  className="img-fluid mt-5 rounded-3 shadow-lg" alt="Kit Papelaria Premium"style={{ maxHeight: "300px", objectFit: "cover" }}/>
         </div>
         <div className="col-md-6 col-12 text-center text-md-start p-5">
-          <small className="text-danger fw-semibold">Oferta exclusiva</small>
-          <h4 className="fw-bold mt-2">Air Jordan edição de colecionador</h4>
+          <small className="text-primary fw-semibold">✨ Oferta exclusiva</small>
+          <h4 className="fw-bold mt-2 text-primary">Kit Papelaria Premium 📚</h4>
           <p className="text-muted">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Illum ullam quam eum eius, voluptatibus voluptas? Obcaecati, rem ea. Impedit animi quisquam dolore voluptatibus quidem accusamus illum, possimus eaque qui deleniti.
+            Conjunto completo de materiais premium para escritório e estudos. Inclui cadernos especiais, canetas importadas, marcadores de qualidade e acessórios organizadores. Perfeito para profissionais exigentes e estudantes que buscam o melhor em papelaria.
           </p>
-          <a href="#" className="btn btn-danger">
-            Comprar agora
+          <a href="#" className="btn btn-primary rounded-pill px-4">
+            🛍️ Comprar agora
           </a>
         </div>
       </div>

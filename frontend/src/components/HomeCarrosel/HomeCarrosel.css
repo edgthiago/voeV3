@@ -1,15 +1,55 @@
+/* Estilo do Carrossel - Voe Papel */
+.bg-gradient {
+  background: linear-gradient(135deg, 
+    var(--primary-light) 0%, 
+    rgba(232, 197, 216, 0.4) 50%, 
+    var(--primary-color) 100%);
+  backdrop-filter: blur(10px);
+}
+
+.image-container {
+  position: relative;
+  padding: 1rem;
+  border-radius: 20px;
+  background: linear-gradient(135deg, 
+    var(--primary-light) 0%, 
+    var(--primary-color) 100%);
+  backdrop-filter: blur(5px);
+}
+
 .carousel-indicators button {
   width: 12px;
   height: 12px;
-  background-color: #C92071; /* rosa */
+  background-color: var(--primary-dark);
   border-radius: 50%;
-  border: none;
+  border: 2px solid rgba(255, 255, 255, 0.5);
   margin: 0 4px;
-  opacity: 0.5;
-  transition: opacity 0.3s ease; transform: 0.3s ease;
+  opacity: 0.6;
+  transition: all 0.3s ease;
 }
 
 .carousel-indicators .active {
   opacity: 1;
-  background-color: #C92071; /* rosa mais escuro para o slide ativo */
+  background-color: var(--primary-accent);
+  transform: scale(1.2);
+  box-shadow: 0 0 10px rgba(232, 197, 216, 0.8);
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(232, 197, 216, 0.3);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 0.3s ease;
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+  background: rgba(168, 216, 232, 0.4);
+  transform: translateY(-50%) scale(1.1);
 }

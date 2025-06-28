@@ -1,3 +1,36 @@
 .login-page {
-  background: linear-gradient(to bottom, #c1bdf4, #e2d5f3);
+  background: var(--bg-light);
+  min-height: 100vh;
+}
+
+/* Botões de login social */
+.social-login-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 4px 15px rgba(232, 197, 216, 0.3);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.social-login-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(232, 197, 216, 0.4);
+}
+
+/* Estilo para inputs com foco */
+.form-control:focus {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 0.2rem rgba(232, 197, 216, 0.25) !important;
+}
+
+/* Estilo para o card principal */
+.card {
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
 }

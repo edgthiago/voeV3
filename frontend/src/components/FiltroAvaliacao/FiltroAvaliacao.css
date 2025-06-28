@@ -8,11 +8,11 @@
 }
 
 .filtro-avaliacao .controle-avaliacao::-webkit-slider-thumb {
-  background-color: #C92071;
+  background-color: var(--primary-dark);
 }
 
 .filtro-avaliacao .controle-avaliacao::-moz-range-thumb {
-  background-color: #C92071;
+  background-color: var(--primary-dark);
 }
 
 .filtro-avaliacao .bi-star-fill,

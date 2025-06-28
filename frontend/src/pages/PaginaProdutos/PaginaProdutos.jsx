@@ -46,7 +46,7 @@ const PaginaProdutos = () => {  const location = useLocation();
           termo_pesquisa: filtros.searchTerm || '',
           marcas: filtros.brands ? filtros.brands.join(',') : '',
           categorias: filtros.categories ? filtros.categories.join(',') : '',
-          generos: filtros.genders ? filtros.genders.join(',') : '',
+          tipos_material: filtros.tipoMaterial ? filtros.tipoMaterial.join(',') : '',
           condicao: filtros.condition || '',
           apenas_em_estoque: true,
           limite: produtosPorPagina,
@@ -497,7 +497,7 @@ const PaginaProdutos = () => {  const location = useLocation();
     <Container fluid className="py-4 pagina-produtos">
       {/* Título da página */}
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1 className="h2">Nossos Produtos</h1>
+        <h1 className="h2" style={{color: 'var(--primary-color)'}}>📚 Nossos Produtos de Papelaria</h1>
         {termoPesquisa && (
           <div className="search-results-info">
             <p className="mb-0">
