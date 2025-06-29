@@ -20,19 +20,19 @@
 .carousel-indicators button {
   width: 12px;
   height: 12px;
-  background-color: var(--primary-dark);
+  background-color: var(--primary-darker);
   border-radius: 50%;
   border: 2px solid rgba(255, 255, 255, 0.5);
   margin: 0 4px;
-  opacity: 0.6;
+  opacity: 0.7;
   transition: all 0.3s ease;
 }
 
 .carousel-indicators .active {
   opacity: 1;
-  background-color: var(--primary-accent);
+  background-color: var(--primary-dark);
   transform: scale(1.2);
-  box-shadow: 0 0 10px rgba(232, 197, 216, 0.8);
+  box-shadow: 0 0 10px rgba(194, 147, 176, 0.8);
 }
 
 .carousel-control-prev,
@@ -40,16 +40,33 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: rgba(232, 197, 216, 0.3);
+  background: var(--primary-darker);
   backdrop-filter: blur(10px);
   border: 2px solid rgba(255, 255, 255, 0.3);
   top: 50%;
   transform: translateY(-50%);
   transition: all 0.3s ease;
+  opacity: 0.9;
 }
 
 .carousel-control-prev:hover,
 .carousel-control-next:hover {
-  background: rgba(168, 216, 232, 0.4);
+  background: var(--primary-dark);
   transform: translateY(-50%) scale(1.1);
+  opacity: 1;
+  box-shadow: 0 4px 15px rgba(194, 147, 176, 0.4);
+}
+
+/* Ícones das setas do carrossel */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+  transition: all 0.3s ease;
+}
+
+.carousel-control-prev:hover .carousel-control-prev-icon,
+.carousel-control-next:hover .carousel-control-next-icon {
+  opacity: 1;
+  transform: scale(1.1);
 }

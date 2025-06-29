@@ -18,6 +18,13 @@
 .item-lista-produto:hover {
   box-shadow: 0 8px 20px rgba(0,0,0,0.1);
   transform: translateY(-5px);
+  border-color: var(--primary-light);
+}
+
+/* Prevent card hover effects from interfering with button hover */
+.item-lista-produto:hover .item-lista-produto__botao-carrinho:not(:hover) {
+  background-color: var(--primary-darker);
+  transform: none;
 }
 
 /* Área da Imagem
@@ -238,19 +245,79 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 20px;
+  gap: 6px;
+  padding: 12px 20px;
+  height: 48px;
+  min-height: 48px;
   background-color: var(--primary-darker);
-  color: white;
+  color: white !important;
   border: none;
   border-radius: 8px;
   font-weight: 600;
+  font-size: 14px;
+  line-height: 1;
   transition: all 0.3s ease;
+  text-decoration: none;
+  cursor: pointer;
+  box-sizing: border-box;
 }
 
 .item-lista-produto__botao-carrinho:hover {
-  background-color: var(--primary-dark);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(194, 147, 176, 0.4);
+  background-color: var(--primary-dark) !important;
+  color: white !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(194, 147, 176, 0.4) !important;
+  z-index: 10;
+  position: relative;
+}
+
+.item-lista-produto__botao-carrinho:focus {
+  background-color: var(--primary-dark) !important;
+  color: white !important;
+  box-shadow: 0 0 0 3px rgba(194, 147, 176, 0.3);
+}
+
+.item-lista-produto__botao-carrinho:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(194, 147, 176, 0.3);
+}
+
+/* Ultra specific rules to override any Bootstrap conflicts */
+.item-lista-produto .item-lista-produto__botao-carrinho,
+.item-lista-produto .item-lista-produto__botao-carrinho.btn {
+  background-color: var(--primary-darker) !important;
+  border: none !important;
+  color: white !important;
+}
+
+.item-lista_produto .item-lista-produto__botao-carrinho:focus,
+.item-lista-produto .item-lista-produto__botao-carrinho.btn:focus {
+  background-color: var(--primary-dark) !important;
+  color: white !important;
+  border: none !important;
+}
+
+/* Prevenção de conflitos com Bootstrap
+   ========================================================================== */
+.item-lista-produto__botao-carrinho.btn,
+.item-lista-produto__botao-carrinho.btn:hover,
+.item-lista-produto__botao-carrinho.btn:focus,
+.item-lista-produto__botao-carrinho.btn:active {
+  background-color: var(--primary-darker) !important;
+  border-color: var(--primary-darker) !important;
+  color: white !important;
+}
+
+.item-lista-produto__botao-carrinho.btn:hover {
+  background-color: var(--primary-dark) !important;
+  border-color: var(--primary-dark) !important;
+}
+
+/* Força o ícone a manter a cor branca */
+.item-lista-produto__botao-carrinho .bi,
+.item-lista-produto__botao-carrinho:hover .bi,
+.item-lista-produto__botao-carrinho:focus .bi {
+  color: white !important;
 }
 
 /* Botão Ver Detalhes
@@ -302,6 +369,18 @@
 }
 
 .list-view-container .item-lista-produto__area-preco {
+  margin-top: auto;
+}
+
+/* Padronização de altura dos botões na lista */
+.item-lista-produto__area-preco {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.item-lista-produto .d-flex:last-child {
   margin-top: auto;
 }
 
@@ -369,9 +448,4 @@ img.item-lista-produto__imagem {
   min-height: none !important;
   max-width: none !important;
   max-height: none !important;
-  object-fit: cover !important;
-  display: block !important;
-  border: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
 }

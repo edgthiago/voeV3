@@ -35,6 +35,13 @@
 .card_produto:hover {
   transform: translateY(-8px);
   box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+  border-color: var(--primary-light);
+}
+
+/* Prevent card hover effects from interfering with button hover */
+.card_produto:hover .card_produto__botao_carrinho:not(:hover) {
+  background-color: var(--primary-darker);
+  transform: none;
 }
 
 /* 2. Área de Desconto
@@ -306,27 +313,73 @@ img.card_produto__imagem {
   transform: scale(1.03);
 }
 
+/* Ensure button hover takes precedence over card hover effects */
+.card_produto__botao_carrinho:hover {
+  background-color: var(--primary-dark) !important;
+  color: white !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(194, 147, 176, 0.4) !important;
+  z-index: 10;
+  position: relative;
+}
+
 /* 9. Botões de Ação
     ========================================================================== */
 .card_produto__botao_carrinho {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
   padding: 12px 24px;
-  background: linear-gradient(135deg, var(--primary-darker), var(--primary-dark));
-  color: white;
+  height: 48px;
+  min-height: 48px;
+  background-color: var(--primary-darker);
+  color: white !important;
   border: none;
   border-radius: 8px;
   font-weight: 600;
+  font-size: 14px;
+  line-height: 1;
   transition: all 0.3s ease;
   width: 100%;
+  text-decoration: none;
+  cursor: pointer;
+  box-sizing: border-box;
 }
 
 .card_produto__botao_carrinho:hover {
-  background: var(--primary-darker);
+  background-color: var(--primary-dark) !important;
+  color: white !important;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(194, 147, 176, 0.4);
+}
+
+.card_produto__botao_carrinho:focus {
+  background-color: var(--primary-dark) !important;
+  color: white !important;
+  box-shadow: 0 0 0 3px rgba(194, 147, 176, 0.3);
+}
+
+.card_produto__botao_carrinho:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(194, 147, 176, 0.3);
+}
+
+/* Ultra specific rules to override any Bootstrap conflicts */
+.card_produto .card_produto__botao_carrinho,
+.card_produto .card_produto__botao_carrinho.btn {
+  background-color: var(--primary-darker) !important;
+  border: none !important;
+  color: white !important;
+}
+
+.card_produto .card_produto__botao_carrinho:hover,
+.card_produto .card_produto__botao_carrinho.btn:hover,
+.card_produto .card_produto__botao_carrinho:focus,
+.card_produto .card_produto__botao_carrinho.btn:focus {
+  background-color: var(--primary-dark) !important;
+  color: white !important;
+  border: none !important;
 }
 
 /* 10. Animações
@@ -448,4 +501,14 @@ img.card_produto__imagem {
   margin: 0 !important;
   padding: 0 !important;
   vertical-align: top !important;
+}
+
+/* Garantir que os botões fiquem alinhados na parte inferior */
+.card_produto__corpo .d-flex:last-child {
+  margin-top: auto;
+}
+
+/* Padronização suave da altura dos cards apenas onde necessário */
+.card_produto__corpo {
+  min-height: 140px;
 }

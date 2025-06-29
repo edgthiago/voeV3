@@ -223,3 +223,29 @@ main {
   border: 2px solid var(--primary-color);
   box-shadow: 0 4px 15px rgba(224, 153, 199, 0.3);
 }
+
+/* ==========================================================================
+   Padronização Global de Botões - Altura Uniforme
+   ========================================================================== */
+
+/* Garantir altura uniforme para todos os botões de adicionar ao carrinho */
+button[class*="botao_carrinho"],
+button[class*="botao-carrinho"],
+.card_produto__botao_carrinho,
+.item-lista-produto__botao-carrinho {
+  height: 48px !important;
+  min-height: 48px !important;
+  max-height: 48px !important;
+  font-size: 14px !important;
+  line-height: 1 !important;
+  box-sizing: border-box !important;
+}
+
+/* Padronização de ícones nos botões */
+.card_produto__botao_carrinho .card_produto__icone_carrinho,
+.card_produto__botao_carrinho .bi,
+.item-lista-produto__botao-carrinho .bi {
+  font-size: 16px !important;
+  line-height: 1 !important;
+  vertical-align: middle !important;
+}
