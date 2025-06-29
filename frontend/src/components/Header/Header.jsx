@@ -185,6 +185,9 @@ const Header = () => {
               <Link to="/produtos" className={`nav-link ${path === '/produtos' ? 'active' : ''}`}>Produtos</Link>
             </li>
             <li className="nav-item">
+              <Link to="/produtos-personalizados" className={`nav-link ${path === '/produtos-personalizados' ? 'active' : ''}`}>Personalizados</Link>
+            </li>
+            <li className="nav-item">
               <Link to="/categorias" className={`nav-link ${path === '/categorias' ? 'active' : ''}`}>Categorias</Link>
             </li>
             <li className="nav-item">
@@ -218,6 +221,9 @@ const Header = () => {
             </li>
             <li className="nav-item">
               <Link to="/produtos" className={`nav-link ${path === '/produtos' ? 'active' : ''}`}>Produtos</Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/produtos-personalizados" className={`nav-link ${path === '/produtos-personalizados' ? 'active' : ''}`}>Personalizados</Link>
             </li>
             <li className="nav-item">
               <Link to="/categorias" className={`nav-link ${path === '/categorias' ? 'active' : ''}`}>Categorias</Link>

@@ -25,8 +25,6 @@ const PaginaProdutos = () => {  const location = useLocation();
   const [ordenacaoAtual, setOrdenacaoAtual] = useState('featured');
   const [modoVisualizacao, setModoVisualizacao] = useState('grid'); // 'grid' ou 'list'
   const [carregando, setCarregando] = useState(false); // Estado para indicador de carregamento
-  const [produtosSelecionados, setProdutosSelecionados] = useState([]); // Estado para produtos selecionados para comparação
-  const [mostrarModalComparacao, setMostrarModalComparacao] = useState(false); // Estado para controlar a exibição do modal de comparação
   // Efeito para atualizar os filtros quando o termo de pesquisa mudar
   useEffect(() => {
     setFiltros(filtrosAnteriores => ({
@@ -47,19 +45,12 @@ const PaginaProdutos = () => {  const location = useLocation();
           marcas: filtros.brands ? filtros.brands.join(',') : '',
           categorias: filtros.categories ? filtros.categories.join(',') : '',
           tipos_material: filtros.tipoMaterial ? filtros.tipoMaterial.join(',') : '',
-          condicao: filtros.condition || '',
           apenas_em_estoque: true,
           limite: produtosPorPagina,
           offset: (paginaAtual - 1) * produtosPorPagina
         };
 
         // Adicionar parâmetros opcionais apenas se eles têm valores válidos
-        if (filtros.price && filtros.price.min !== undefined && filtros.price.min > 0) {
-          parametrosAPI.preco_min = filtros.price.min;
-        }
-        if (filtros.price && filtros.price.max !== undefined && filtros.price.max < 1000) {
-          parametrosAPI.preco_max = filtros.price.max;
-        }
         if (filtros.minRating && filtros.minRating > 0) {
           parametrosAPI.avaliacao_minima = filtros.minRating;
         }
@@ -106,8 +97,6 @@ const PaginaProdutos = () => {  const location = useLocation();
     const visualizacaoURL = parametrosURL.get('view');
     const marcasURL = parametrosURL.get('brands');
     const categoriasURL = parametrosURL.get('categories');
-    const precoMinimoURL = parametrosURL.get('min_price');
-    const precoMaximoURL = parametrosURL.get('max_price');
     const avaliacaoURL = parametrosURL.get('rating');
       // Configurar visualização
     if (visualizacaoURL && (visualizacaoURL === 'grid' || visualizacaoURL === 'list')) {
@@ -133,14 +122,6 @@ const PaginaProdutos = () => {  const location = useLocation();
       filtrosURL.categories = categoriasURL.split(',');
     }
     
-    // Adicionar preço
-    if (precoMinimoURL || precoMaximoURL) {
-      filtrosURL.price = {
-        min: precoMinimoURL ? parseInt(precoMinimoURL) : 0,
-        max: precoMaximoURL ? parseInt(precoMaximoURL) : 1000
-      };
-    }
-    
     // Adicionar classificação mínima
     if (avaliacaoURL) {
       filtrosURL.minRating = parseFloat(avaliacaoURL);
@@ -152,28 +133,6 @@ const PaginaProdutos = () => {  const location = useLocation();
     }
   }, [termoPesquisa, location.search, parametrosURL]);
 
-  // Função para adicionar/remover produto da lista de comparação
-  const alternarComparacaoProduto = (produto) => {
-    setProdutosSelecionados(produtosAnteriores => {
-      if (produtosAnteriores.some(p => p.id === produto.id)) {
-        // Se o produto já está na lista, removê-lo
-        return produtosAnteriores.filter(p => p.id !== produto.id);
-      } else {
-        // Se não está na lista e há menos de 4 produtos, adicioná-lo
-        if (produtosAnteriores.length < 4) {
-          return [...produtosAnteriores, produto];
-        } else {
-          alert('Você só pode comparar até 4 produtos simultaneamente.');
-          return produtosAnteriores;
-        }
-      }
-    });
-  };
-
-  // Função para limpar a lista de produtos selecionados
-  const limparProdutosSelecionados = () => {
-    setProdutosSelecionados([]);
-  };
   // Carregar preferências do usuário para o modo de visualização
   useEffect(() => {
     const modoVisualizacaoSalvo = localStorage.getItem('modoVisualizacao');
@@ -265,16 +224,6 @@ const PaginaProdutos = () => {  const location = useLocation();
     // Adicionar categorias selecionadas
     if (filtrosAplicados.categories && filtrosAplicados.categories.length > 0) {
       parametros.set('categories', filtrosAplicados.categories.join(','));
-    }
-    
-    // Adicionar filtro de preço
-    if (filtrosAplicados.price) {
-      if (filtrosAplicados.price.min > 0) {
-        parametros.set('min_price', filtrosAplicados.price.min.toString());
-      }
-      if (filtrosAplicados.price.max < 1000) {
-        parametros.set('max_price', filtrosAplicados.price.max.toString());
-      }
     }
     
     // Adicionar filtro de classificação mínima
@@ -373,8 +322,6 @@ const PaginaProdutos = () => {  const location = useLocation();
             <CardProduto 
               key={produto.id} 
               produto={produto} 
-              estaSelecionado={produtosSelecionados.some(p => p.id === produto.id)}
-              aoAlternarComparacao={() => alternarComparacaoProduto(produto)}
             />
           ))}
         </Row>
@@ -385,8 +332,6 @@ const PaginaProdutos = () => {  const location = useLocation();
             <ItemListaProduto 
               key={produto.id} 
               produto={produto} 
-              estaSelecionado={produtosSelecionados.some(p => p.id === produto.id)}
-              aoAlternarComparacao={() => alternarComparacaoProduto(produto)}
             />
           ))}
         </div>
@@ -394,105 +339,6 @@ const PaginaProdutos = () => {  const location = useLocation();
     }
   };
 
-  // Modal de comparação de produtos
-  const modalComparacao = (
-    <Modal 
-      show={mostrarModalComparacao} 
-      onHide={() => setMostrarModalComparacao(false)}
-      size="xl"
-      centered
-    >      <Modal.Header closeButton>
-        <Modal.Title>Comparação de Produtos</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        {produtosSelecionados.length > 0 ? (
-          <div className="table-responsive">            <table className="tabela-comparacao table table-bordered table-striped">
-              <thead>                <tr>
-                  <th>Características</th>
-                  {produtosSelecionados.map(produto => (
-                    <th key={produto.id} className="text-center">
-                      {produto.nome}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>                <tr>
-                  <td>Imagem</td>
-                  {produtosSelecionados.map(produto => (
-                    <td key={`img-${produto.id}`} className="text-center">
-                      <img 
-                        src={produto.imagem} 
-                        alt={produto.nome} 
-                        className="img-fluid"
-                        style={{ maxHeight: '100px' }}
-                      />
-                    </td>
-                  ))}
-                </tr>                <tr>
-                  <td>Marca</td>
-                  {produtosSelecionados.map(produto => (
-                    <td key={`brand-${produto.id}`} className="text-center">
-                      {produto.marca}
-                    </td>
-                  ))}
-                </tr><tr>
-                  <td>Preço</td>
-                  {produtosSelecionados.map(produto => (
-                    <td key={`price-${produto.id}`} className="text-center font-weight-bold">
-                      R$ {Number(produto.preco_atual).toFixed(2)}
-                    </td>
-                  ))}
-                </tr>                <tr>
-                  <td>Desconto</td>
-                  {produtosSelecionados.map(produto => (
-                    <td key={`discount-${produto.id}`} className="text-center">
-                      {produto.desconto ? `${produto.desconto}%` : 'Sem desconto'}
-                    </td>
-                  ))}
-                </tr>
-                <tr>
-                  <td>Avaliação</td>
-                  {produtosSelecionados.map(produto => (
-                    <td key={`rating-${produto.id}`} className="text-center">
-                      {produto.avaliacao} / 5 ({produto.numero_avaliacoes} avaliações)
-                    </td>
-                  ))}
-                </tr>
-                <tr>
-                  <td>Categoria</td>
-                  {produtosSelecionados.map(produto => (
-                    <td key={`category-${produto.id}`} className="text-center">
-                      {produto.categoria}
-                    </td>
-                  ))}
-                </tr>
-                <tr>
-                  <td>Gênero</td>
-                  {produtosSelecionados.map(produto => (
-                    <td key={`gender-${produto.id}`} className="text-center">
-                      {produto.genero}
-                    </td>
-                  ))}
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <div className="text-center py-4">
-            <p>Nenhum produto selecionado para comparação.</p>
-          </div>
-        )}
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={() => setMostrarModalComparacao(false)}>
-          Fechar
-        </Button>
-        <Button variant="danger" onClick={limparProdutosSelecionados}>
-          Limpar Seleção
-        </Button>
-      </Modal.Footer>
-    </Modal>
-  );
   return (
     <Container fluid className="py-4 pagina-produtos">
       {/* Título da página */}
@@ -503,22 +349,9 @@ const PaginaProdutos = () => {  const location = useLocation();
             <p className="mb-0">
               Resultados para: <strong>{termoPesquisa}</strong>
             </p>
-          </div>        )}
+          </div>
+        )}
       </div>
-
-      {/* Botão de comparação fixo (aparece quando há produtos selecionados) */}
-      {produtosSelecionados.length > 0 && (
-        <div className="botao-comparacao-produtos">
-          <Button 
-            variant="primary" 
-            className="position-fixed bottom-0 end-0 mb-4 me-4 shadow"
-            onClick={() => setMostrarModalComparacao(true)}
-          >
-            <i className="bi bi-bar-chart-fill me-2"></i>
-            Comparar {produtosSelecionados.length} {produtosSelecionados.length > 1 ? 'produtos' : 'produto'}
-          </Button>
-        </div>
-      )}
 
       <Row>
         {/* Componente de filtro lateral */}
@@ -574,9 +407,6 @@ const PaginaProdutos = () => {  const location = useLocation();
           </Container>
         </section>
       </Row>
-
-      {/* Modal de comparação */}
-      {modalComparacao}
     </Container>
   );
 };

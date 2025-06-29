@@ -7,6 +7,7 @@ import HomeCarrosel from '../../components/HomeCarrosel/HomeCarrosel';
 import HomeColecaoDestaque from '../../components/HomeColecaoDestaque/HomeColecaoDestaque';
 import HomeProdutos from '../../components/HomeProdutos/HomeProdutos';
 import HomeOferta from '../../components/HomeOferta/HomeOferta';
+import BannerPersonalizados from '../../components/BannerPersonalizados/BannerPersonalizados';
 
 
 
@@ -16,6 +17,7 @@ const HomePage = () => {
     <>
     <HomeCarrosel/>
     <HomeColecaoDestaque/>
+    <BannerPersonalizados/>
     <HomeProdutos/>
     <HomeOferta/>
     

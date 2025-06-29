@@ -302,7 +302,7 @@ a:hover {
   width: 200%;
   height: 200%;
   background: linear-gradient(45deg, transparent, rgba(168, 216, 232, 0.1), transparent);
-  transform: rotate(45deg);
+  transform: translateX(-100%);
   transition: var(--transition);
   opacity: 0;
 }
@@ -314,9 +314,9 @@ a:hover {
 
 @keyframes shimmer {
   0% {
-    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    transform: translateX(-100%);
   }
   100% {
-    transform: translateX(100%) translateY(100%) rotate(45deg);
+    transform: translateX(100%);
   }
 }

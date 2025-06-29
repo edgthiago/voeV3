@@ -4,12 +4,12 @@
    
    Índice:
    1. Container Principal
-   2. Estado Selecionado
-   3. Área de Desconto
-   4. Área da Imagem
-   5. Efeitos de Imagem
-   6. Overlay e Quick View
-   7. Informações do Produto
+   2. Área de Desconto
+   3. Área da Imagem
+   4. Efeitos de Imagem
+   5. Overlay e Quick View
+   6. Informações do Produto
+   7. Área de Avaliação
    8. Área de Preço
    9. Botões de Ação
    10. Animações
@@ -37,34 +37,7 @@
   box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
 }
 
-/* 2. Estado Selecionado
-   ========================================================================== */
-.card_produto--selected {
-  border: 2px solid var(--primary-color);
-  box-shadow: 0 8px 20px rgba(232, 197, 216, 0.25);
-}
-
-.card_produto--selected::after {
-  content: '✓';
-  position: absolute;
-  width: 30px;
-  height: 30px;
-  background-color: var(--primary-color);
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  font-weight: bold;
-  top: -10px;
-  right: -10px;
-  box-shadow: 0 3px 8px rgba(232, 197, 216, 0.4);
-  animation: pulseEffect 1.5s infinite;
-  z-index: 2;
-}
-
-/* 3. Área de Desconto
+/* 2. Área de Desconto
    ========================================================================== */
 .card_produto__desconto_area {
   position: absolute;
@@ -81,45 +54,84 @@
   padding: 6px 14px;
   border-radius: 29px;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-  transform: rotate(-5deg) scale(1.05);
+  transform: scale(1.05);
   transition: all 0.3s ease;
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.7);
 }
 
 .card_produto:hover .card_produto__desconto {
-  transform: rotate(-5deg) scale(1.1);
+  transform: scale(1.1);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* 4. Área da Imagem
+/* 3. Área da Imagem
    ========================================================================== */
 .card_produto__area_imagem {
-  padding: 24px;
+  padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 300px;
-  background-color: white;
+  height: 280px;
+  background: transparent;
   position: relative;
   overflow: hidden;
 }
 
+.card_produto__area_imagem a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+}
+
 .card_produto__imagem {
-  max-width: 90%;
-  max-height: 90%;
-  object-fit: contain;
-  transform: rotate(-30deg) translateX(-7px);
+  width: 100% !important;
+  height: 280px !important;
+  max-width: none !important;
+  max-height: none !important;
+  min-width: none !important;
+  min-height: none !important;
+  object-fit: cover !important;
+  object-position: center !important;
   transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.05));
+  background: transparent !important;
+  border: none !important;
+  display: block !important;
+  border-radius: 0 !important;
 }
 
 .card_produto:hover .card_produto__imagem {
-  transform: rotate(-30deg) translateX(-7px) scale(1.15);
+  transform: scale(1.1);
   filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.15));
 }
 
-/* 5. Efeitos de Imagem
+/* Alternativa para imagens com proporções muito diferentes */
+.card_produto__imagem[src*="muito-larga"],
+.card_produto__imagem[src*="muito-alta"] {
+  object-fit: cover;
+}
+
+/* Força tamanho uniforme para todas as imagens */
+.card_produto__area_imagem img,
+.card_produto__area_imagem .card_produto__imagem,
+img.card_produto__imagem {
+  width: 100% !important;
+  height: 280px !important;
+  min-width: none !important;
+  min-height: none !important;
+  max-width: none !important;
+  max-height: none !important;
+  object-fit: cover !important;
+  display: block !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+/* 4. Efeitos de Imagem
    ========================================================================== */
 .card_produto__area_imagem::after {
   content: '';
@@ -148,7 +160,7 @@
     rgba(255, 255, 255, 0) 60%,
     rgba(255, 255, 255, 0) 100%
   );
-  transform: rotate(30deg);
+  transform: translateX(-100%);
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.5s ease, transform 0.8s ease;
@@ -159,7 +171,7 @@
   animation: shineEffect 2s infinite;
 }
 
-/* 6. Overlay e Quick View
+/* 5. Overlay e Quick View
    ========================================================================== */
 .card_produto__imagem_overlay {
   position: absolute;
@@ -199,7 +211,7 @@
   opacity: 1;
 }
 
-/* 7. Informações do Produto
+/* 6. Informações do Produto
    ========================================================================== */
 .card_produto__corpo {
   padding: 20px;
@@ -240,7 +252,7 @@
   background-size: 100% 100%;
 }
 
-/* 8. Área de Avaliação
+/* 7. Área de Avaliação
    ========================================================================== */
 .card_produto__avaliacao_area {
   display: flex;
@@ -259,7 +271,7 @@
   font-size: 14px;
 }
 
-/* 9. Área de Preço
+/* 8. Área de Preço
    ========================================================================== */
 .card_produto__preco_area {
   display: flex;
@@ -294,7 +306,7 @@
   transform: scale(1.03);
 }
 
-/* 10. Botões de Ação
+/* 9. Botões de Ação
     ========================================================================== */
 .card_produto__botao_carrinho {
   display: inline-flex;
@@ -302,83 +314,47 @@
   justify-content: center;
   gap: 8px;
   padding: 12px 24px;
-  background: var(--gradient-primary);
+  background: linear-gradient(135deg, var(--primary-darker), var(--primary-dark));
   color: white;
   border: none;
   border-radius: 8px;
   font-weight: 600;
   transition: all 0.3s ease;
+  width: 100%;
 }
 
 .card_produto__botao_carrinho:hover {
-  background: var(--primary-hover);
+  background: var(--primary-darker);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(232, 197, 216, 0.3);
+  box-shadow: 0 4px 12px rgba(194, 147, 176, 0.4);
 }
 
-.card_produto__botao_comparar {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 42px;
-  height: 42px;
-  background-color: #f8f9fa;
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  color: #495057;
-}
-
-.card_produto__botao_comparar:hover {
-  background-color: var(--primary-light);
-  color: var(--primary-color);
-  border-color: var(--primary-color);
-}
-
-.card_produto__botao_comparar--selecionado {
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
-  color: white;
-  box-shadow: 0 4px 10px rgba(232, 197, 216, 0.3);
-}
-
-.card_produto__botao_comparar--selecionado:hover {
-  background-color: var(--primary-hover);
-  border-color: var(--primary-hover);
-  box-shadow: 0 4px 12px rgba(232, 197, 216, 0.4);
-}
-
-/* 11. Animações
+/* 10. Animações
     ========================================================================== */
-@keyframes pulseEffect {
-  0% {
-    transform: scale(1);
-    box-shadow: 0 3px 8px rgba(232, 197, 216, 0.4);
-  }
-  50% {
-    transform: scale(1.1);
-    box-shadow: 0 5px 12px rgba(232, 197, 216, 0.5);
-  }
-  100% {
-    transform: scale(1);
-    box-shadow: 0 3px 8px rgba(232, 197, 216, 0.4);
-  }
-}
-
 @keyframes shineEffect {
   0% {
-    transform: rotate(30deg) translate(-100%, -100%);
+    transform: translateX(-100%);
   }
   100% {
-    transform: rotate(30deg) translate(100%, 100%);
+    transform: translateX(100%);
   }
 }
 
-/* 12. Media Queries
+/* 11. Media Queries
     ========================================================================== */
 @media (max-width: 576px) {
   .card_produto__area_imagem {
-    height: 250px;
+    height: 240px;
+    padding: 4px;
+  }
+
+  .card_produto__imagem {
+    width: 200px !important;
+    height: 200px !important;
+    max-width: 200px !important;
+    max-height: 200px !important;
+    min-width: 200px !important;
+    min-height: 200px !important;
   }
 
   .card_produto__corpo {
@@ -396,7 +372,17 @@
 
 @media (min-width: 577px) and (max-width: 768px) {
   .card_produto__area_imagem {
-    height: 280px;
+    height: 260px;
+    padding: 6px;
+  }
+
+  .card_produto__imagem {
+    width: 220px !important;
+    height: 220px !important;
+    max-width: 220px !important;
+    max-height: 220px !important;
+    min-width: 220px !important;
+    min-height: 220px !important;
   }
 }
 
@@ -426,4 +412,40 @@
 .card_produto {
   animation: cardFadeIn 0.6s ease forwards;
   opacity: 0;
+}
+
+/* Garantir que não há fundo cinza em lugar nenhum */
+.card_produto__area_imagem,
+.card_produto__area_imagem *,
+.card_produto__area_imagem a,
+.card_produto__area_imagem img {
+  background-color: transparent !important;
+  background: transparent !important;
+}
+
+/* Remove qualquer borda ou padding que possa criar espaço cinza */
+.card_produto__area_imagem img {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Garantir que as imagens preencham completamente o card */
+.card_produto__area_imagem {
+  border: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.card_produto__area_imagem a {
+  border: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Remove qualquer gap ou espaço extra */
+.card_produto__imagem {
+  margin: 0 !important;
+  padding: 0 !important;
+  vertical-align: top !important;
 }

@@ -17,6 +17,7 @@ import PaginaSupervisor from '../pages/Admin/PaginaSupervisor';
 import PaginaDiretor from '../pages/Admin/PaginaDiretor';
 import CriarConta from '../pages/CriarConta';
 import Entrar from '../pages/Entrar';
+import PaginaProdutosPersonalizados from '../pages/PaginaProdutosPersonalizados/PaginaProdutosPersonalizados';
 
 
 const AppRoutes = () => {
@@ -30,6 +31,7 @@ const AppRoutes = () => {
       <Route path="/cadastro" element={<Cadastro />} />
       <Route path="/criarConta" element={<CriarConta/>} />
       <Route path="/produtos" element={<PaginaProdutos />} />
+      <Route path="/produtos-personalizados" element={<PaginaProdutosPersonalizados />} />
       <Route path="/produto/:id" element={<PaginaDetalhesProduto />} />
       <Route path="/carrinho" element={<PaginaCarrinho />} />
       

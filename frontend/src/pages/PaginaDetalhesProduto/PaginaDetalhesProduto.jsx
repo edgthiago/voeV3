@@ -209,8 +209,13 @@ let PaginaDetalhesProduto = () => {
               </span>
             </div>
               <div className="descricao-produto mb-4">
-              <p>Este produto é perfeito para o seu estilo. Confortável, durável e com design moderno, 
-              o {produto.nome} da {produto.marca} é ideal para diversas ocasiões.</p>
+              <p>
+                {produto.categoria === 'cadernos' && `Este ${produto.nome} da ${produto.marca} é perfeito para suas anotações, estudos e criatividade. Com papel de alta qualidade e design funcional, é ideal para estudantes e profissionais.`}
+                {produto.categoria === 'canetas' && `A ${produto.nome} da ${produto.marca} oferece escrita suave e precisa. Desenvolvida com tecnologia avançada, é perfeita para uso diário, desenhos e anotações importantes.`}
+                {produto.categoria === 'material-escolar' && `O ${produto.nome} da ${produto.marca} é essencial para seu material escolar. Com qualidade superior e durabilidade, torna seus estudos mais organizados e eficientes.`}
+                {produto.categoria === 'organização' && `Este ${produto.nome} da ${produto.marca} é ideal para manter seu espaço organizado. Com design moderno e funcional, combina praticidade e estilo em seu escritório ou casa.`}
+                {!['cadernos', 'canetas', 'material-escolar', 'organização'].includes(produto.categoria) && `Este ${produto.nome} da ${produto.marca} é um produto de papelaria de alta qualidade. Perfeito para suas necessidades de escritório, estudos ou trabalhos criativos.`}
+              </p>
             </div>
             
             <div className="acoes-produto mb-4">
@@ -267,16 +272,20 @@ let PaginaDetalhesProduto = () => {
             
             <div className="meta-produto mt-4">
               <div className="d-flex align-items-center mb-2">
-                <i className="bi bi-truck me-2"></i>
-                <span>Frete grátis para compras acima de R$ 200,00</span>
+                <i className="bi bi-truck me-2 text-success"></i>
+                <span>Frete grátis para compras acima de R$ 150,00</span>
               </div>
               <div className="d-flex align-items-center mb-2">
-                <i className="bi bi-arrow-repeat me-2"></i>
+                <i className="bi bi-arrow-repeat me-2 text-primary"></i>
                 <span>30 dias para troca ou devolução</span>
               </div>
+              <div className="d-flex align-items-center mb-2">
+                <i className="bi bi-shield-check me-2 text-success"></i>
+                <span>Garantia contra defeitos de fabricação</span>
+              </div>
               <div className="d-flex align-items-center">
-                <i className="bi bi-shield-check me-2"></i>
-                <span>Garantia de 1 ano</span>
+                <i className="bi bi-heart me-2 text-danger"></i>
+                <span>Produto sustentável e ecológico</span>
               </div>
             </div>
           </div>
@@ -289,46 +298,181 @@ let PaginaDetalhesProduto = () => {
           defaultActiveKey="description"
           className="mb-4"
         >
-          <Tab eventKey="description" title="Descrição">            <div className="p-4 bg-light rounded">
-              <h4>Sobre o Produto</h4>
-              <p>O {produto.nome} da {produto.marca} é a escolha perfeita para quem busca conforto e estilo. 
-              Fabricado com materiais de alta qualidade, proporciona aderência excepcional e suporte para seus pés.</p>
-              
-              <h5 className="mt-4">Características</h5>
-              <ul>
-                <li>Cabedal em material respirável</li>
-                <li>Entressola com tecnologia de amortecimento</li>
-                <li>Solado de borracha para melhor aderência</li>
-                <li>Design moderno e versátil</li>
-                <li>Ideal para uso casual e esportivo</li>
-              </ul>
+          <Tab eventKey="description" title="Descrição">
+            <div className="tab-content-wrapper">
+              <div className="descricao-detalhada">
+                <h4 className="mb-3">Sobre o Produto</h4>
+                <div className="descricao-texto">
+                  {produto.categoria === 'cadernos' && (
+                    <>
+                      <p>O {produto.nome} da {produto.marca} é a escolha perfeita para quem busca qualidade e funcionalidade em um caderno. 
+                      Desenvolvido com papel de alta gramatura, proporciona uma experiência de escrita suave e agradável.</p>
+                      
+                      <h5 className="mt-4 mb-3">Características Principais</h5>
+                      <ul className="lista-caracteristicas">
+                        <li><i className="bi bi-check-circle me-2"></i>Papel de alta qualidade, ideal para canetas e lápis</li>
+                        <li><i className="bi bi-check-circle me-2"></i>Capa resistente e durável</li>
+                        <li><i className="bi bi-check-circle me-2"></i>Espiral ou costura reforçada</li>
+                        <li><i className="bi bi-check-circle me-2"></i>Design moderno e funcional</li>
+                        <li><i className="bi bi-check-circle me-2"></i>Ideal para estudos, trabalho e anotações</li>
+                      </ul>
+                    </>
+                  )}
+                  
+                  {produto.categoria === 'canetas' && (
+                    <>
+                      <p>A {produto.nome} da {produto.marca} oferece uma experiência de escrita excepcional. 
+                      Com tecnologia avançada e design ergonômico, é perfeita para uso prolongado.</p>
+                      
+                      <h5 className="mt-4 mb-3">Características Principais</h5>
+                      <ul className="lista-caracteristicas">
+                        <li><i className="bi bi-check-circle me-2"></i>Tinta de alta qualidade e longa duração</li>
+                        <li><i className="bi bi-check-circle me-2"></i>Ponta resistente e precisa</li>
+                        <li><i className="bi bi-check-circle me-2"></i>Design ergonômico para conforto</li>
+                        <li><i className="bi bi-check-circle me-2"></i>Escrita suave e uniforme</li>
+                        <li><i className="bi bi-check-circle me-2"></i>Ideal para uso diário e profissional</li>
+                      </ul>
+                    </>
+                  )}
+                  
+                  {produto.categoria === 'material-escolar' && (
+                    <>
+                      <p>O {produto.nome} da {produto.marca} é um item essencial para seu material escolar. 
+                      Desenvolvido com materiais de qualidade superior para garantir durabilidade e eficiência.</p>
+                      
+                      <h5 className="mt-4 mb-3">Características Principais</h5>
+                      <ul className="lista-caracteristicas">
+                        <li><i className="bi bi-check-circle me-2"></i>Material resistente e durável</li>
+                        <li><i className="bi bi-check-circle me-2"></i>Design funcional e prático</li>
+                        <li><i className="bi bi-check-circle me-2"></i>Fácil de usar e transportar</li>
+                        <li><i className="bi bi-check-circle me-2"></i>Cores vibrantes e atrativas</li>
+                        <li><i className="bi bi-check-circle me-2"></i>Perfeito para estudantes de todas as idades</li>
+                      </ul>
+                    </>
+                  )}
+                  
+                  {produto.categoria === 'organização' && (
+                    <>
+                      <p>Este {produto.nome} da {produto.marca} é a solução perfeita para manter seu espaço organizado. 
+                      Combina funcionalidade e estilo para criar ambientes mais produtivos.</p>
+                      
+                      <h5 className="mt-4 mb-3">Características Principais</h5>
+                      <ul className="lista-caracteristicas">
+                        <li><i className="bi bi-check-circle me-2"></i>Design moderno e elegante</li>
+                        <li><i className="bi bi-check-circle me-2"></i>Materiais de alta qualidade</li>
+                        <li><i className="bi bi-check-circle me-2"></i>Múltiplas possibilidades de organização</li>
+                        <li><i className="bi bi-check-circle me-2"></i>Fácil montagem e uso</li>
+                        <li><i className="bi bi-check-circle me-2"></i>Ideal para escritório e casa</li>
+                      </ul>
+                    </>
+                  )}
+                  
+                  {!['cadernos', 'canetas', 'material-escolar', 'organização'].includes(produto.categoria) && (
+                    <>
+                      <p>O {produto.nome} da {produto.marca} é um produto de papelaria de alta qualidade. 
+                      Desenvolvido para atender suas necessidades com excelência e durabilidade.</p>
+                      
+                      <h5 className="mt-4 mb-3">Características Principais</h5>
+                      <ul className="lista-caracteristicas">
+                        <li><i className="bi bi-check-circle me-2"></i>Material de alta qualidade</li>
+                        <li><i className="bi bi-check-circle me-2"></i>Design funcional e moderno</li>
+                        <li><i className="bi bi-check-circle me-2"></i>Durabilidade garantida</li>
+                        <li><i className="bi bi-check-circle me-2"></i>Fácil de usar</li>
+                        <li><i className="bi bi-check-circle me-2"></i>Ideal para uso diário</li>
+                      </ul>
+                    </>
+                  )}
+                </div>
+                
+                <div className="cuidados-produto mt-4">
+                  <h5 className="mb-3">Cuidados e Conservação</h5>
+                  <div className="dica-cuidado">
+                    <i className="bi bi-lightbulb me-2"></i>
+                    <span>Mantenha em local seco e arejado para preservar a qualidade</span>
+                  </div>
+                  <div className="dica-cuidado">
+                    <i className="bi bi-shield-check me-2"></i>
+                    <span>Produto testado e aprovado pelos mais altos padrões de qualidade</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </Tab>
           <Tab eventKey="specifications" title="Especificações">
-            <div className="p-4 bg-light rounded">
-              <h4>Especificações Técnicas</h4>
-              <div className="tabela-especificacoes">                <div className="linha-especificacoes">
-                  <div className="rotulo-especificacoes">Marca</div>
+            <div className="tab-content-wrapper">
+              <h4 className="mb-4">Especificações Técnicas</h4>
+              <div className="tabela-especificacoes">
+                <div className="linha-especificacoes">
+                  <div className="rotulo-especificacoes">
+                    <i className="bi bi-tag me-2"></i>Marca
+                  </div>
                   <div className="valor-especificacoes">{produto.marca}</div>
                 </div>
                 <div className="linha-especificacoes">
-                  <div className="rotulo-especificacoes">Modelo</div>
+                  <div className="rotulo-especificacoes">
+                    <i className="bi bi-box me-2"></i>Produto
+                  </div>
                   <div className="valor-especificacoes">{produto.nome}</div>
                 </div>
                 <div className="linha-especificacoes">
-                  <div className="rotulo-especificacoes">Categoria</div>
-                  <div className="valor-especificacoes">{produto.categoria}</div>
+                  <div className="rotulo-especificacoes">
+                    <i className="bi bi-collection me-2"></i>Categoria
+                  </div>
+                  <div className="valor-especificacoes">
+                    {produto.categoria === 'cadernos' && 'Cadernos e Blocos'}
+                    {produto.categoria === 'canetas' && 'Canetas e Instrumentos de Escrita'}
+                    {produto.categoria === 'material-escolar' && 'Material Escolar'}
+                    {produto.categoria === 'organização' && 'Organização e Arquivo'}
+                    {!['cadernos', 'canetas', 'material-escolar', 'organização'].includes(produto.categoria) && produto.categoria}
+                  </div>
                 </div>
                 <div className="linha-especificacoes">
-                  <div className="rotulo-especificacoes">Gênero</div>
-                  <div className="valor-especificacoes">{produto.genero === 'male' ? 'Masculino' : 'Feminino'}</div>
-                </div>                <div className="linha-especificacoes">
-                  <div className="rotulo-especificacoes">Condição</div>
-                  <div className="valor-especificacoes">{produto.condicao === 'new' ? 'Novo' : 'Usado'}</div>
+                  <div className="rotulo-especificacoes">
+                    <i className="bi bi-person me-2"></i>Público-Alvo
+                  </div>
+                  <div className="valor-especificacoes">
+                    {produto.categoria === 'cadernos' && 'Estudantes, Profissionais, Uso Geral'}
+                    {produto.categoria === 'canetas' && 'Estudantes, Escritório, Uso Diário'}
+                    {produto.categoria === 'material-escolar' && 'Estudantes, Crianças, Jovens'}
+                    {produto.categoria === 'organização' && 'Profissionais, Escritório, Casa'}
+                    {!['cadernos', 'canetas', 'material-escolar', 'organização'].includes(produto.categoria) && 'Uso Geral'}
+                  </div>
                 </div>
                 <div className="linha-especificacoes">
-                  <div className="rotulo-especificacoes">Código do Produto</div>
-                  <div className="valor-especificacoes">SKU-{produto.id ? produto.id.toString().padStart(5, '0') : '00000'}</div>
+                  <div className="rotulo-especificacoes">
+                    <i className="bi bi-award me-2"></i>Qualidade
+                  </div>
+                  <div className="valor-especificacoes">
+                    {produto.condicao === 'new' ? 'Produto Novo - Primeira Linha' : 'Usado'}
+                  </div>
+                </div>
+                <div className="linha-especificacoes">
+                  <div className="rotulo-especificacoes">
+                    <i className="bi bi-leaf me-2"></i>Sustentabilidade
+                  </div>
+                  <div className="valor-especificacoes">Produto Ecológico e Sustentável</div>
+                </div>
+                <div className="linha-especificacoes">
+                  <div className="rotulo-especificacoes">
+                    <i className="bi bi-upc me-2"></i>Código SKU
+                  </div>
+                  <div className="valor-especificacoes">VoePapel-{produto.id ? produto.id.toString().padStart(5, '0') : '00000'}</div>
+                </div>
+              </div>
+              
+              <div className="certificacoes mt-4">
+                <h5 className="mb-3">Certificações e Qualidade</h5>
+                <div className="badge-certificacao">
+                  <i className="bi bi-patch-check me-2"></i>
+                  ISO 9001 - Gestão da Qualidade
+                </div>
+                <div className="badge-certificacao">
+                  <i className="bi bi-recycle me-2"></i>
+                  Material Reciclável
+                </div>
+                <div className="badge-certificacao">
+                  <i className="bi bi-shield-fill-check me-2"></i>
+                  Testado e Aprovado
                 </div>
               </div>
             </div>

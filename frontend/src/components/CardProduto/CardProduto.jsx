@@ -3,14 +3,14 @@
  * 
  * Componente que renderiza um card de produto na visualização em grade.
  * Responsável por exibir as informações principais do produto e permitir
- * interações como adicionar ao carrinho e comparar produtos.
+ * interações como adicionar ao carrinho.
  * 
  * Features:
  * - Exibição de imagem com efeito hover
  * - Badge de desconto
  * - Sistema de avaliação com estrelas
  * - Preços e economia
- * - Botões de ação (carrinho e comparação)
+ * - Botão de ação para adicionar ao carrinho
  * - Notificação toast ao adicionar ao carrinho
  */
 
@@ -18,7 +18,7 @@ import React, { useEffect, useState } from 'react';
 import { Card, Button, Toast, ToastContainer } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useCarrinho } from '../../context/ContextoCarrinho';
-import { BsStarFill, BsStarHalf, BsStar, BsCartPlus, BsBarChart, BsDashCircle, BsEye } from 'react-icons/bs';
+import { BsStarFill, BsStarHalf, BsStar, BsCartPlus, BsEye } from 'react-icons/bs';
 import './CardProduto.css';
 
 /**
@@ -56,7 +56,7 @@ const EstrelasAvaliacao = ({ avaliacao }) => {
 /**
  * Componente principal do card de produto
  */
-const CardProduto = ({ produto, estaSelecionado = false, aoAlternarComparacao }) => {
+const CardProduto = ({ produto }) => {
   const { adicionarAoCarrinho } = useCarrinho();
   const [mostrarToast, setMostrarToast] = useState(false);
   // Desestruturação das propriedades do produto com fallback para ambos os modelos
@@ -92,7 +92,7 @@ const CardProduto = ({ produto, estaSelecionado = false, aoAlternarComparacao })
   return (
     <>
       <article className="col">
-        <div className={`card_produto ${estaSelecionado ? 'card_produto--selected' : ''}`}>
+        <div className="card_produto">
           {/* Badge de Desconto */}
           {desconto > 0 && (
             <div className="card_produto__desconto_area">
@@ -119,21 +119,11 @@ const CardProduto = ({ produto, estaSelecionado = false, aoAlternarComparacao })
           {/* Corpo do Card */}
           <div className="card_produto__corpo">
             {/* Informações do Produto */}
-            <p className="card_produto__marca">{marca}</p>            <h3 className="card_produto__titulo">
+            <h3 className="card_produto__titulo">
               <Link to={`/produto/${id}`} className="text-decoration-none text-dark">
                 {nome}
               </Link>
             </h3>
-
-            {/* Área de Avaliação */}
-            <div className="card_produto__avaliacao_area">
-              <div className="card_produto__avaliacao_estrelas">
-                <EstrelasAvaliacao avaliacao={avaliacao} />
-              </div>
-              <span className="card_produto__avaliacao_total">
-                ({numeroAvaliacoes})
-              </span>
-            </div>
 
             {/* Área de Preço */}
             <div className="card_produto__preco_area">
@@ -155,29 +145,15 @@ const CardProduto = ({ produto, estaSelecionado = false, aoAlternarComparacao })
             </div>
 
             {/* Botões de Ação */}
-            <div className="d-flex gap-2">
+            <div className="d-flex">
               <button
-                className="card_produto__botao_carrinho flex-grow-1"
+                className="card_produto__botao_carrinho"
                 onClick={handleAdicionarAoCarrinho}
                 aria-label="Adicionar ao carrinho"
               >
                 <BsCartPlus className="card_produto__icone_carrinho" /> 
-                Adicionar
+                Adicionar ao Carrinho
               </button>
-
-              {aoAlternarComparacao && (
-                <button
-                  className={`card_produto__botao_comparar ${
-                    estaSelecionado ? 'card_produto__botao_comparar--selecionado' : ''
-                  }`}
-                  onClick={aoAlternarComparacao}
-                  aria-label={
-                    estaSelecionado ? "Remover da comparação" : "Adicionar à comparação"
-                  }
-                >
-                  {estaSelecionado ? <BsDashCircle /> : <BsBarChart />}
-                </button>
-              )}
             </div>
           </div>
         </div>

@@ -20,61 +20,43 @@
   transform: translateY(-5px);
 }
 
-/* Estado Selecionado
-   ========================================================================== */
-.item-lista-produto--selected {
-  border: 2px solid var(--primary-color);
-  box-shadow: 0 6px 15px rgba(201, 32, 113, 0.15);
-}
-
-.item-lista-produto--selected::after {
-  content: '✓';
-  position: absolute;
-  width: 30px;
-  height: 30px;
-  background-color: var(--primary-color);
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  font-weight: bold;
-  top: -10px;
-  right: -10px;
-  box-shadow: 0 3px 8px rgba(201, 32, 113, 0.3);
-  animation: pulseListEffect 1.5s infinite;
-  z-index: 2;
-}
-
 /* Área da Imagem
    ========================================================================== */
 .item-lista-produto__container-imagem {
-  height: 200px;
+  height: 160px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background-color: white;
+  background: transparent;
   position: relative;
-  padding: 15px;
+  padding: 0;
   border-radius: 8px;
 }
 
 .item-lista-produto__imagem {
-  max-height: 140px;
-  max-width: 85%;
-  object-fit: contain;
+  width: 100% !important;
+  height: 160px !important;
+  max-height: none !important;
+  max-width: none !important;
+  min-width: none !important;
+  min-height: none !important;
+  object-fit: cover !important;
+  object-position: center !important;
   transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  transform: rotate(-30deg) translateX(-5px);
   transform-origin: center center;
   filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.05));
   z-index: 2;
   position: relative;
+  border: none !important;
+  border-radius: 8px 8px 0 0 !important;
+  background: transparent !important;
+  border: none !important;
+  display: block !important;
 }
 
 .item-lista-produto:hover .item-lista-produto__imagem {
-  transform: rotate(-30deg) translateX(-5px) scale(1.15);
+  transform: scale(1.1);
   filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.15));
 }
 
@@ -95,7 +77,7 @@
     rgba(255, 255, 255, 0) 60%,
     rgba(255, 255, 255, 0) 100%
   );
-  transform: rotate(30deg);
+  transform: translateX(-100%);
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.5s ease, transform 0.8s ease;
@@ -143,14 +125,14 @@
   padding: 6px 14px;
   border-radius: 29px;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-  transform: rotate(-5deg) scale(1.05);
+  transform: scale(1.05);
   transition: all 0.3s ease;
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.7);
 }
 
 .item-lista-produto:hover .item-lista-produto__desconto {
-  transform: rotate(-5deg) scale(1.1);
+  transform: scale(1.1);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
@@ -257,7 +239,7 @@
   align-items: center;
   justify-content: center;
   padding: 10px 20px;
-  background-color: var(--primary-color);
+  background-color: var(--primary-darker);
   color: white;
   border: none;
   border-radius: 8px;
@@ -266,41 +248,9 @@
 }
 
 .item-lista-produto__botao-carrinho:hover {
-  background-color: var(--primary-hover);
+  background-color: var(--primary-dark);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(201, 32, 113, 0.2);
-}
-
-.item-lista-produto__botao-comparar {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 42px;
-  height: 42px;
-  background-color: #f8f9fa;
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  color: #495057;
-}
-
-.item-lista-produto__botao-comparar:hover {
-  background-color: #e9ecef;
-  color: var(--primary-color);
-  border-color: var(--primary-color);
-}
-
-.item-lista-produto__botao-comparar--selecionado {
-  background-color: var(--primary-color) !important;
-  border-color: var(--primary-color) !important;
-  color: white !important;
-  box-shadow: 0 4px 10px rgba(201, 32, 113, 0.2) !important;
-}
-
-.item-lista-produto__botao-comparar--selecionado:hover {
-  background-color: var(--primary-hover) !important;
-  border-color: var(--primary-hover) !important;
-  box-shadow: 0 4px 12px rgba(201, 32, 113, 0.3) !important;
+  box-shadow: 0 4px 12px rgba(194, 147, 176, 0.4);
 }
 
 /* Botão Ver Detalhes
@@ -357,27 +307,12 @@
 
 /* Animações
    ========================================================================== */
-@keyframes pulseListEffect {
-  0% {
-    transform: scale(1);
-    box-shadow: 0 3px 8px rgba(201, 32, 113, 0.3);
-  }
-  50% {
-    transform: scale(1.1);
-    box-shadow: 0 5px 12px rgba(201, 32, 113, 0.4);
-  }
-  100% {
-    transform: scale(1);
-    box-shadow: 0 3px 8px rgba(201, 32, 113, 0.3);
-  }
-}
-
 @keyframes listShineEffect {
   0% {
-    transform: rotate(30deg) translate(-100%, -100%);
+    transform: translateX(-100%);
   }
   100% {
-    transform: rotate(30deg) translate(100%, 100%);
+    transform: translateX(100%);
   }
 }
 
@@ -391,9 +326,52 @@
   
   .list-view-container .item-lista-produto__container-imagem {
     width: 100%;
+    height: 140px;
+    padding: 2px;
+  }
+
+  .item-lista-produto__imagem {
+    width: 120px !important;
+    height: 120px !important;
+    max-width: 120px !important;
+    max-height: 120px !important;
+    min-width: 120px !important;
+    min-height: 120px !important;
   }
   
   .item-lista-produto__acoes {
     flex-direction: column;
   }
+}
+
+/* Garantir que não há fundo cinza em lugar nenhum */
+.item-lista-produto__container-imagem,
+.item-lista-produto__container-imagem *,
+.item-lista-produto__container-imagem img {
+  background-color: transparent !important;
+  background: transparent !important;
+}
+
+/* Remove qualquer borda ou padding que possa criar espaço cinza */
+.item-lista-produto__container-imagem img {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Força tamanho uniforme para todas as imagens */
+.item-lista-produto__container-imagem img,
+.item-lista-produto__container-imagem .item-lista-produto__imagem,
+img.item-lista-produto__imagem {
+  width: 100% !important;
+  height: 160px !important;
+  min-width: none !important;
+  min-height: none !important;
+  max-width: none !important;
+  max-height: none !important;
+  object-fit: cover !important;
+  display: block !important;
+  border: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }

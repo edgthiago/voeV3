@@ -13,6 +13,7 @@ body {
   --primary-hover: #DFB3C8; /* Rosa hover */
   --primary-light: #F2D9E6; /* Rosa claro para backgrounds */
   --primary-dark: #D4A5C0; /* Rosa escuro */
+  --primary-darker: #C293B0; /* Rosa mais escuro para header */
   --primary-accent: #E099C7; /* Rosa mais vibrante para destaques */
   --secondary-color: #F4E4C1; /* Amarelo pastel complementar */
   --accent-color: #E8C5D8; /* Mudando azul para rosa */

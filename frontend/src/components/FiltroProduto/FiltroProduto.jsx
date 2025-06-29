@@ -30,25 +30,15 @@ const FiltroProduto = ({ onFilterChange }) => {
     infantil: false,
   });
 
-  const [condicao, setCondicao] = useState('new');
-  const [precoMinimo, setPrecoMinimo] = useState(0);
-  const [precoMaximo, setPrecoMaximo] = useState(1000);
   const [avaliacaoMinima, setAvaliacaoMinima] = useState(0);
 
   const previousFilters = useRef(null);
 
-    const aplicarFiltros = useCallback(() => {
-    // Mapeamento de condição para o backend
-    let condicaoBackend = condicao;
-    if (condicao === 'new') condicaoBackend = 'novo';
-    else if (condicao === 'used') condicaoBackend = 'usado';
-
+  const aplicarFiltros = useCallback(() => {
     const filtros = {
       brands: Object.entries(marcas).filter(([, v]) => v).map(([k]) => k.toLowerCase()),
       categories: Object.entries(categorias).filter(([, v]) => v).map(([k]) => k),
       tipoMaterial: Object.entries(tipoMaterial).filter(([, v]) => v).map(([k]) => k),
-      condition: condicaoBackend,
-      priceRange: { min: precoMinimo, max: precoMaximo },
       minRating: avaliacaoMinima,
     };
 
@@ -57,7 +47,7 @@ const FiltroProduto = ({ onFilterChange }) => {
       previousFilters.current = stringFiltros;
       onFilterChange(filtros);
     }
-  }, [marcas, categorias, tipoMaterial, condicao, precoMinimo, precoMaximo, avaliacaoMinima, onFilterChange]);  useEffect(() => {
+  }, [marcas, categorias, tipoMaterial, avaliacaoMinima, onFilterChange]);  useEffect(() => {
     aplicarFiltros();
   }, [aplicarFiltros]);
 
@@ -85,9 +75,6 @@ const FiltroProduto = ({ onFilterChange }) => {
       profissional: false,
       infantil: false,
     });
-    setCondicao('new');
-    setPrecoMinimo(0);
-    setPrecoMaximo(1000);
     setAvaliacaoMinima(0);
   };
 
@@ -170,44 +157,6 @@ const FiltroProduto = ({ onFilterChange }) => {
           />
         );
       })}
-
-      <h5 className="mt-4">📦 Condição</h5>
-      <Form.Check
-        type="radio"
-        id="new"
-        name="condicao"
-        label="✨ Novo"
-        checked={condicao === 'new'}
-        onChange={() => setCondicao('new')}
-      />
-      <Form.Check
-        type="radio"
-        id="used"
-        name="condicao"
-        label="🔄 Usado"
-        checked={condicao === 'used'}
-        onChange={() => setCondicao('used')}
-      />
-
-      <h5 className="mt-4">💰 Preço</h5>
-      <Form.Group className="mb-2">
-        <Form.Label>💵 Mínimo</Form.Label>
-        <Form.Control 
-          type="number" 
-          value={precoMinimo} 
-          onChange={e => setPrecoMinimo(Number(e.target.value))}
-          style={{border: '2px solid var(--border-color)', borderRadius: '8px'}}
-        />
-      </Form.Group>
-      <Form.Group className="mb-4">
-        <Form.Label>💸 Máximo</Form.Label>
-        <Form.Control 
-          type="number" 
-          value={precoMaximo} 
-          onChange={e => setPrecoMaximo(Number(e.target.value))}
-          style={{border: '2px solid var(--border-color)', borderRadius: '8px'}}
-        />
-      </Form.Group>
 
       <FiltroAvaliacao valor={avaliacaoMinima} aoMudar={setAvaliacaoMinima} />
     </aside>

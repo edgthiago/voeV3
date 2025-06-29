@@ -49,7 +49,7 @@ const MensagemCompletarCadastro = () => {
                   Como funciona nosso sistema:
                 </h6>
                 <ul className="mb-0">
-                  <li><strong>Visitante:</strong> Pode navegar, ver produtos, comparar e adicionar ao carrinho</li>
+                  <li><strong>Visitante:</strong> Pode navegar, ver produtos e adicionar ao carrinho</li>
                   <li><strong>Usuário Nível 2:</strong> Pode finalizar compras, comentar produtos comprados e acessar histórico</li>
                   <li><strong>Colaborador/Supervisor/Diretor:</strong> Acesso administrativo</li>
                 </ul>

@@ -7,7 +7,6 @@
  * - Exibe imagem, marca, nome, preço e avaliações do produto em layout horizontal
  * - Mostra descontos quando disponíveis
  * - Permite adicionar o produto ao carrinho
- * - Suporta funcionalidade de comparação entre produtos
  * - Exibe uma notificação toast ao adicionar produto ao carrinho
  */
 
@@ -17,7 +16,7 @@ import { Link } from 'react-router-dom';
 import { useCarrinho } from '../../context/ContextoCarrinho';
 import './ItemListaProduto.css';
 
-const ItemListaProduto = ({ produto, estaSelecionado = false, aoAlternarComparacao }) => {
+const ItemListaProduto = ({ produto }) => {
   const { adicionarAoCarrinho } = useCarrinho();
   const [mostrarToast, setMostrarToast] = React.useState(false);
   const {
@@ -89,7 +88,7 @@ const ItemListaProduto = ({ produto, estaSelecionado = false, aoAlternarComparac
 
   return (
     <>
-      <article className={`item-lista-produto mb-3 ${estaSelecionado ? 'item-lista-produto--selected' : ''}`}>
+      <article className="item-lista-produto mb-3">
         <div className="row align-items-center">
           {/* Imagem do produto */}
           <div className="col-md-3 col-4 mb-2 mb-md-0">
@@ -115,20 +114,11 @@ const ItemListaProduto = ({ produto, estaSelecionado = false, aoAlternarComparac
 
           {/* Informações do produto */}
           <div className="col-md-6 col-8">
-            <p className="item-lista-produto__marca text-muted mb-1">{marca}</p>
-            <h3 className="item-lista-produto__titulo fs-5 mb-2">
+            <h3 className="item-lista-produto__titulo fs-5 mb-3">
               <Link to={`/produto/${id}`} className="text-decoration-none text-dark">
                 {nome}
               </Link>
             </h3>
-            <div className="item-lista-produto__avaliacoes mb-2">
-              <span className="item-lista-produto__estrelas text-warning me-2">
-                {renderizarEstrelas(avaliacao)}
-              </span>
-              <span className="item-lista-produto__contador-avaliacoes text-muted small">
-                ({numeroAvaliacoes} avaliações)
-              </span>
-            </div>
             <Link 
               to={`/produto/${id}`} 
               className="btn btn-outline-primary btn-sm item-lista-produto__visualizacao-detalhes"
@@ -162,15 +152,6 @@ const ItemListaProduto = ({ produto, estaSelecionado = false, aoAlternarComparac
                 <i className="bi bi-cart-plus me-2"></i>
                 Adicionar
               </button>
-              {aoAlternarComparacao && (
-                <button
-                  className={`item-lista-produto__botao-comparar ${estaSelecionado ? 'item-lista-produto__botao-comparar--selecionado' : ''}`}
-                  onClick={aoAlternarComparacao}
-                  title={estaSelecionado ? "Remover da comparação" : "Adicionar para comparar"}
-                >
-                  <i className={`bi ${estaSelecionado ? 'bi-dash-circle' : 'bi-bar-chart'}`}></i>
-                </button>
-              )}
             </div>
           </div>
         </div>
