@@ -218,176 +218,245 @@ const PaginaProdutosPersonalizados = () => {
   };
 
   return (
-    <Container fluid className="py-4 pagina-produtos-personalizados">
-      <Row>
-        <Col>
-          <div className="d-flex align-items-center mb-4">
-            <BsPalette size={32} style={{color: 'var(--primary-color)'}} className="me-3" />
-            <div>
-              <h1 className="h2 mb-1" style={{color: 'var(--primary-color)'}}>
-                🎨 Produtos Personalizados
-              </h1>
-              <p className="text-muted mb-0">
-                Crie produtos únicos com seu nome e estilo pessoal
-              </p>
-            </div>
-          </div>
-        </Col>
-      </Row>
-
-      {mostrarAlert && (
-        <Alert variant="success" className="alert-personalizado">
-          ✅ Produto personalizado adicionado ao carrinho com sucesso!
-        </Alert>
-      )}
-
-      <Row>
-        {/* Seleção de Produtos */}
-        <Col lg={4} className="mb-4">
-          <Card className="produtos-card h-100">
-            <Card.Header className="bg-gradient-primary text-white">
-              <h5 className="mb-0">
-                <BsStarFill className="me-2" />
-                Escolha seu Produto
-              </h5>
-            </Card.Header>
-            <Card.Body>
-              {produtosPersonalizaveis.map(produto => (
-                <Card 
-                  key={produto.id}
-                  className={`produto-item mb-3 ${produtoSelecionado?.id === produto.id ? 'selecionado' : ''}`}
-                  onClick={() => selecionarProduto(produto)}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <Card.Body className="p-3">
-                    <div className="d-flex align-items-center">
-                      <div className="produto-thumb me-3 d-flex align-items-center justify-content-center">
-                        {getIconeProduto(produto.id)}
-                      </div>
-                      <div className="flex-grow-1">
-                        <h6 className="mb-1">{produto.nome}</h6>
-                        <p className="text-muted small mb-1">{produto.descricao}</p>
-                        <Badge bg="primary">
-                          A partir de R$ {produto.precoBase.toFixed(2)}
-                        </Badge>
-                      </div>
-                    </div>
-                  </Card.Body>
-                </Card>
-              ))}
-            </Card.Body>
-          </Card>
-        </Col>
-
-        {/* Personalização */}
-        <Col lg={4} className="mb-4">
-          <Card className="personalizacao-card h-100">
-            <Card.Header className="bg-gradient-primary text-white">
-              <h5 className="mb-0">
-                <BsTypeBold className="me-2" />
-                Personalização
-              </h5>
-            </Card.Header>
-            <Card.Body>
-              {produtoSelecionado ? (
-                <>
-                  <Form.Group className="mb-3">
-                    <Form.Label>📝 Nome Personalizado</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="Digite seu nome..."
-                      value={personalizacao.nome}
-                      onChange={(e) => atualizarPersonalizacao('nome', e.target.value)}
-                      maxLength="20"
-                    />
-                    <Form.Text className="text-muted">
-                      Adiciona R$ 5,00 • Máx. 20 caracteres
-                    </Form.Text>
-                  </Form.Group>
-
-                  <Form.Group className="mb-3">
-                    <Form.Label>💬 Texto Adicional</Form.Label>
-                    <Form.Control
-                      as="textarea"
-                      rows={2}
-                      placeholder="Texto adicional..."
-                      value={personalizacao.texto}
-                      onChange={(e) => atualizarPersonalizacao('texto', e.target.value)}
-                      maxLength="50"
-                    />
-                    <Form.Text className="text-muted">
-                      Adiciona R$ 3,00 • Máx. 50 caracteres
-                    </Form.Text>
-                  </Form.Group>
-
-                  <Form.Group className="mb-3">
-                    <Form.Label>🎨 Cor</Form.Label>
-                    <div className="cores-container">
-                      {produtoSelecionado.opcoes.cores.map(cor => (
-                        <div
-                          key={cor}
-                          className={`cor-opcao ${personalizacao.cor === cor ? 'selecionada' : ''}`}
-                          style={{ backgroundColor: cor }}
-                          onClick={() => atualizarPersonalizacao('cor', cor)}
-                        />
-                      ))}
-                    </div>
-                  </Form.Group>
-
-                  <Form.Group className="mb-3">
-                    <Form.Label>🔤 Fonte</Form.Label>
-                    <Form.Select
-                      value={personalizacao.fonte}
-                      onChange={(e) => atualizarPersonalizacao('fonte', e.target.value)}
-                    >
-                      {produtoSelecionado.opcoes.fontes.map(fonte => (
-                        <option key={fonte} value={fonte} style={{fontFamily: fonte}}>
-                          {fonte}
-                        </option>
-                      ))}
-                    </Form.Select>
-                  </Form.Group>
-
-                  <Form.Group className="mb-4">
-                    <Form.Label>📏 Tamanho</Form.Label>
-                    <Form.Select
-                      value={personalizacao.tamanho}
-                      onChange={(e) => atualizarPersonalizacao('tamanho', e.target.value)}
-                    >
-                      {produtoSelecionado.opcoes.tamanhos.map(tamanho => (
-                        <option key={tamanho} value={tamanho}>
-                          {tamanho}
-                        </option>
-                      ))}
-                    </Form.Select>
-                  </Form.Group>
-
-                  <div className="preco-final mb-3">
-                    <h5 style={{color: 'var(--primary-color)'}}>
-                      💰 Total: R$ {precoFinal.toFixed(2)}
-                    </h5>
-                  </div>
-
-                  <Button
-                    variant="primary"
-                    size="lg"
-                    className="w-100"
-                    onClick={adicionarProdutoPersonalizado}
-                    disabled={!personalizacao.nome && !personalizacao.texto}
-                  >
-                    <BsCartPlus className="me-2" />
-                    Adicionar ao Carrinho
-                  </Button>
-                </>
-              ) : (
-                <div className="text-center py-5">
-                  <BsPalette size={48} className="text-muted mb-3" />
-                  <h6 className="text-muted">Selecione um produto para personalizar</h6>
+    <Container fluid className="py-5 pagina-produtos-personalizados">
+      <Container>
+        <Row>
+          <Col>
+            <div className="d-flex align-items-center justify-content-center mb-5">
+              <div className="text-center">
+                <div className="mb-3">
+                  <BsPalette size={48} style={{color: 'var(--primary-color)'}} />
                 </div>
-              )}
-            </Card.Body>
-          </Card>
-        </Col>
+                <h1 className="h1 mb-3">
+                  🎨 Produtos Personalizados
+                </h1>
+                <p className="text-muted mb-0 lead">
+                  Crie produtos únicos com seu nome e estilo pessoal. Transforme suas ideias em realidade!
+                </p>
+                <div className="mt-4">
+                  <span className="badge bg-primary fs-6 px-4 py-2">
+                    ✨ Design Premium • Entrega Rápida • Qualidade Garantida
+                  </span>
+                </div>
+              </div>
+            </div>
+          </Col>
+        </Row>
+
+        {mostrarAlert && (
+          <Alert variant="success" className="alert-personalizado mb-4">
+            <div className="d-flex align-items-center">
+              <div className="me-3">
+                <div className="alert-icon">
+                  ✅
+                </div>
+              </div>
+              <div>
+                <strong>Sucesso!</strong> Produto personalizado adicionado ao carrinho com sucesso!
+              </div>
+            </div>
+          </Alert>
+        )}
+
+        <Row className="g-4">
+          {/* Seleção de Produtos */}
+          <Col lg={4} className="mb-4">
+            <Card className="produtos-card h-100">
+              <Card.Header className="bg-gradient-primary text-white">
+                <h5 className="mb-0 d-flex align-items-center">
+                  <BsStarFill className="me-2" />
+                  Escolha seu Produto
+                </h5>
+              </Card.Header>
+              <Card.Body className="p-4">
+                <div className="mb-3">
+                  <p className="text-muted small mb-3">
+                    Selecione o produto que deseja personalizar e deixe sua marca única!
+                  </p>
+                </div>
+                {produtosPersonalizaveis.map(produto => (
+                  <Card 
+                    key={produto.id}
+                    className={`produto-item mb-3 ${produtoSelecionado?.id === produto.id ? 'selecionado' : ''}`}
+                    onClick={() => selecionarProduto(produto)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <Card.Body className="p-3">
+                      <div className="d-flex align-items-center">
+                        <div className="produto-thumb me-3 d-flex align-items-center justify-content-center">
+                          {getIconeProduto(produto.id)}
+                        </div>
+                        <div className="flex-grow-1">
+                          <h6 className="mb-1 fw-bold">{produto.nome}</h6>
+                          <p className="text-muted small mb-2">{produto.descricao}</p>
+                          <div className="d-flex align-items-center justify-content-between">
+                            <Badge bg="primary" className="px-3 py-1">
+                              A partir de R$ {produto.precoBase.toFixed(2)}
+                            </Badge>
+                            <small className="text-muted">
+                              {produto.categoria}
+                            </small>
+                          </div>
+                        </div>
+                      </div>
+                    </Card.Body>
+                  </Card>
+                ))}
+              </Card.Body>
+            </Card>
+          </Col>
+
+          {/* Personalização */}
+          <Col lg={4} className="mb-4">
+            <Card className="personalizacao-card h-100">
+              <Card.Header className="bg-gradient-primary text-white">
+                <h5 className="mb-0 d-flex align-items-center">
+                  <BsTypeBold className="me-2" />
+                  Personalização
+                </h5>
+              </Card.Header>
+              <Card.Body className="p-4">
+                {produtoSelecionado ? (
+                  <>
+                    <div className="mb-3">
+                      <p className="text-muted small mb-3">
+                        Customize seu <strong>{produtoSelecionado.nome}</strong> da forma que quiser!
+                      </p>
+                    </div>
+
+                    <Form.Group className="mb-4">
+                      <Form.Label className="d-flex align-items-center">
+                        <span className="me-2">📝</span>
+                        Nome Personalizado
+                      </Form.Label>
+                      <Form.Control
+                        type="text"
+                        placeholder="Digite seu nome ou texto..."
+                        value={personalizacao.nome}
+                        onChange={(e) => atualizarPersonalizacao('nome', e.target.value)}
+                        maxLength="20"
+                        className="form-control-premium"
+                      />
+                      <Form.Text className="text-muted">
+                        <i className="bi bi-info-circle me-1"></i>
+                        Adiciona R$ 5,00 • Máximo 20 caracteres
+                      </Form.Text>
+                    </Form.Group>
+
+                    <Form.Group className="mb-4">
+                      <Form.Label className="d-flex align-items-center">
+                        <span className="me-2">💬</span>
+                        Texto Adicional
+                      </Form.Label>
+                      <Form.Control
+                        as="textarea"
+                        rows={3}
+                        placeholder="Adicione uma frase especial..."
+                        value={personalizacao.texto}
+                        onChange={(e) => atualizarPersonalizacao('texto', e.target.value)}
+                        maxLength="50"
+                        className="form-control-premium"
+                      />
+                      <Form.Text className="text-muted">
+                        <i className="bi bi-info-circle me-1"></i>
+                        Adiciona R$ 3,00 • Máximo 50 caracteres
+                      </Form.Text>
+                    </Form.Group>
+
+                    <Form.Group className="mb-4">
+                      <Form.Label className="d-flex align-items-center">
+                        <span className="me-2">🎨</span>
+                        Escolha a Cor
+                      </Form.Label>
+                      <div className="cores-container">
+                        {produtoSelecionado.opcoes.cores.map(cor => (
+                          <div
+                            key={cor}
+                            className={`cor-opcao ${personalizacao.cor === cor ? 'selecionada' : ''}`}
+                            style={{ backgroundColor: cor }}
+                            onClick={() => atualizarPersonalizacao('cor', cor)}
+                            title={`Cor: ${cor}`}
+                          />
+                        ))}
+                      </div>
+                    </Form.Group>
+
+                    <Form.Group className="mb-4">
+                      <Form.Label className="d-flex align-items-center">
+                        <span className="me-2">🔤</span>
+                        Fonte
+                      </Form.Label>
+                      <Form.Select
+                        value={personalizacao.fonte}
+                        onChange={(e) => atualizarPersonalizacao('fonte', e.target.value)}
+                        className="form-select-premium"
+                      >
+                        {produtoSelecionado.opcoes.fontes.map(fonte => (
+                          <option key={fonte} value={fonte} style={{fontFamily: fonte}}>
+                            {fonte}
+                          </option>
+                        ))}
+                      </Form.Select>
+                    </Form.Group>
+
+                    <Form.Group className="mb-4">
+                      <Form.Label className="d-flex align-items-center">
+                        <span className="me-2">📏</span>
+                        Tamanho
+                      </Form.Label>
+                      <Form.Select
+                        value={personalizacao.tamanho}
+                        onChange={(e) => atualizarPersonalizacao('tamanho', e.target.value)}
+                        className="form-select-premium"
+                      >
+                        {produtoSelecionado.opcoes.tamanhos.map(tamanho => (
+                          <option key={tamanho} value={tamanho}>
+                            {tamanho}
+                          </option>
+                        ))}
+                      </Form.Select>
+                    </Form.Group>
+
+                    <div className="preco-final mb-4">
+                      <div className="text-center">
+                        <h5 className="mb-2">
+                          <i className="bi bi-calculator me-2"></i>
+                          Valor Total
+                        </h5>
+                        <div className="display-6 fw-bold">
+                          R$ {precoFinal.toFixed(2)}
+                        </div>
+                        <small className="text-muted">
+                          Produto personalizado
+                        </small>
+                      </div>
+                    </div>
+
+                    <Button
+                      variant="primary"
+                      size="lg"
+                      className="w-100 btn-premium"
+                      onClick={adicionarProdutoPersonalizado}
+                      disabled={!personalizacao.nome && !personalizacao.texto}
+                    >
+                      <BsCartPlus className="me-2" />
+                      Adicionar ao Carrinho
+                    </Button>
+                  </>
+                ) : (
+                  <div className="text-center py-5">
+                    <div className="mb-4">
+                      <BsPalette size={64} className="text-muted opacity-50" />
+                    </div>
+                    <h6 className="text-muted mb-2">Escolha um produto</h6>
+                    <p className="text-muted small">
+                      Selecione um produto na lista ao lado para começar a personalizar
+                    </p>
+                  </div>
+                )}
+              </Card.Body>
+            </Card>
+          </Col>
 
         {/* Preview */}
         <Col lg={4} className="mb-4">
@@ -450,7 +519,8 @@ const PaginaProdutosPersonalizados = () => {
             </Card.Body>
           </Card>
         </Col>
-      </Row>
+        </Row>
+      </Container>
     </Container>
   );
 };
