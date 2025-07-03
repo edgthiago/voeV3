@@ -87,30 +87,57 @@
   z-index: 2;
 }
 
+.newsletter-form .input-group {
+  gap: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: stretch;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.newsletter-form .input-group > * {
+  flex: 1;
+}
+
+.newsletter-form .input-group .btn-newsletter {
+  flex: 0 0 auto;
+}
+
 .newsletter-input {
   border: 2px solid rgba(255, 255, 255, 0.2);
   background: rgba(255, 255, 255, 0.9);
-  border-radius: 12px 0 0 12px;
+  border-radius: 12px 0 0 12px !important;
   padding: 0.8rem 1.2rem;
   font-size: 1rem;
   transition: all 0.3s ease;
+  border-right: none !important;
+  outline: none;
 }
 
 .newsletter-input:focus {
   border-color: rgba(255, 255, 255, 0.5);
   background: white;
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+  border-right: none !important;
 }
 
 .btn-newsletter {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
   border: 2px solid rgba(255, 255, 255, 0.3);
   color: white;
-  border-radius: 0 12px 12px 0;
+  border-radius: 0 12px 12px 0 !important;
   padding: 0.8rem 1.5rem;
   font-weight: 600;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
+  border-left: none !important;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  outline: none;
 }
 
 .btn-newsletter:hover {
@@ -222,8 +249,8 @@
 .stat-item {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
+  align-items: flex-start;
+  text-align: left;
   flex: 1;
 }
 
@@ -619,56 +646,117 @@
   gap: 0.4rem;
   padding: 0.8rem;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.8);
-  border: 2px solid rgba(232, 197, 216, 0.2);
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(232, 197, 216, 0.3);
   transition: all 0.3s ease;
   min-width: 70px;
   cursor: pointer;
-}
-
-.payment-icon:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(232, 197, 216, 0.3);
-  border-color: var(--primary-color);
-}
-
-.payment-icon.pix:hover {
-  background: linear-gradient(135deg, #32BCAD, #4FD1C7);
-  color: white;
-}
-
-.payment-icon.card:hover {
-  background: linear-gradient(135deg, #1E40AF, #3B82F6);
-  color: white;
-}
-
-.payment-icon.boleto:hover {
-  background: linear-gradient(135deg, #DC2626, #EF4444);
-  color: white;
+  position: relative;
+  overflow: hidden;
 }
 
 .payment-icon i {
   font-size: 1.4rem;
-  color: var(--primary-color);
+  color: var(--primary-color); /* Cor rosa pastel padrão */
   transition: all 0.3s ease;
-}
-
-.payment-icon:hover i {
-  color: white;
-  transform: scale(1.1);
 }
 
 .payment-icon span {
   font-size: 0.75rem;
-  color: var(--text-medium);
+  color: var(--text-medium); /* Cor cinza padrão */
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   transition: all 0.3s ease;
 }
 
-.payment-icon:hover span {
-  color: white;
+/* Hover effects - apenas mudam o fundo, mantendo cores padrão */
+.payment-icon:hover {
+  transform: translateY(-3px);
+  border-color: var(--primary-color);
+  box-shadow: 0 8px 25px rgba(232, 197, 216, 0.4);
+}
+
+.payment-icon.pix:hover {
+  background: linear-gradient(135deg, #86EFAC, #BBF7D0) !important;
+  border-color: #86EFAC !important;
+}
+
+.payment-icon.pix:hover i {
+  color: #065F46 !important;
+  transform: scale(1.1);
+}
+
+.payment-icon.pix:hover span {
+  color: #065F46 !important;
+  transform: scale(1.1);
+}
+
+.payment-icon.card:hover {
+  background: linear-gradient(135deg, #93C5FD, #BFDBFE) !important;
+  border-color: #93C5FD !important;
+}
+
+.payment-icon.card:hover i {
+  color: #1E3A8A !important;
+  transform: scale(1.1);
+}
+
+.payment-icon.card:hover span {
+  color: #1E3A8A !important;
+  transform: scale(1.1);
+}
+
+.payment-icon.boleto:hover {
+  background: linear-gradient(135deg, #FDE68A, #FEF3C7) !important;
+  border-color: #FDE68A !important;
+}
+
+.payment-icon.boleto:hover i {
+  color: #92400E !important;
+  transform: scale(1.1);
+}
+
+.payment-icon.boleto:hover span {
+  color: #92400E !important;
+  transform: scale(1.1);
+}
+
+/* Touch devices - melhorar interação com formas de pagamento */
+@media (hover: none) and (pointer: coarse) {
+  .payment-icon:active {
+    transform: translateY(-2px) scale(0.98);
+  }
+  
+  .payment-icon.pix:active {
+    background: linear-gradient(135deg, #86EFAC, #BBF7D0);
+    border-color: #86EFAC;
+  }
+  
+  .payment-icon.pix:active i,
+  .payment-icon.pix:active span {
+    color: #065F46;
+  }
+  
+  .payment-icon.card:active {
+    background: linear-gradient(135deg, #93C5FD, #BFDBFE);
+    border-color: #93C5FD;
+  }
+  
+  .payment-icon.card:active i,
+  .payment-icon.card:active span {
+    color: #1E3A8A;
+  }
+  
+  .payment-icon.boleto:active {
+    background: linear-gradient(135deg, #FDE68A, #FEF3C7);
+    border-color: #FDE68A;
+  }
+  
+  .payment-icon.boleto:active i,
+  .payment-icon.boleto:active span {
+    color: #92400E;
+  }
 }
 
 /* Certifications */
@@ -707,7 +795,10 @@
 
 /* Back to Top */
 .back-to-top {
-  text-align: center;
+  position: fixed;
+  bottom: 20px;
+  right: 20px; /* Posição padrão mais próxima da borda */
+  z-index: 100; /* Z-index muito baixo para evitar sobreposição */
 }
 
 .btn-back-to-top {
@@ -715,36 +806,76 @@
   flex-direction: column;
   align-items: center;
   gap: 0.3rem;
-  background: rgba(255, 255, 255, 0.9);
-  border: 2px solid var(--primary-color);
-  border-radius: 15px;
-  padding: 0.8rem 1.2rem;
+  background: rgba(255, 255, 255, 0.1); /* Muito mais transparente */
+  border: 2px solid rgba(232, 197, 216, 0.3); /* Borda bem transparente */
+  border-radius: 50px;
+  padding: 0.8rem;
   color: var(--primary-color);
   font-weight: 600;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   transition: all 0.3s ease;
   cursor: pointer;
+  box-shadow: 0 2px 8px rgba(232, 197, 216, 0.1); /* Sombra muito sutil */
+  backdrop-filter: blur(20px); /* Mais blur para melhor legibilidade */
+  min-width: 60px;
+  min-height: 60px;
 }
 
 .btn-back-to-top:hover {
-  background: var(--primary-color);
-  color: white;
-  transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(232, 197, 216, 0.4);
+  background: rgba(232, 197, 216, 0.4); /* Hover ainda transparente */
+  color: var(--primary-darker);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 4px 15px rgba(232, 197, 216, 0.2);
+  border-color: rgba(232, 197, 216, 0.5);
 }
 
 .btn-back-to-top i {
-  font-size: 1.2rem;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8); /* Sombra branca para contraste */
+  font-size: 1.4rem;
   transition: all 0.3s ease;
+}
+
+.btn-back-to-top span {
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8); /* Sombra branca para contraste */
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .btn-back-to-top:hover i {
   transform: scale(1.1);
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
+}
+
+.btn-back-to-top:hover span {
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
 }
 
 /* ==========================================================================
    Responsive Design
    ========================================================================== */
+
+/* Large screens */
+@media (min-width: 1400px) {
+  .back-to-top {
+    right: 30px; /* Posição mais conservadora em telas grandes */
+  }
+}
+
+/* Desktop */
+@media (max-width: 1399px) and (min-width: 1025px) {
+  .back-to-top {
+    right: 20px; /* Posição padrão para desktop */
+  }
+}
+
+/* Tablet adjustments */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .back-to-top {
+    right: 20px; /* Mesma posição para tablets */
+  }
+}
 
 @media (max-width: 768px) {
   .newsletter-section {
@@ -782,6 +913,11 @@
   
   .footer-stats {
     gap: 1rem;
+  }
+  
+  .stat-item {
+    align-items: center;
+    text-align: center;
   }
   
   .social-heading {
@@ -876,7 +1012,25 @@
   .stat-item {
     flex-direction: row;
     justify-content: center;
+    align-items: center;
+    text-align: center;
     gap: 0.5rem;
+  }
+  
+  .btn-back-to-top {
+    bottom: 15px;
+    right: 15px; /* Posição padrão no mobile */
+    min-width: 50px;
+    min-height: 50px;
+    padding: 0.6rem;
+  }
+  
+  .btn-back-to-top i {
+    font-size: 1.2rem;
+  }
+  
+  .btn-back-to-top span {
+    font-size: 0.65rem;
   }
   
   .social-links {
@@ -907,6 +1061,14 @@
     padding: 0.6rem;
   }
   
+  .payment-icon i {
+    font-size: 1.2rem;
+  }
+  
+  .payment-icon span {
+    font-size: 0.7rem;
+  }
+  
   .trust-badge {
     min-width: 60px;
     padding: 0.5rem;
@@ -915,5 +1077,45 @@
   .footer-bottom {
     padding: 1.5rem 0;
   }
+}
+
+/* ==========================================================================
+   CORREÇÃO FINAL - Maior especificidade para hovers das formas de pagamento
+   ========================================================================== */
+
+/* PIX - Verde Pastel */
+.footer .footer-bottom .payment-methods .payment-icons .payment-icon.pix:hover {
+  background: linear-gradient(135deg, #86EFAC, #BBF7D0) !important;
+  border-color: #86EFAC !important;
+  box-shadow: 0 8px 25px rgba(134, 239, 172, 0.4) !important;
+}
+
+.footer .footer-bottom .payment-methods .payment-icons .payment-icon.pix:hover i,
+.footer .footer-bottom .payment-methods .payment-icons .payment-icon.pix:hover span {
+  color: #065F46 !important; /* Verde escuro para contraste */
+}
+
+/* CARTÃO - Azul Pastel */
+.footer .footer-bottom .payment-methods .payment-icons .payment-icon.card:hover {
+  background: linear-gradient(135deg, #93C5FD, #BFDBFE) !important;
+  border-color: #93C5FD !important;
+  box-shadow: 0 8px 25px rgba(147, 197, 253, 0.4) !important;
+}
+
+.footer .footer-bottom .payment-methods .payment-icons .payment-icon.card:hover i,
+.footer .footer-bottom .payment-methods .payment-icons .payment-icon.card:hover span {
+  color: #1E3A8A !important; /* Azul escuro para contraste */
+}
+
+/* BOLETO - Amarelo Pastel */
+.footer .footer-bottom .payment-methods .payment-icons .payment-icon.boleto:hover {
+  background: linear-gradient(135deg, #FDE68A, #FEF3C7) !important;
+  border-color: #FDE68A !important;
+  box-shadow: 0 8px 25px rgba(253, 230, 138, 0.4) !important;
+}
+
+.footer .footer-bottom .payment-methods .payment-icons .payment-icon.boleto:hover i,
+.footer .footer-bottom .payment-methods .payment-icons .payment-icon.boleto:hover span {
+  color: #92400E !important; /* Amarelo escuro para contraste */
 }
 

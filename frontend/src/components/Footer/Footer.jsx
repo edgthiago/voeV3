@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import './Footer.css';
 
@@ -29,14 +29,14 @@ const Footer = () => {
                   <div className="input-group">
                     <input 
                       type="email" 
-                      className="form-control newsletter-input" 
+                      className="newsletter-input" 
                       placeholder="Digite seu melhor e-mail"
                       aria-label="E-mail para newsletter"
                     />
-                    <Button className="btn-newsletter">
+                    <button className="btn-newsletter">
                       <i className="bi bi-send-fill me-2"></i>
                       Cadastrar
-                    </Button>
+                    </button>
                   </div>
                   <div className="newsletter-benefits">
                     <span className="benefit-item">
@@ -279,22 +279,23 @@ const Footer = () => {
                     <span>Loja Verificada</span>
                   </div>
                 </div>
-                
-                <div className="back-to-top">
-                  <button 
-                    className="btn-back-to-top"
-                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                    title="Voltar ao topo"
-                  >
-                    <i className="bi bi-arrow-up-circle-fill"></i>
-                    <span>Topo</span>
-                  </button>
-                </div>
               </Col>
             </Row>
           </Container>
         </div>
       </footer>
+      
+      {/* Floating Back to Top Button */}
+      <div className="back-to-top">
+        <button 
+          className="btn-back-to-top"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          title="Voltar ao topo"
+        >
+          <i className="bi bi-arrow-up-circle-fill"></i>
+          <span>Topo</span>
+        </button>
+      </div>
     </>
   );
 };
