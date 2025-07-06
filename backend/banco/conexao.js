@@ -1,12 +1,33 @@
 // Configuração de conexão com MySQL
 // Arquivo: conexao.js
 
+// Carregar variáveis de ambiente
+require('dotenv').config();
+
 const mysql = require('mysql2/promise');
+
+// Validação básica de segurança
+const validarConfiguracao = () => {
+    // Em desenvolvimento, DB_PASSWORD pode estar vazia
+    if (process.env.NODE_ENV === 'production') {
+        const obrigatorios = ['DB_PASSWORD'];
+        const faltando = obrigatorios.filter(env => !process.env[env] && process.env[env] !== '');
+        
+        if (faltando.length > 0) {
+            console.error(`❌ ERRO CRÍTICO: Configure no arquivo .env: ${faltando.join(', ')}`);
+            console.error('📋 Exemplo: DB_PASSWORD=sua_senha_real');
+            process.exit(1);
+        }
+    }
+};
+
+// Executar validação
+validarConfiguracao();
 
 const configuracaoBanco = {
     host: process.env.DB_HOST || 'localhost',
     user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '1234',
+    password: process.env.DB_PASSWORD || '', // ✅ Permitir senha vazia em desenvolvimento
     database: process.env.DB_NAME || 'projetofgt',
     waitForConnections: true,
     connectionLimit: 10,

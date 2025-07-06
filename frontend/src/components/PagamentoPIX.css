@@ -1,0 +1,384 @@
+.pagamento-pix {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.pagamento-pix.loading {
+    text-align: center;
+    padding: 40px;
+}
+
+.pagamento-pix.erro {
+    text-align: center;
+}
+
+.pagamento-pix.sucesso {
+    text-align: center;
+    background: linear-gradient(135deg, #e8f5e8, #d4f1d4);
+}
+
+/* Header */
+.pix-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.pix-header h3 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-size: 1.4rem;
+}
+
+.valor-pagamento {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #27ae60;
+    margin: 10px 0;
+}
+
+.tempo-restante {
+    background: #fff3cd;
+    color: #856404;
+    padding: 8px 16px;
+    border-radius: 20px;
+    display: inline-block;
+    font-weight: 500;
+    border: 1px solid #ffeaa7;
+}
+
+/* QR Code Section */
+.qr-code-section {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.qr-code-section h4 {
+    color: #34495e;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+.qr-code-container {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 15px 0;
+    border: 2px dashed #dee2e6;
+}
+
+.qr-code-image {
+    max-width: 200px;
+    height: auto;
+    border: 2px solid #fff;
+    border-radius: 8px;
+}
+
+.qr-placeholder {
+    width: 200px;
+    height: 200px;
+    background: #e9ecef;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    color: #6c757d;
+}
+
+.qr-instrucoes {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+/* Divider */
+.ou-divider {
+    text-align: center;
+    margin: 20px 0;
+    position: relative;
+}
+
+.ou-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #dee2e6;
+}
+
+.ou-divider span {
+    background: #fff;
+    padding: 0 15px;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+/* Código PIX Section */
+.codigo-pix-section h4 {
+    color: #34495e;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+.codigo-pix-container {
+    display: flex;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.codigo-pix-input {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #dee2e6;
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 0.85rem;
+    background: #f8f9fa;
+    color: #495057;
+}
+
+.btn-copiar-pix {
+    padding: 12px 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.btn-copiar-pix:hover {
+    background: #0056b3;
+    transform: translateY(-2px);
+}
+
+.btn-copiar-pix.copiado {
+    background: #28a745;
+}
+
+.btn-copiar-pix:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+}
+
+.codigo-instrucoes {
+    color: #6c757d;
+    font-size: 0.9rem;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* Status */
+.pix-status {
+    background: #e3f2fd;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.status-indicator span {
+    font-weight: 500;
+    color: #1976d2;
+}
+
+.status-texto {
+    color: #424242;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* Ações */
+.pix-acoes {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.btn-verificar {
+    flex: 1;
+    padding: 12px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-verificar:hover {
+    background: #1e7e34;
+    transform: translateY(-2px);
+}
+
+.btn-cancelar-pix {
+    padding: 12px 20px;
+    background: transparent;
+    color: #dc3545;
+    border: 2px solid #dc3545;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-cancelar-pix:hover {
+    background: #dc3545;
+    color: white;
+}
+
+/* Ajuda */
+.pix-ajuda {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.pix-ajuda h5 {
+    color: #495057;
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+
+.pix-ajuda ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.pix-ajuda li {
+    color: #6c757d;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+/* Spinner */
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+.spinner-small {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #e3f2fd;
+    border-top: 2px solid #1976d2;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Estados de erro e sucesso */
+.erro-container,
+.sucesso-container {
+    padding: 40px 20px;
+}
+
+.erro-container h3 {
+    color: #dc3545;
+    margin-bottom: 15px;
+}
+
+.sucesso-container h3 {
+    color: #28a745;
+    margin-bottom: 15px;
+}
+
+.valor-pago {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #28a745;
+    margin-top: 15px;
+}
+
+.acoes {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.btn-tentar-novamente {
+    padding: 12px 24px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-tentar-novamente:hover {
+    background: #0056b3;
+}
+
+.btn-cancelar {
+    padding: 12px 24px;
+    background: transparent;
+    color: #6c757d;
+    border: 2px solid #6c757d;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-cancelar:hover {
+    background: #6c757d;
+    color: white;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .pagamento-pix {
+        margin: 10px;
+        padding: 15px;
+    }
+    
+    .valor-pagamento {
+        font-size: 1.5rem;
+    }
+    
+    .codigo-pix-container {
+        flex-direction: column;
+    }
+    
+    .pix-acoes {
+        flex-direction: column;
+    }
+    
+    .acoes {
+        flex-direction: column;
+    }
+}

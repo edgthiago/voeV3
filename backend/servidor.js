@@ -1,3 +1,6 @@
+// Carregar variáveis de ambiente PRIMEIRO
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -137,6 +140,9 @@ app.use('/api/produtos', require('./rotas/produtos'));
 app.use('/api/auth', require('./rotas/autenticacao'));
 app.use('/api/carrinho', require('./rotas/carrinho'));
 app.use('/api/pedidos', require('./rotas/pedidos'));
+app.use('/api/pedidos', require('./rotas/status-frete'));
+app.use('/api/pagamentos', require('./rotas/pagamentos'));
+app.use('/api/notificacoes', require('./rotas/notificacoes'));
 app.use('/api/promocoes', require('./rotas/promocoes'));
 app.use('/api/comentarios', require('./rotas/comentarios'));
 app.use('/api/admin', require('./rotas/admin'));

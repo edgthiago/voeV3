@@ -12,6 +12,7 @@ const conexao = require('../banco/conexao');
 const { verificarAutenticacao } = require('../middleware/autenticacao');
 const logger = require('../utils/logger');
 const metrics = require('../utils/metrics');
+const eventoManager = require('../services/eventoManager');
 
 /**
  * @route GET /api/pedidos
