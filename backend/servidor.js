@@ -163,6 +163,7 @@ app.use('/api/admin', require('./rotas/admin'));
 app.use('/api/admin/metrics', require('./rotas/admin-metrics'));
 app.use('/api/upgrade', require('./rotas/upgrade'));
 app.use('/api/logs', require('./rotas/logs')); // Nova rota de logs
+app.use('/api/backup', require('./rotas/backup')); // Nova rota de backup
 
 // Servir dashboard de testes
 app.get('/dashboard', (req, res) => {
