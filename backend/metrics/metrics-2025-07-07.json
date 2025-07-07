@@ -1,0 +1,188 @@
+[
+  {
+    "timestamp": "2025-07-07T19:56:19.970Z",
+    "system": {
+      "cpu": 10,
+      "memory": {
+        "total": 16072,
+        "free": 6762,
+        "used": 9310,
+        "usage": 58
+      },
+      "disk": {
+        "total": 0,
+        "free": 0,
+        "used": 0,
+        "usage": 0
+      },
+      "network": {
+        "Wi-Fi": {
+          "address": "192.168.1.2",
+          "netmask": "255.255.255.0",
+          "mac": "e4:1f:d5:fc:d5:96"
+        }
+      },
+      "uptime": 757739.546,
+      "loadAverage": [
+        0,
+        0,
+        0
+      ],
+      "platform": "win32",
+      "hostname": "Thiago"
+    },
+    "database": {
+      "connections": 0,
+      "queries": 0,
+      "slowQueries": 0,
+      "size": 0,
+      "status": "error",
+      "error": "db.execute is not a function"
+    },
+    "application": {
+      "memory": {
+        "rss": 98,
+        "heapUsed": 32,
+        "heapTotal": 65,
+        "external": 4
+      },
+      "uptime": 1.4868571,
+      "pid": 10572,
+      "version": "v24.0.2",
+      "environment": "development"
+    },
+    "performance": {
+      "averageResponseTime": 804.1445119753377,
+      "requestsPerMinute": 69,
+      "errorRate": 5.5997764478952625,
+      "throughput": 428,
+      "concurrentUsers": 26
+    },
+    "errors": {},
+    "alerts": []
+  },
+  {
+    "timestamp": "2025-07-07T19:56:23.015Z",
+    "system": {
+      "cpu": 10,
+      "memory": {
+        "total": 16072,
+        "free": 6752,
+        "used": 9320,
+        "usage": 58
+      },
+      "disk": {
+        "total": 0,
+        "free": 0,
+        "used": 0,
+        "usage": 0
+      },
+      "network": {
+        "Wi-Fi": {
+          "address": "192.168.1.2",
+          "netmask": "255.255.255.0",
+          "mac": "e4:1f:d5:fc:d5:96"
+        }
+      },
+      "uptime": 757741.562,
+      "loadAverage": [
+        0,
+        0,
+        0
+      ],
+      "platform": "win32",
+      "hostname": "Thiago"
+    },
+    "database": {
+      "connections": 0,
+      "queries": 0,
+      "slowQueries": 0,
+      "size": 0,
+      "status": "error",
+      "error": "db.execute is not a function"
+    },
+    "application": {
+      "memory": {
+        "rss": 98,
+        "heapUsed": 32,
+        "heapTotal": 65,
+        "external": 4
+      },
+      "uptime": 3.5074359,
+      "pid": 10572,
+      "version": "v24.0.2",
+      "environment": "development"
+    },
+    "performance": {
+      "averageResponseTime": 433.6670090288205,
+      "requestsPerMinute": 59,
+      "errorRate": 9.444878741567502,
+      "throughput": 98,
+      "concurrentUsers": 41
+    },
+    "errors": {},
+    "alerts": []
+  },
+  {
+    "timestamp": "2025-07-07T19:56:23.015Z",
+    "system": {
+      "cpu": 10,
+      "memory": {
+        "total": 16072,
+        "free": 6752,
+        "used": 9320,
+        "usage": 58
+      },
+      "disk": {
+        "total": 0,
+        "free": 0,
+        "used": 0,
+        "usage": 0
+      },
+      "network": {
+        "Wi-Fi": {
+          "address": "192.168.1.2",
+          "netmask": "255.255.255.0",
+          "mac": "e4:1f:d5:fc:d5:96"
+        }
+      },
+      "uptime": 757741.562,
+      "loadAverage": [
+        0,
+        0,
+        0
+      ],
+      "platform": "win32",
+      "hostname": "Thiago"
+    },
+    "database": {
+      "connections": 0,
+      "queries": 0,
+      "slowQueries": 0,
+      "size": 0,
+      "status": "error",
+      "error": "db.execute is not a function"
+    },
+    "application": {
+      "memory": {
+        "rss": 98,
+        "heapUsed": 32,
+        "heapTotal": 65,
+        "external": 4
+      },
+      "uptime": 3.5074359,
+      "pid": 10572,
+      "version": "v24.0.2",
+      "environment": "development"
+    },
+    "performance": {
+      "averageResponseTime": 433.6670090288205,
+      "requestsPerMinute": 59,
+      "errorRate": 9.444878741567502,
+      "throughput": 98,
+      "concurrentUsers": 41
+    },
+    "errors": {},
+    "alerts": []
+  }
+]

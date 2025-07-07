@@ -1,0 +1,379 @@
+{
+  "timestamp": "2025-07-07T19:56:23.067Z",
+  "totalTests": 10,
+  "passed": 9,
+  "failed": 0,
+  "successRate": 90,
+  "details": [
+    {
+      "name": "Teste 1: Conexão com banco de dados real",
+      "status": "passed",
+      "result": {
+        "connected": true,
+        "userCount": 79,
+        "tableCount": 22,
+        "database": "projetofgt"
+      },
+      "timestamp": "2025-07-07T19:56:19.968Z"
+    },
+    {
+      "name": "Teste 2: Inicializar sistema de monitoramento",
+      "status": "passed",
+      "result": {
+        "success": true,
+        "message": "Monitoring started successfully",
+        "interval": 60000
+      },
+      "timestamp": "2025-07-07T19:56:19.979Z"
+    },
+    {
+      "name": "Teste 3: Simular carga no sistema",
+      "status": "passed",
+      "result": "Carga simulada com sucesso",
+      "timestamp": "2025-07-07T19:56:23.011Z"
+    },
+    {
+      "name": "Teste 4: Coletar métricas reais do sistema",
+      "status": "passed",
+      "result": {
+        "timestamp": "2025-07-07T19:56:23.015Z",
+        "system": {
+          "cpu": 10,
+          "memory": {
+            "total": 16072,
+            "free": 6752,
+            "used": 9320,
+            "usage": 58
+          },
+          "disk": {
+            "total": 0,
+            "free": 0,
+            "used": 0,
+            "usage": 0
+          },
+          "network": {
+            "Wi-Fi": {
+              "address": "192.168.1.2",
+              "netmask": "255.255.255.0",
+              "mac": "e4:1f:d5:fc:d5:96"
+            }
+          },
+          "uptime": 757741.562,
+          "loadAverage": [
+            0,
+            0,
+            0
+          ],
+          "platform": "win32",
+          "hostname": "Thiago"
+        },
+        "database": {
+          "connections": 0,
+          "queries": 0,
+          "slowQueries": 0,
+          "size": 0,
+          "status": "error",
+          "error": "db.execute is not a function"
+        },
+        "application": {
+          "memory": {
+            "rss": 98,
+            "heapUsed": 32,
+            "heapTotal": 65,
+            "external": 4
+          },
+          "uptime": 3.5074359,
+          "pid": 10572,
+          "version": "v24.0.2",
+          "environment": "development"
+        },
+        "performance": {
+          "averageResponseTime": 433.6670090288205,
+          "requestsPerMinute": 59,
+          "errorRate": 9.444878741567502,
+          "throughput": 98,
+          "concurrentUsers": 41
+        },
+        "errors": {},
+        "alerts": [],
+        "monitoringStatus": "running",
+        "thresholds": {
+          "cpu": 80,
+          "memory": 85,
+          "disk": 90,
+          "responseTime": 2000,
+          "errorRate": 5,
+          "dbConnections": 100
+        }
+      },
+      "timestamp": "2025-07-07T19:56:23.034Z"
+    },
+    {
+      "name": "Teste 5: Verificar sistema de alertas",
+      "status": "passed",
+      "result": [],
+      "timestamp": "2025-07-07T19:56:23.035Z"
+    },
+    {
+      "name": "Teste 6: Verificação de saúde do sistema",
+      "status": "passed",
+      "result": {
+        "timestamp": "2025-07-07T19:56:23.036Z",
+        "status": "degraded",
+        "services": {
+          "database": "unhealthy",
+          "application": "healthy",
+          "filesystem": "healthy",
+          "network": "healthy"
+        },
+        "uptime": 3.5127831,
+        "memory": {
+          "rss": 102260736,
+          "heapTotal": 68456448,
+          "heapUsed": 34179744,
+          "external": 3711910,
+          "arrayBuffers": 180966
+        },
+        "version": "v24.0.2"
+      },
+      "timestamp": "2025-07-07T19:56:23.039Z"
+    },
+    {
+      "name": "Teste 7: Integração com sistema de backup",
+      "status": "passed",
+      "result": {
+        "total": 8,
+        "totalSize": 0.66,
+        "types": {
+          "database": 6,
+          "logs": 1,
+          "full": 0,
+          "other": 1
+        },
+        "oldest": "database-2025-07-07T19-08-17-853Z.sql",
+        "newest": "logs-2025-07-07T19-23-22-083Z.zip",
+        "lastBackup": "2025-07-07T19:23:23.683Z"
+      },
+      "timestamp": "2025-07-07T19:56:23.042Z"
+    },
+    {
+      "name": "Teste 8: Salvar métricas em arquivo",
+      "status": "passed",
+      "result": {
+        "saved": true,
+        "records": 3
+      },
+      "timestamp": "2025-07-07T19:56:23.048Z"
+    },
+    {
+      "name": "Teste 9: Obter histórico de métricas",
+      "status": "passed",
+      "result": [
+        {
+          "date": "2025-07-07",
+          "metrics": [
+            {
+              "timestamp": "2025-07-07T19:56:19.970Z",
+              "system": {
+                "cpu": 10,
+                "memory": {
+                  "total": 16072,
+                  "free": 6762,
+                  "used": 9310,
+                  "usage": 58
+                },
+                "disk": {
+                  "total": 0,
+                  "free": 0,
+                  "used": 0,
+                  "usage": 0
+                },
+                "network": {
+                  "Wi-Fi": {
+                    "address": "192.168.1.2",
+                    "netmask": "255.255.255.0",
+                    "mac": "e4:1f:d5:fc:d5:96"
+                  }
+                },
+                "uptime": 757739.546,
+                "loadAverage": [
+                  0,
+                  0,
+                  0
+                ],
+                "platform": "win32",
+                "hostname": "Thiago"
+              },
+              "database": {
+                "connections": 0,
+                "queries": 0,
+                "slowQueries": 0,
+                "size": 0,
+                "status": "error",
+                "error": "db.execute is not a function"
+              },
+              "application": {
+                "memory": {
+                  "rss": 98,
+                  "heapUsed": 32,
+                  "heapTotal": 65,
+                  "external": 4
+                },
+                "uptime": 1.4868571,
+                "pid": 10572,
+                "version": "v24.0.2",
+                "environment": "development"
+              },
+              "performance": {
+                "averageResponseTime": 804.1445119753377,
+                "requestsPerMinute": 69,
+                "errorRate": 5.5997764478952625,
+                "throughput": 428,
+                "concurrentUsers": 26
+              },
+              "errors": {},
+              "alerts": []
+            },
+            {
+              "timestamp": "2025-07-07T19:56:23.015Z",
+              "system": {
+                "cpu": 10,
+                "memory": {
+                  "total": 16072,
+                  "free": 6752,
+                  "used": 9320,
+                  "usage": 58
+                },
+                "disk": {
+                  "total": 0,
+                  "free": 0,
+                  "used": 0,
+                  "usage": 0
+                },
+                "network": {
+                  "Wi-Fi": {
+                    "address": "192.168.1.2",
+                    "netmask": "255.255.255.0",
+                    "mac": "e4:1f:d5:fc:d5:96"
+                  }
+                },
+                "uptime": 757741.562,
+                "loadAverage": [
+                  0,
+                  0,
+                  0
+                ],
+                "platform": "win32",
+                "hostname": "Thiago"
+              },
+              "database": {
+                "connections": 0,
+                "queries": 0,
+                "slowQueries": 0,
+                "size": 0,
+                "status": "error",
+                "error": "db.execute is not a function"
+              },
+              "application": {
+                "memory": {
+                  "rss": 98,
+                  "heapUsed": 32,
+                  "heapTotal": 65,
+                  "external": 4
+                },
+                "uptime": 3.5074359,
+                "pid": 10572,
+                "version": "v24.0.2",
+                "environment": "development"
+              },
+              "performance": {
+                "averageResponseTime": 433.6670090288205,
+                "requestsPerMinute": 59,
+                "errorRate": 9.444878741567502,
+                "throughput": 98,
+                "concurrentUsers": 41
+              },
+              "errors": {},
+              "alerts": []
+            },
+            {
+              "timestamp": "2025-07-07T19:56:23.015Z",
+              "system": {
+                "cpu": 10,
+                "memory": {
+                  "total": 16072,
+                  "free": 6752,
+                  "used": 9320,
+                  "usage": 58
+                },
+                "disk": {
+                  "total": 0,
+                  "free": 0,
+                  "used": 0,
+                  "usage": 0
+                },
+                "network": {
+                  "Wi-Fi": {
+                    "address": "192.168.1.2",
+                    "netmask": "255.255.255.0",
+                    "mac": "e4:1f:d5:fc:d5:96"
+                  }
+                },
+                "uptime": 757741.562,
+                "loadAverage": [
+                  0,
+                  0,
+                  0
+                ],
+                "platform": "win32",
+                "hostname": "Thiago"
+              },
+              "database": {
+                "connections": 0,
+                "queries": 0,
+                "slowQueries": 0,
+                "size": 0,
+                "status": "error",
+                "error": "db.execute is not a function"
+              },
+              "application": {
+                "memory": {
+                  "rss": 98,
+                  "heapUsed": 32,
+                  "heapTotal": 65,
+                  "external": 4
+                },
+                "uptime": 3.5074359,
+                "pid": 10572,
+                "version": "v24.0.2",
+                "environment": "development"
+              },
+              "performance": {
+                "averageResponseTime": 433.6670090288205,
+                "requestsPerMinute": 59,
+                "errorRate": 9.444878741567502,
+                "throughput": 98,
+                "concurrentUsers": 41
+              },
+              "errors": {},
+              "alerts": []
+            }
+          ]
+        }
+      ],
+      "timestamp": "2025-07-07T19:56:23.051Z"
+    }
+  ],
+  "systemInfo": {
+    "platform": "win32",
+    "nodeVersion": "v24.0.2",
+    "memory": {
+      "rss": 102572032,
+      "heapTotal": 68456448,
+      "heapUsed": 35453808,
+      "external": 3720102,
+      "arrayBuffers": 189158
+    },
+    "uptime": 3.5439759
+  }
+}

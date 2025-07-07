@@ -19,6 +19,12 @@ const {
     businessLoggingMiddleware
 } = require('./middleware/logging');
 
+// 📊 Importar sistema de monitoramento
+const monitoringService = require('./services/monitoringService');
+
+// 💾 Importar sistema de backup
+const backupService = require('./services/backupService');
+
 // ⚠️  ATENÇÃO: MODO DE TESTE ATIVO ⚠️ 
 // Mecanismos de segurança DESABILITADOS para facilitar testes
 // CORS, Rate Limiting, Helmet e Compression estão desativados
@@ -150,6 +156,7 @@ app.use(async (req, res, next) => {
 });
 
 // Rotas da API
+app.use('/api/usuarios', require('./rotas/usuarios'));
 app.use('/api/produtos', require('./rotas/produtos'));
 app.use('/api/auth', require('./rotas/autenticacao'));
 app.use('/api/carrinho', require('./rotas/carrinho'));
@@ -164,6 +171,7 @@ app.use('/api/admin/metrics', require('./rotas/admin-metrics'));
 app.use('/api/upgrade', require('./rotas/upgrade'));
 app.use('/api/logs', require('./rotas/logs')); // Nova rota de logs
 app.use('/api/backup', require('./rotas/backup')); // Nova rota de backup
+app.use('/api/monitoring', require('./rotas/monitoring')); // Nova rota de monitoramento
 
 // Servir dashboard de testes
 app.get('/dashboard', (req, res) => {
@@ -353,6 +361,9 @@ const iniciarServidor = async () => {
     process.exit(1);
   }
 };
+
+// 🎯 Inicializar sistema de monitoramento
+monitoringService.startMonitoring();
 
 // Verificar promoções expiradas periodicamente (a cada hora)
 setInterval(async () => {
