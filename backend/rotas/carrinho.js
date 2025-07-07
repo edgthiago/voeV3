@@ -3,9 +3,10 @@ const router = express.Router();
 const Carrinho = require('../modelos/Carrinho');
 const { verificarAutenticacao } = require('../middleware/autenticacao');
 const { middleware } = require('../utils/sistema-permissoes');
+const CacheMiddleware = require('../middleware/cache');
 
-// GET /api/carrinho - Obter carrinho do usuário logado
-router.get('/', verificarAutenticacao, async (req, res) => {
+// GET /api/carrinho - Obter carrinho do usuário logado - COM CACHE
+router.get('/', verificarAutenticacao, CacheMiddleware.cacheCart(1800), async (req, res) => {
   try {
     const itens = await Carrinho.buscarPorUsuario(req.usuario.id);
     const total = await Carrinho.calcularTotal(req.usuario.id);
@@ -26,8 +27,8 @@ router.get('/', verificarAutenticacao, async (req, res) => {
   }
 });
 
-// POST /api/carrinho/adicionar - Adicionar item ao carrinho
-router.post('/adicionar', verificarAutenticacao, async (req, res) => {
+// POST /api/carrinho/adicionar - Adicionar item ao carrinho - COM INVALIDAÇÃO DE CACHE
+router.post('/adicionar', verificarAutenticacao, CacheMiddleware.invalidateCache('cart'), async (req, res) => {
   try {
     const { produto_id, quantidade, tamanho, cor } = req.body;
 

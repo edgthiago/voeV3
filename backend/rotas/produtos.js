@@ -3,9 +3,13 @@ const router = express.Router();
 const Produto = require('../modelos/Produto');
 const { verificarAutenticacao, verificarPermissao } = require('../middleware/autenticacao');
 const { middleware, PERMISSOES } = require('../utils/sistema-permissoes');
+const CacheMiddleware = require('../middleware/cache');
 
-// GET /api/produtos - Buscar produtos (público)
-router.get('/', async (req, res) => {
+// GET /api/produtos - Buscar produtos (público) - COM CACHE
+router.get('/', CacheMiddleware.cacheQuery(
+  (req) => `produtos:${JSON.stringify(req.query)}`, 
+  600 // 10 minutos
+), async (req, res) => {
   try {
     const filtros = {
       termo_pesquisa: req.query.busca,
@@ -38,8 +42,8 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET /api/produtos/:id - Buscar produto específico (público)
-router.get('/:id', async (req, res) => {
+// GET /api/produtos/:id - Buscar produto específico (público) - COM CACHE
+router.get('/:id', CacheMiddleware.cacheProduct(3600), async (req, res) => {
   try {
     const produto = await Produto.buscarPorId(req.params.id);
     

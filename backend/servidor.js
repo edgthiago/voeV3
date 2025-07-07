@@ -10,12 +10,26 @@ const morgan = require('morgan');
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
+// 📊 Importar sistema de logs avançado
+const { logger, loggers } = require('./services/loggerService');
+const { 
+    requestLoggingMiddleware, 
+    errorLoggingMiddleware, 
+    securityLoggingMiddleware,
+    businessLoggingMiddleware
+} = require('./middleware/logging');
+
 // ⚠️  ATENÇÃO: MODO DE TESTE ATIVO ⚠️ 
 // Mecanismos de segurança DESABILITADOS para facilitar testes
 // CORS, Rate Limiting, Helmet e Compression estão desativados
 // NÃO usar em produção!
 
 const app = express();
+
+// 📝 Middleware de logging - SEMPRE ATIVO
+app.use(requestLoggingMiddleware);
+app.use(securityLoggingMiddleware);
+app.use(businessLoggingMiddleware);
 
 // Middleware de segurança - DESABILITADO PARA TESTES
 // app.use(helmet({
@@ -148,6 +162,7 @@ app.use('/api/comentarios', require('./rotas/comentarios'));
 app.use('/api/admin', require('./rotas/admin'));
 app.use('/api/admin/metrics', require('./rotas/admin-metrics'));
 app.use('/api/upgrade', require('./rotas/upgrade'));
+app.use('/api/logs', require('./rotas/logs')); // Nova rota de logs
 
 // Servir dashboard de testes
 app.get('/dashboard', (req, res) => {
@@ -231,52 +246,108 @@ app.use('*', (req, res) => {
   });
 });
 
-// Middleware de tratamento de erros globais
+// Middleware de tratamento de erros - ÚLTIMA MIDDLEWARE
+app.use(errorLoggingMiddleware);
+
+// Middleware de tratamento de erro global
 app.use((err, req, res, next) => {
-  console.error('Erro não tratado:', err);
+  const statusCode = err.statusCode || 500;
+  const message = err.message || 'Erro interno do servidor';
   
   // Log do erro
-  if (req.logAcao) {
-    req.logAcao('erro_sistema', {
-      erro: err.message,
+  loggers.api.error('Global error handler', {
+    error: {
+      message: err.message,
       stack: err.stack,
+      code: err.code || 'UNKNOWN'
+    },
+    request: {
+      method: req.method,
       url: req.originalUrl,
-      metodo: req.method
-    });
-  }
-  
-  res.status(500).json({
+      userId: req.usuario?.id,
+      ip: req.ip
+    }
+  });
+
+  // Resposta para o cliente
+  res.status(statusCode).json({
     sucesso: false,
-    mensagem: 'Erro interno do servidor',
-    erro: process.env.NODE_ENV === 'development' ? err.message : undefined
+    mensagem: process.env.NODE_ENV === 'development' ? message : 'Erro interno do servidor',
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+  });
+});
+
+// Middleware para rotas não encontradas
+app.use('*', (req, res) => {
+  loggers.api.warn('Route not found', {
+    method: req.method,
+    url: req.originalUrl,
+    ip: req.ip
+  });
+  
+  res.status(404).json({
+    sucesso: false,
+    mensagem: 'Rota não encontrada'
   });
 });
 
 // Função para inicializar o servidor
-const iniciarServidor = async () => {  try {
-    // Testar conexão com banco de dados
+const iniciarServidor = async () => {
+  try {
+    // Log de inicialização
+    logger.info('Starting server', {
+      environment: process.env.NODE_ENV || 'development',
+      port: process.env.PORT || 5000
+    });
+
+    // Verificar conexão com banco
     const conexao = require('./banco/conexao');
     await conexao.executarConsulta('SELECT 1');
-    console.log('✅ Conexão com banco de dados estabelecida');    // Desativar promoções expiradas ao iniciar
+    
+    logger.info('Database connection established', {
+      host: process.env.DB_HOST || 'localhost',
+      database: process.env.DB_DATABASE || 'loja_tenis_fgt'
+    });
+
+    // Desativar promoções expiradas ao iniciar
     const PromocaoRelampago = require('./modelos/PromocaoRelampago');
     await PromocaoRelampago.desativarExpiradas();
-    console.log('✅ Promoções expiradas desativadas');    const PORT = process.env.PORT || 9999;
-    const HOST = process.env.HOST || '127.0.0.1';
-    
-    app.listen(PORT, HOST, () => {
-      console.log(`🚀 Servidor rodando em http://${HOST}:${PORT}`);
-      console.log(`📱 Frontend esperado em: ${process.env.FRONTEND_URL || 'http://localhost:3000'}`);
-      console.log(`🌐 API disponível em: http://${HOST}:${PORT}/api`);
-      console.log(`📊 Informações da API: http://${HOST}:${PORT}/api/info`);
-      console.log(`❤️  Status da API: http://${HOST}:${PORT}/api/health`);
+    logger.info('Expired promotions deactivated');
+
+    // Iniciar servidor
+    const PORT = process.env.PORT || 5000;
+    const servidor = app.listen(PORT, () => {
+      logger.info('Server started successfully', {
+        port: PORT,
+        environment: process.env.NODE_ENV || 'development',
+        timestamp: new Date().toISOString()
+      });
+      
+      console.log(`\n🚀 ===== SERVIDOR INICIADO COM SUCESSO =====`);
+      console.log(`📍 Porta: ${PORT}`);
+      console.log(`🌍 Ambiente: ${process.env.NODE_ENV || 'development'}`);
+      console.log(`� Logs: Sistema avançado ativo`);
+      console.log(`🔒 Segurança: Modo teste (desenvolvimento)`);
+      console.log(`📱 Cache: Sistema Redis/Memory ativo`);
+      console.log(`🎯 URL: http://localhost:${PORT}`);
+      console.log(`📋 API: http://localhost:${PORT}/api`);
+      console.log(`📊 Logs: http://localhost:${PORT}/api/logs`);
+      console.log(`🔍 Health: http://localhost:${PORT}/api/health`);
+      console.log(`===========================================\n`);
       
       if (process.env.NODE_ENV === 'development') {
-        console.log('\n🔧 Modo de desenvolvimento ativo');
         console.log('📝 Logs detalhados habilitados');
       }
     });
 
   } catch (erro) {
+    logger.error('Server initialization failed', {
+      error: {
+        message: erro.message,
+        stack: erro.stack
+      }
+    });
+    
     console.error('❌ Erro ao inicializar servidor:', erro);
     process.exit(1);
   }
@@ -295,26 +366,38 @@ setInterval(async () => {
   }
 }, 60 * 60 * 1000); // 1 hora
 
-// Graceful shutdown
-process.on('SIGTERM', () => {
-  console.log('🛑 Recebido SIGTERM, encerrando servidor graciosamente...');
-  process.exit(0);
-});
-
-process.on('SIGINT', () => {
-  console.log('🛑 Recebido SIGINT, encerrando servidor graciosamente...');
-  process.exit(0);
-});
-
 // Tratar erros não capturados
 process.on('uncaughtException', (err) => {
+  logger.error('Uncaught exception', {
+    error: {
+      message: err.message,
+      stack: err.stack
+    }
+  });
   console.error('❌ Erro não capturado:', err);
   process.exit(1);
 });
 
 process.on('unhandledRejection', (reason, promise) => {
+  logger.error('Unhandled rejection', {
+    reason: reason,
+    promise: promise
+  });
   console.error('❌ Promise rejeitada não tratada:', reason);
   process.exit(1);
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  logger.info('Received SIGTERM, shutting down gracefully');
+  console.log('🛑 Recebido SIGTERM, encerrando servidor graciosamente...');
+  process.exit(0);
+});
+
+process.on('SIGINT', () => {
+  logger.info('Received SIGINT, shutting down gracefully');
+  console.log('🛑 Recebido SIGINT, encerrando servidor graciosamente...');
+  process.exit(0);
 });
 
 // Inicializar servidor se este arquivo for executado diretamente
