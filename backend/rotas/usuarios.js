@@ -9,12 +9,12 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const conexao = require('../banco/conexao');
-const autenticacao = require('../middleware/autenticacao');
+const { verificarAutenticacao } = require('../middleware/autenticacao');
 
 /**
  * Listar usuários (apenas admin/diretor)
  */
-router.get('/', autenticacao, async (req, res) => {
+router.get('/', verificarAutenticacao, async (req, res) => {
     try {
         // Verificar permissão
         if (!['admin', 'diretor'].includes(req.usuario.tipo_usuario)) {
@@ -49,7 +49,7 @@ router.get('/', autenticacao, async (req, res) => {
 /**
  * Obter dados do usuário atual
  */
-router.get('/perfil', autenticacao, async (req, res) => {
+router.get('/perfil', verificarAutenticacao, async (req, res) => {
     try {
         const usuario = await conexao.executarConsulta(`
             SELECT 
@@ -84,7 +84,7 @@ router.get('/perfil', autenticacao, async (req, res) => {
 /**
  * Atualizar perfil do usuário
  */
-router.put('/perfil', autenticacao, async (req, res) => {
+router.put('/perfil', verificarAutenticacao, async (req, res) => {
     try {
         const { nome, telefone, data_nascimento, notificacoes_email, notificacoes_sms, notificacoes_push } = req.body;
 
@@ -113,7 +113,7 @@ router.put('/perfil', autenticacao, async (req, res) => {
 /**
  * Alterar senha
  */
-router.put('/senha', autenticacao, async (req, res) => {
+router.put('/senha', verificarAutenticacao, async (req, res) => {
     try {
         const { senha_atual, nova_senha } = req.body;
 
@@ -173,7 +173,7 @@ router.put('/senha', autenticacao, async (req, res) => {
 /**
  * Obter estatísticas de usuário (admin/diretor)
  */
-router.get('/estatisticas', autenticacao, async (req, res) => {
+router.get('/estatisticas', verificarAutenticacao, async (req, res) => {
     try {
         // Verificar permissão
         if (!['admin', 'diretor'].includes(req.usuario.tipo_usuario)) {

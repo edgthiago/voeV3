@@ -15,7 +15,7 @@ const TesteAPI = () => {
       setCarregando(true);
       setErro(null);
       
-      const resposta = await fetch('http://localhost:8080/api/health');
+      const resposta = await fetch('http://localhost:30011/api/health');
       const dados = await resposta.json();
       
       setStatusAPI(dados);
@@ -54,7 +54,7 @@ const TesteAPI = () => {
       setErro(null);
       
       // Teste direto com fetch      // Testar produto específico
-      const resposta = await fetch(`http://localhost:8080/api/produtos/${id}`);
+      const resposta = await fetch(`http://localhost:30011/api/produtos/${id}`);
       
       if (!resposta.ok) {
         const textoErro = await resposta.text();

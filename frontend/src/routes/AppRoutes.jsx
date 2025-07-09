@@ -19,6 +19,12 @@ import CriarConta from '../pages/CriarConta';
 import Entrar from '../pages/Entrar';
 import PaginaProdutosPersonalizados from '../pages/PaginaProdutosPersonalizados/PaginaProdutosPersonalizados';
 
+// Componentes para funcionalidades do colaborador
+import GerenciarProdutos from '../components/admin/GerenciarProdutos';
+import GerenciarEstoque from '../components/admin/GerenciarEstoque';
+import GerenciarPedidos from '../components/admin/GerenciarPedidos';
+import RelatoriosColaborador from '../components/admin/RelatoriosColaborador';
+
 
 const AppRoutes = () => {
   return (
@@ -61,7 +67,8 @@ const AppRoutes = () => {
         <ProtecaoRota tipoUsuarioMinimo="colaborador" redirectTo="/entrar">
           <PaginaColaborador />
         </ProtecaoRota>
-      } />      <Route path="/admin/supervisor" element={
+      } />
+      <Route path="/admin/supervisor" element={
         <ProtecaoRota tipoUsuarioMinimo="supervisor" redirectTo="/entrar">
           <PaginaSupervisor />
         </ProtecaoRota>
@@ -71,6 +78,49 @@ const AppRoutes = () => {
           <PaginaDiretor />
         </ProtecaoRota>
       } />
+
+      {/* Rotas das funcionalidades do colaborador */}
+      <Route path="/dashboard/produtos" element={
+        <ProtecaoRota tipoUsuarioMinimo="colaborador" redirectTo="/entrar">
+          <GerenciarProdutos />
+        </ProtecaoRota>
+      } />
+      <Route path="/dashboard/produtos/novo" element={
+        <ProtecaoRota tipoUsuarioMinimo="colaborador" redirectTo="/entrar">
+          <GerenciarProdutos />
+        </ProtecaoRota>
+      } />
+      <Route path="/dashboard/estoque" element={
+        <ProtecaoRota tipoUsuarioMinimo="colaborador" redirectTo="/entrar">
+          <GerenciarEstoque />
+        </ProtecaoRota>
+      } />
+      <Route path="/dashboard/estoque/atualizar" element={
+        <ProtecaoRota tipoUsuarioMinimo="colaborador" redirectTo="/entrar">
+          <GerenciarEstoque />
+        </ProtecaoRota>
+      } />
+      <Route path="/dashboard/pedidos" element={
+        <ProtecaoRota tipoUsuarioMinimo="colaborador" redirectTo="/entrar">
+          <GerenciarPedidos />
+        </ProtecaoRota>
+      } />
+      <Route path="/dashboard/pedidos/pendentes" element={
+        <ProtecaoRota tipoUsuarioMinimo="colaborador" redirectTo="/entrar">
+          <GerenciarPedidos />
+        </ProtecaoRota>
+      } />
+      <Route path="/dashboard/relatorios/vendas-basico" element={
+        <ProtecaoRota tipoUsuarioMinimo="colaborador" redirectTo="/entrar">
+          <RelatoriosColaborador />
+        </ProtecaoRota>
+      } />
+      <Route path="/dashboard/relatorios/produtos" element={
+        <ProtecaoRota tipoUsuarioMinimo="colaborador" redirectTo="/entrar">
+          <RelatoriosColaborador />
+        </ProtecaoRota>
+      } />
+      
         {/* Rotas de Usuário Autenticado */}
       <Route path="/meus-pedidos" element={
         <ProtecaoRota tipoUsuarioMinimo="usuario" redirectTo="/entrar">

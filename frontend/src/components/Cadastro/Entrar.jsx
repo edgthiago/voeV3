@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Entrar.css';
+import api from '../../services/api';
 
 export default function Login() {
   const [login, setLogin] = useState('');
@@ -9,7 +10,6 @@ export default function Login() {
     e.preventDefault();
     
     console.log('Iniciando processo de login...');
-    console.log('Endpoint de login:', 'http://localhost:8080/api/auth/login');
     console.log('Dados de login:', { email: login });
 
     try {
@@ -17,30 +17,16 @@ export default function Login() {
       const emailLimpo = login.trim();
       const senhaLimpa = senha.trim();
       
-      // Usar o serviço de API em vez de fetch diretamente
-      // Isso garante que o token seja configurado corretamente
-      const resposta = await fetch('http://localhost:8080/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email: emailLimpo,
-          senha: senhaLimpa
-        })
+      // Usar o serviço de API configurado
+      const dados = await api.post('/auth/login', {
+        email: emailLimpo,
+        senha: senhaLimpa
       });
 
-      console.log('Resposta recebida:', resposta.status);
-      const dados = await resposta.json();
-      console.log('Dados da resposta:', dados);if (!resposta.ok) {
-        throw new Error(dados.mensagem || 'Falha no login');
-      }      // Armazenar token e redirecionar
+      console.log('Dados da resposta:', dados);      // Armazenar token e redirecionar
       if (dados.dados && dados.dados.token) {
-        // Armazenar o token utilizando um método mais robusto
-        // Primeiro limpar qualquer token antigo
-        localStorage.removeItem('token');
-          // Depois armazenar o novo token
-        localStorage.setItem('token', dados.dados.token);
+        // Armazenar o token utilizando o serviço API
+        api.setToken(dados.dados.token);
         
         // Normalizar os dados do usuário garantindo que o campo tipo seja preenchido
         const usuario = dados.dados.usuario;
@@ -50,10 +36,6 @@ export default function Login() {
         }
         
         localStorage.setItem('usuario', JSON.stringify(usuario));
-        
-        // Garantir que a API seja inicializada com o token
-        const apiService = await import('../../services/api');
-        apiService.default.setToken(dados.dados.token);
         
         // Redirecionar com base no nível de acesso
         const tipoUsuario = dados.dados.usuario?.tipo_usuario || dados.dados.usuario?.nivel_acesso || 'usuario';

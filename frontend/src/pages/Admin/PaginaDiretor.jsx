@@ -1,18 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ProtecaoRota from '../../components/common/ProtecaoRota';
+import DashboardMonitoramento from '../../components/monitoring/DashboardMonitoramento';
+import MetricasTempoReal from '../../components/monitoring/MetricasTempoReal';
+import ControleServicos from '../../components/monitoring/ControleServicos';
 
 const DashboardDiretor = () => {
-  return (
-    <div className="container-fluid">
-      <div className="row">
-        <div className="col-12">
-          <div className="d-flex justify-content-between align-items-center mb-4">
-            <h2><i className="bi bi-shield-crown text-primary"></i> Painel do Diretor</h2>
-            <span className="badge bg-primary">Acesso Total</span>
-          </div>
-        </div>
-      </div>
+  const [activeView, setActiveView] = useState('dashboard');
 
+  const renderContent = () => {
+    switch (activeView) {
+      case 'monitoring':
+        return <DashboardMonitoramento />;
+      case 'realtime':
+        return <MetricasTempoReal />;
+      case 'services':
+        return <ControleServicos />;
+      default:
+        return renderDashboardContent();
+    }
+  };
+
+  const renderDashboardContent = () => {
+    return (
       <div className="row g-4">
         {/* Configurações do Sistema */}
         <div className="col-xl-4 col-md-6">
@@ -24,27 +33,50 @@ const DashboardDiretor = () => {
             </div>
             <div className="card-body">
               <div className="list-group list-group-flush">
-                <button className="list-group-item list-group-item-action">
-                  <i className="bi bi-sliders me-2"></i>Configurações Gerais
+                <button 
+                  className="list-group-item list-group-item-action"
+                  onClick={() => setActiveView('monitoring')}
+                >
+                  <i className="bi bi-bar-chart-line me-2"></i>Dashboard de Monitoramento
+                </button>
+                <button 
+                  className="list-group-item list-group-item-action"
+                  onClick={() => setActiveView('realtime')}
+                >
+                  <i className="bi bi-activity me-2"></i>Métricas em Tempo Real
+                </button>
+                <button 
+                  className="list-group-item list-group-item-action"
+                  onClick={() => setActiveView('services')}
+                >
+                  <i className="bi bi-gear me-2"></i>Controle de Serviços
                 </button>
                 <button className="list-group-item list-group-item-action">
                   <i className="bi bi-shield-check me-2"></i>Configurações de Segurança
-                </button>
-                <button className="list-group-item list-group-item-action">
-                  <i className="bi bi-database me-2"></i>Backup e Restauração
-                </button>
-                <button className="list-group-item list-group-item-action">
-                  <i className="bi bi-cloud-arrow-up me-2"></i>Integrações API
                 </button>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Relatórios Financeiros */}
-        <div className="col-xl-4 col-md-6">
+        {/* Métricas Rápidas */}
+        <div className="col-xl-8 col-md-6">
           <div className="card h-100 border-success">
             <div className="card-header bg-success text-white">
+              <h5 className="card-title mb-0">
+                <i className="bi bi-graph-up me-2"></i>Visão Geral do Sistema
+              </h5>
+            </div>
+            <div className="card-body">
+              <MetricasTempoReal />
+            </div>
+          </div>
+        </div>
+
+        {/* Relatórios Financeiros */}
+        <div className="col-xl-4 col-md-6">
+          <div className="card h-100 border-info">
+            <div className="card-header bg-info text-white">
               <h5 className="card-title mb-0">
                 <i className="bi bi-graph-up me-2"></i>Relatórios Financeiros
               </h5>
@@ -96,78 +128,33 @@ const DashboardDiretor = () => {
         </div>
 
         {/* Analytics Avançados */}
-        <div className="col-xl-6 col-md-6">
-          <div className="card h-100 border-info">
-            <div className="card-header bg-info text-white">
+        <div className="col-xl-4 col-md-6">
+          <div className="card h-100 border-danger">
+            <div className="card-header bg-danger text-white">
               <h5 className="card-title mb-0">
                 <i className="bi bi-graph-down me-2"></i>Analytics Avançados
               </h5>
             </div>
             <div className="card-body">
-              <div className="row g-3">
-                <div className="col-6">
-                  <button className="btn btn-outline-info w-100">
-                    <i className="bi bi-eye me-2"></i>Comportamento do Usuário
-                  </button>
-                </div>
-                <div className="col-6">
-                  <button className="btn btn-outline-info w-100">
-                    <i className="bi bi-cart-check me-2"></i>Conversão de Vendas
-                  </button>
-                </div>
-                <div className="col-6">
-                  <button className="btn btn-outline-info w-100">
-                    <i className="bi bi-search me-2"></i>Produtos Mais Buscados
-                  </button>
-                </div>
-                <div className="col-6">
-                  <button className="btn btn-outline-info w-100">
-                    <i className="bi bi-clock-history me-2"></i>Análise Temporal
-                  </button>
-                </div>
+              <div className="list-group list-group-flush">
+                <button className="list-group-item list-group-item-action">
+                  <i className="bi bi-people me-2"></i>Análise de Usuários
+                </button>
+                <button className="list-group-item list-group-item-action">
+                  <i className="bi bi-graph-up-arrow me-2"></i>Tendências de Vendas
+                </button>
+                <button className="list-group-item list-group-item-action">
+                  <i className="bi bi-pie-chart-fill me-2"></i>Segmentação de Clientes
+                </button>
+                <button className="list-group-item list-group-item-action">
+                  <i className="bi bi-bar-chart-steps me-2"></i>Funil de Conversão
+                </button>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Gestão Empresarial */}
-        <div className="col-xl-6 col-md-6">
-          <div className="card h-100 border-dark">
-            <div className="card-header bg-dark text-white">
-              <h5 className="card-title mb-0">
-                <i className="bi bi-building me-2"></i>Gestão Empresarial
-              </h5>
-            </div>
-            <div className="card-body">
-              <div className="row g-3">
-                <div className="col-6">
-                  <button className="btn btn-outline-dark w-100">
-                    <i className="bi bi-people me-2"></i>Departamentos
-                  </button>
-                </div>
-                <div className="col-6">
-                  <button className="btn btn-outline-dark w-100">
-                    <i className="bi bi-calendar-event me-2"></i>Planejamento
-                  </button>
-                </div>
-                <div className="col-6">
-                  <button className="btn btn-outline-dark w-100">
-                    <i className="bi bi-file-earmark-text me-2"></i>Políticas
-                  </button>
-                </div>
-                <div className="col-6">
-                  <button className="btn btn-outline-dark w-100">
-                    <i className="bi bi-award me-2"></i>KPIs Globais
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Resumo Executivo */}
-      <div className="row mt-4">
+        {/* Resumo Executivo */}
         <div className="col-12">
           <div className="card border-secondary">
             <div className="card-header bg-secondary text-white">
@@ -206,6 +193,46 @@ const DashboardDiretor = () => {
           </div>
         </div>
       </div>
+    );
+  };
+
+  return (
+    <div className="container-fluid">
+      <div className="row">
+        <div className="col-12">
+          <div className="d-flex justify-content-between align-items-center mb-4">
+            <h2><i className="bi bi-shield-crown text-primary"></i> Painel do Diretor</h2>
+            <div>
+              <button 
+                className={`btn btn-sm me-2 ${activeView === 'dashboard' ? 'btn-primary' : 'btn-outline-primary'}`}
+                onClick={() => setActiveView('dashboard')}
+              >
+                <i className="bi bi-speedometer2 me-1"></i>Dashboard
+              </button>
+              <button 
+                className={`btn btn-sm me-2 ${activeView === 'monitoring' ? 'btn-primary' : 'btn-outline-primary'}`}
+                onClick={() => setActiveView('monitoring')}
+              >
+                <i className="bi bi-bar-chart-line me-1"></i>Monitoramento
+              </button>
+              <button 
+                className={`btn btn-sm me-2 ${activeView === 'realtime' ? 'btn-primary' : 'btn-outline-primary'}`}
+                onClick={() => setActiveView('realtime')}
+              >
+                <i className="bi bi-activity me-1"></i>Tempo Real
+              </button>
+              <button 
+                className={`btn btn-sm ${activeView === 'services' ? 'btn-primary' : 'btn-outline-primary'}`}
+                onClick={() => setActiveView('services')}
+              >
+                <i className="bi bi-gear me-1"></i>Serviços
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {renderContent()}
     </div>
   );
 };

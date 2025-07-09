@@ -1,0 +1,313 @@
+/* 
+ * 📊 ESTILOS CUSTOMIZADOS PARA DASHBOARD DE MONITORAMENTO
+ * Data: 07 de Julho de 2025
+ * Objetivo: Estilos específicos para componentes de monitoramento
+ */
+
+/* Animações para métricas em tempo real */
+.realtime-metric {
+  transition: all 0.3s ease;
+}
+
+.realtime-metric:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Indicador de status ativo */
+.status-indicator {
+  position: relative;
+  display: inline-block;
+}
+
+.status-indicator::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 8px;
+  height: 8px;
+  background: #28a745;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* Spin animation para loading */
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Gráficos responsivos */
+.chart-container {
+  width: 100%;
+  height: 300px;
+  position: relative;
+}
+
+.chart-container .recharts-wrapper {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Cards de métricas */
+.metric-card {
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  border: 1px solid #e0e0e0;
+}
+
+.metric-card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.metric-card .card-header {
+  border-radius: 12px 12px 0 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.metric-card .card-body {
+  padding: 1.5rem;
+}
+
+/* Progress bars customizadas */
+.progress-custom {
+  height: 8px;
+  border-radius: 10px;
+  background-color: #f8f9fa;
+}
+
+.progress-custom .progress-bar {
+  border-radius: 10px;
+  transition: width 0.6s ease;
+}
+
+/* Badges customizados */
+.badge-custom {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 0.85rem;
+}
+
+/* Alertas customizados */
+.alert-custom {
+  border-radius: 10px;
+  border: none;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.alert-custom .alert-heading {
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+/* Tabs customizadas */
+.nav-tabs-custom {
+  border-bottom: 2px solid #dee2e6;
+}
+
+.nav-tabs-custom .nav-link {
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 1rem 1.5rem;
+  color: #6c757d;
+  transition: all 0.3s ease;
+}
+
+.nav-tabs-custom .nav-link:hover {
+  color: #007bff;
+  border-bottom-color: #007bff;
+}
+
+.nav-tabs-custom .nav-link.active {
+  color: #007bff;
+  background-color: transparent;
+  border-bottom-color: #007bff;
+}
+
+/* Botões de ação */
+.btn-action {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.btn-action:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Tabela de logs */
+.logs-table {
+  max-height: 400px;
+  overflow-y: auto;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.logs-table .table {
+  margin-bottom: 0;
+}
+
+.logs-table .table thead th {
+  position: sticky;
+  top: 0;
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.logs-table .table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* Sidebar de controles */
+.control-sidebar {
+  position: sticky;
+  top: 20px;
+  height: calc(100vh - 40px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.control-sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.control-sidebar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.control-sidebar::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 2px;
+}
+
+.control-sidebar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .metric-card {
+    margin-bottom: 1rem;
+  }
+  
+  .chart-container {
+    height: 250px;
+  }
+  
+  .control-sidebar {
+    position: relative;
+    height: auto;
+  }
+  
+  .nav-tabs-custom .nav-link {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .metric-card .card-body {
+    padding: 1rem;
+  }
+  
+  .chart-container {
+    height: 200px;
+  }
+  
+  .btn-action {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .metric-card {
+    background-color: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
+  }
+  
+  .metric-card .card-header {
+    background-color: #4a5568;
+    border-bottom-color: #718096;
+  }
+  
+  .progress-custom {
+    background-color: #4a5568;
+  }
+  
+  .logs-table {
+    background-color: #2d3748;
+    border-color: #4a5568;
+  }
+  
+  .logs-table .table thead th {
+    background-color: #4a5568;
+    color: #e2e8f0;
+  }
+  
+  .logs-table .table tbody tr:hover {
+    background-color: #4a5568;
+  }
+}
+
+/* Utilitários */
+.text-gradient {
+  background: linear-gradient(45deg, #007bff, #6610f2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.shadow-custom {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.shadow-custom-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.border-custom {
+  border: 1px solid #e5e7eb;
+}
+
+.rounded-custom {
+  border-radius: 12px;
+}
+
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+}
+
+.bg-gradient-success {
+  background: linear-gradient(135deg, #28a745, #1e7e34);
+}
+
+.bg-gradient-warning {
+  background: linear-gradient(135deg, #ffc107, #e0a800);
+}
+
+.bg-gradient-danger {
+  background: linear-gradient(135deg, #dc3545, #c82333);
+}
+
+.bg-gradient-info {
+  background: linear-gradient(135deg, #17a2b8, #138496);
+}

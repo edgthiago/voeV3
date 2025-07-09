@@ -14,20 +14,25 @@ import Configuracoes from '../../components/admin/Configuracoes';
 import './Dashboard.css';
 
 const Dashboard = () => {
-  const { user, hasPermission } = useAuth();
+  const { usuario, hasPermission } = useAuth();
   const [activeTab, setActiveTab] = useState('home');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     // Verificar se o usuário tem permissão para acessar o painel administrativo
-    if (!hasPermission('colaborador')) {
+    const tipoUsuario = usuario?.tipo_usuario || usuario?.nivel_acesso || usuario?.tipo;
+    const hierarquia = ['visitante', 'usuario', 'colaborador', 'supervisor', 'diretor'];
+    const nivelAtual = hierarquia.indexOf(tipoUsuario);
+    const nivelMinimo = hierarquia.indexOf('colaborador');
+    
+    if (nivelAtual < nivelMinimo) {
       setError('Você não tem permissão para acessar o painel administrativo.');
       setLoading(false);
       return;
     }
     setLoading(false);
-  }, [user, hasPermission]);
+  }, [usuario, hasPermission]);
 
   if (loading) {
     return <LoadingSpinner message="Carregando painel administrativo..." />;
@@ -79,8 +84,8 @@ const Dashboard = () => {
               <div className="user-info">
                 <i className="bi bi-person-circle fs-1"></i>
                 <div className="mt-2">
-                  <small className="d-block">{user?.nome}</small>
-                  <small className="text-muted">{user?.nivel_acesso}</small>
+                  <small className="d-block">{usuario?.nome}</small>
+                  <small className="text-muted">{usuario?.tipo_usuario || usuario?.nivel_acesso || usuario?.tipo}</small>
                 </div>
               </div>
             </div>

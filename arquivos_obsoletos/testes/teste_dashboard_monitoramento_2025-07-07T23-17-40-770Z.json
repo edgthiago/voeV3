@@ -1,0 +1,325 @@
+{
+  "timestamp": "2025-07-07T23:17:40.770Z",
+  "resumo": {
+    "total": 18,
+    "sucessos": 18,
+    "falhas": 0,
+    "porcentagem": 100
+  },
+  "detalhes": {
+    "apis": [
+      {
+        "url": "http://localhost:3001/api/health",
+        "desc": "API de Saúde",
+        "resultado": {
+          "success": true,
+          "data": {
+            "sucesso": true,
+            "mensagem": "API funcionando corretamente",
+            "timestamp": "2025-07-07T23:17:40.735Z",
+            "versao": "1.0.0"
+          }
+        }
+      },
+      {
+        "url": "http://localhost:3001/api/monitoring/status",
+        "desc": "Status do Sistema",
+        "resultado": {
+          "success": true,
+          "data": {
+            "success": true,
+            "data": {
+              "system": {
+                "status": "running",
+                "uptime": 259,
+                "cpuUsage": 13,
+                "memoryUsage": 79,
+                "memoryUsed": 8,
+                "memoryTotal": 10,
+                "diskUsage": 75,
+                "nodeVersion": "v24.0.2",
+                "platform": "win32"
+              },
+              "timestamp": "2025-07-07T23:17:40.741Z"
+            },
+            "timestamp": "2025-07-07T23:17:40.742Z"
+          }
+        }
+      },
+      {
+        "url": "http://localhost:3001/api/monitoring/metrics",
+        "desc": "Métricas do Sistema",
+        "resultado": {
+          "success": true,
+          "data": {
+            "success": true,
+            "data": {
+              "system": {
+                "status": "healthy",
+                "uptime": 259,
+                "cpuUsage": 81,
+                "memoryUsage": 79,
+                "memoryUsed": 8,
+                "memoryTotal": 10,
+                "diskUsage": 37
+              },
+              "application": {
+                "requestsPerSecond": 4,
+                "totalRequests": 1333,
+                "errorRate": 0.03,
+                "responseTime": 4,
+                "activeConnections": 87
+              },
+              "database": {
+                "status": "connected",
+                "activeConnections": 16,
+                "queryTime": 15,
+                "totalQueries": 25
+              },
+              "alerts": [
+                {
+                  "id": 1,
+                  "type": "warning",
+                  "message": "Uso de CPU acima de 80%",
+                  "timestamp": "2025-07-07T23:17:40.743Z",
+                  "severity": "medium"
+                }
+              ]
+            },
+            "timestamp": "2025-07-07T23:17:40.744Z"
+          }
+        }
+      },
+      {
+        "url": "http://localhost:3001/api/monitoring/alerts",
+        "desc": "Alertas do Sistema",
+        "resultado": {
+          "success": true,
+          "data": {
+            "success": true,
+            "data": [
+              {
+                "id": 1,
+                "type": "warning",
+                "message": "Uso de CPU acima de 80%",
+                "timestamp": "2025-07-07T23:17:40.745Z",
+                "severity": "medium"
+              }
+            ],
+            "timestamp": "2025-07-07T23:17:40.746Z"
+          }
+        }
+      },
+      {
+        "url": "http://localhost:3001/api/monitoring/logs",
+        "desc": "Logs do Sistema",
+        "resultado": {
+          "success": true,
+          "data": {
+            "success": true,
+            "data": [
+              {
+                "id": 8,
+                "type": "error",
+                "message": "Produto adicionado ao carrinho",
+                "timestamp": "2025-07-07T22:56:40.468Z",
+                "source": "system"
+              },
+              {
+                "id": 5,
+                "type": "info",
+                "message": "Usuário logado com sucesso",
+                "timestamp": "2025-07-07T22:54:59.085Z",
+                "source": "system"
+              },
+              {
+                "id": 7,
+                "type": "info",
+                "message": "Backup automático iniciado",
+                "timestamp": "2025-07-07T22:53:47.320Z",
+                "source": "system"
+              },
+              {
+                "id": 3,
+                "type": "info",
+                "message": "Conexão com banco estabelecida",
+                "timestamp": "2025-07-07T22:52:27.799Z",
+                "source": "system"
+              },
+              {
+                "id": 4,
+                "type": "info",
+                "message": "Usuário logado com sucesso",
+                "timestamp": "2025-07-07T22:43:49.945Z",
+                "source": "system"
+              },
+              {
+                "id": 9,
+                "type": "warning",
+                "message": "Produto adicionado ao carrinho",
+                "timestamp": "2025-07-07T22:43:19.800Z",
+                "source": "system"
+              },
+              {
+                "id": 1,
+                "type": "info",
+                "message": "Cache limpo automaticamente",
+                "timestamp": "2025-07-07T22:36:20.435Z",
+                "source": "system"
+              },
+              {
+                "id": 2,
+                "type": "info",
+                "message": "Erro ao processar pagamento",
+                "timestamp": "2025-07-07T22:32:26.112Z",
+                "source": "system"
+              },
+              {
+                "id": 6,
+                "type": "debug",
+                "message": "Erro ao processar pagamento",
+                "timestamp": "2025-07-07T22:29:12.845Z",
+                "source": "system"
+              },
+              {
+                "id": 10,
+                "type": "warning",
+                "message": "Backup automático iniciado",
+                "timestamp": "2025-07-07T22:25:43.393Z",
+                "source": "system"
+              }
+            ],
+            "timestamp": "2025-07-07T23:17:40.748Z"
+          }
+        }
+      }
+    ],
+    "componentes": [
+      {
+        "path": "C:\\Users\\edgle\\Desktop\\inova\\frontend\\src\\components\\monitoring\\DashboardMonitoramento.jsx",
+        "desc": "Dashboard de Monitoramento",
+        "existe": {
+          "success": true,
+          "path": "C:\\Users\\edgle\\Desktop\\inova\\frontend\\src\\components\\monitoring\\DashboardMonitoramento.jsx"
+        },
+        "analise": {
+          "success": true,
+          "score": 6,
+          "maxScore": 7,
+          "checks": {
+            "imports": true,
+            "react": true,
+            "export": true,
+            "jsx": true,
+            "hooks": true,
+            "monitoring": true,
+            "api": false
+          }
+        }
+      },
+      {
+        "path": "C:\\Users\\edgle\\Desktop\\inova\\frontend\\src\\components\\monitoring\\MetricasTempoReal.jsx",
+        "desc": "Métricas em Tempo Real",
+        "existe": {
+          "success": true,
+          "path": "C:\\Users\\edgle\\Desktop\\inova\\frontend\\src\\components\\monitoring\\MetricasTempoReal.jsx"
+        },
+        "analise": {
+          "success": true,
+          "score": 7,
+          "maxScore": 7,
+          "checks": {
+            "imports": true,
+            "react": true,
+            "export": true,
+            "jsx": true,
+            "hooks": true,
+            "monitoring": true,
+            "api": true
+          }
+        }
+      },
+      {
+        "path": "C:\\Users\\edgle\\Desktop\\inova\\frontend\\src\\components\\monitoring\\ControleServicos.jsx",
+        "desc": "Controle de Serviços",
+        "existe": {
+          "success": true,
+          "path": "C:\\Users\\edgle\\Desktop\\inova\\frontend\\src\\components\\monitoring\\ControleServicos.jsx"
+        },
+        "analise": {
+          "success": true,
+          "score": 6,
+          "maxScore": 7,
+          "checks": {
+            "imports": true,
+            "react": true,
+            "export": true,
+            "jsx": true,
+            "hooks": true,
+            "monitoring": true,
+            "api": false
+          }
+        }
+      },
+      {
+        "path": "C:\\Users\\edgle\\Desktop\\inova\\frontend\\src\\components\\TesteDashboard.jsx",
+        "desc": "Teste de Dashboard",
+        "existe": {
+          "success": true,
+          "path": "C:\\Users\\edgle\\Desktop\\inova\\frontend\\src\\components\\TesteDashboard.jsx"
+        },
+        "analise": {
+          "success": true,
+          "score": 6,
+          "maxScore": 7,
+          "checks": {
+            "imports": true,
+            "react": true,
+            "export": true,
+            "jsx": true,
+            "hooks": true,
+            "monitoring": true,
+            "api": false
+          }
+        }
+      }
+    ],
+    "arquivos": [
+      {
+        "path": "C:\\Users\\edgle\\Desktop\\inova\\frontend\\src\\services\\monitoringService.js",
+        "desc": "Serviço de Monitoramento",
+        "resultado": {
+          "success": true,
+          "path": "C:\\Users\\edgle\\Desktop\\inova\\frontend\\src\\services\\monitoringService.js"
+        }
+      },
+      {
+        "path": "C:\\Users\\edgle\\Desktop\\inova\\frontend\\src\\styles\\monitoring.css",
+        "desc": "Estilos de Monitoramento",
+        "resultado": {
+          "success": true,
+          "path": "C:\\Users\\edgle\\Desktop\\inova\\frontend\\src\\styles\\monitoring.css"
+        }
+      },
+      {
+        "path": "C:\\Users\\edgle\\Desktop\\inova\\frontend\\src\\pages\\Admin\\PaginaDiretor.jsx",
+        "desc": "Página do Diretor",
+        "resultado": {
+          "success": true,
+          "path": "C:\\Users\\edgle\\Desktop\\inova\\frontend\\src\\pages\\Admin\\PaginaDiretor.jsx"
+        }
+      },
+      {
+        "path": "C:\\Users\\edgle\\Desktop\\inova\\backend\\servidor_monitoramento.js",
+        "desc": "Servidor de Monitoramento",
+        "resultado": {
+          "success": true,
+          "path": "C:\\Users\\edgle\\Desktop\\inova\\backend\\servidor_monitoramento.js"
+        }
+      }
+    ],
+    "erros": [],
+    "sucessos": 18,
+    "total": 18
+  }
+}

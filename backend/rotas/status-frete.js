@@ -5,7 +5,7 @@ const freteService = require('../services/freteService');
 const { verificarAutenticacao, verificarPermissao } = require('../middleware/autenticacao');
 
 /**
- * @route GET /api/pedidos/status/tipos
+ * @route GET /api/frete/status/tipos
  * @description Obter todos os tipos de status disponíveis
  * @access Público
  */
@@ -27,7 +27,7 @@ router.get('/status/tipos', (req, res) => {
 });
 
 /**
- * @route PUT /api/pedidos/:pedido_id/status
+ * @route PUT /api/frete/:pedido_id/status
  * @description Atualizar status de um pedido (apenas admin)
  * @access Privado - Admin
  */
@@ -71,7 +71,7 @@ router.put('/:pedido_id/status', verificarAutenticacao, verificarPermissao('cola
 });
 
 /**
- * @route GET /api/pedidos/:pedido_id/historico
+ * @route GET /api/frete/:pedido_id/historico
  * @description Obter histórico de status de um pedido
  * @access Privado
  */
@@ -115,7 +115,7 @@ router.get('/:pedido_id/historico', verificarAutenticacao, async (req, res) => {
 });
 
 /**
- * @route GET /api/pedidos/status/:status
+ * @route GET /api/frete/status/:status
  * @description Listar pedidos por status (apenas admin)
  * @access Privado - Admin
  */
@@ -143,7 +143,7 @@ router.get('/status/:status', verificarAutenticacao, verificarPermissao('colabor
 });
 
 /**
- * @route GET /api/pedidos/status/estatisticas
+ * @route GET /api/frete/status/estatisticas
  * @description Obter estatísticas de pedidos por status (apenas admin)
  * @access Privado - Admin
  */
@@ -162,7 +162,7 @@ router.get('/status/estatisticas', verificarAutenticacao, verificarPermissao('co
 });
 
 /**
- * @route POST /api/pedidos/frete/calcular
+ * @route POST /api/frete/frete/calcular
  * @description Calcular frete para um pedido
  * @access Privado
  */
@@ -197,7 +197,7 @@ router.post('/frete/calcular', verificarAutenticacao, async (req, res) => {
 });
 
 /**
- * @route GET /api/pedidos/cep/:cep
+ * @route GET /api/frete/cep/:cep
  * @description Buscar informações de um CEP
  * @access Público
  */
@@ -218,7 +218,7 @@ router.get('/cep/:cep', async (req, res) => {
 });
 
 /**
- * @route GET /api/pedidos/rastreamento/:codigo
+ * @route GET /api/frete/rastreamento/:codigo
  * @description Rastrear objeto pelos Correios
  * @access Privado
  */
@@ -263,7 +263,7 @@ router.get('/rastreamento/:codigo', verificarAutenticacao, async (req, res) => {
 });
 
 /**
- * @route GET /api/pedidos/:pedido_id/proximos-status
+ * @route GET /api/frete/:pedido_id/proximos-status
  * @description Obter próximos status válidos para um pedido (apenas admin)
  * @access Privado - Admin
  */

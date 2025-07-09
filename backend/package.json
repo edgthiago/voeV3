@@ -6,6 +6,8 @@
   "scripts": {
     "start": "node servidor.js",
     "dev": "nodemon servidor.js",
+    "dev:simple": "nodemon servidor_desenvolvimento.js",
+    "dev:basic": "nodemon servidor_basico.js",
     "dev:alt": "PORT=7777 nodemon servidor.js",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -44,6 +46,7 @@
   "dependencies": {
     "axios": "^1.9.0",
     "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
