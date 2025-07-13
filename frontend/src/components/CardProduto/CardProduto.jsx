@@ -1,7 +1,7 @@
 /**
  * CardProduto
  * 
- * Componente que renderiza um card de produto na visualização em grade.
+ *const formatarPreco = (valor) => `R$${Number(valor || 0).toFixed(2).replace('.', ',')}`;>onst formatarPreco = (valor) => `R$${Number(valor || 0).toFixed(2).replace('.', ',')}`;;onst formatarPreco = (valor) => `R$${Number(valor || 0).toFixed(2).replace('.', ',')}`;;onst formatarPreco = (valor) => `R$${Number(valor || 0).toFixed(2).replace('.', ',')}`;;Componente que renderiza um card de produto na visualização em grade.
  * Responsável por exibir as informações principais do produto e permitir
  * interações como adicionar ao carrinho.
  * 
@@ -103,10 +103,10 @@ const CardProduto = ({ produto }) => {
           {/* Área da Imagem com Overlay */}
           <div className="card_produto__area_imagem">            <Link to={`/produto/${id}`}>
               <img 
-                src={imagem || '/tenis_produtos.png'} 
+                src={imagem || '/img/papelaria_produtos.png'} 
                 alt={nome} 
                 className="card_produto__imagem"
-                onError={(e) => {e.target.src = '/tenis_produtos.png'}}
+                onError={(e) => {e.target.src = '/img/papelaria_produtos.png'}}
               />
               <div className="card_produto__imagem_overlay">
                 <span className="card_produto__visualizacao_rapida">

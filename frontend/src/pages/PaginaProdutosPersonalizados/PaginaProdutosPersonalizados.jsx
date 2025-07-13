@@ -36,7 +36,7 @@ const PaginaProdutosPersonalizados = () => {
       nome: 'Caderno Personalizado',
       categoria: 'Cadernos',
       precoBase: 25.90,
-      imagem: '/tenis_produtos.png',
+      imagem: '/papelaria_produtos.png',
       descricao: 'Caderno com capa personalizada, 200 páginas',
       opcoes: {
         tamanhos: ['A4', 'A5', 'A6'],
@@ -49,7 +49,7 @@ const PaginaProdutosPersonalizados = () => {
       nome: 'Agenda Personalizada',
       categoria: 'Agendas',
       precoBase: 35.90,
-      imagem: '/tenis_produtos.png',
+      imagem: '/papelaria_produtos.png',
       descricao: 'Agenda anual com capa personalizada',
       opcoes: {
         tamanhos: ['A4', 'A5'],
@@ -62,7 +62,7 @@ const PaginaProdutosPersonalizados = () => {
       nome: 'Bloco de Notas Personalizado',
       categoria: 'Blocos',
       precoBase: 12.90,
-      imagem: '/tenis_produtos.png',
+      imagem: '/papelaria_produtos.png',
       descricao: 'Bloco de notas com capa personalizada, 100 folhas',
       opcoes: {
         tamanhos: ['A5', 'A6'],
@@ -75,7 +75,7 @@ const PaginaProdutosPersonalizados = () => {
       nome: 'Planner Personalizado',
       categoria: 'Planners',
       precoBase: 42.90,
-      imagem: '/tenis_produtos.png',
+      imagem: '/papelaria_produtos.png',
       descricao: 'Planner anual com layout personalizado',
       opcoes: {
         tamanhos: ['A4', 'A5'],
@@ -88,7 +88,7 @@ const PaginaProdutosPersonalizados = () => {
       nome: 'Calendário Personalizado',
       categoria: 'Calendários',
       precoBase: 28.90,
-      imagem: '/tenis_produtos.png',
+      imagem: '/papelaria_produtos.png',
       descricao: 'Calendário de mesa com fotos e textos personalizados',
       opcoes: {
         tamanhos: ['A4', 'A5', 'A3'],
@@ -101,7 +101,7 @@ const PaginaProdutosPersonalizados = () => {
       nome: 'Etiquetas Personalizadas',
       categoria: 'Etiquetas',
       precoBase: 15.90,
-      imagem: '/tenis_produtos.png',
+      imagem: '/papelaria_produtos.png',
       descricao: 'Kit com 50 etiquetas personalizadas',
       opcoes: {
         tamanhos: ['P', 'M', 'G'],
@@ -291,7 +291,7 @@ const PaginaProdutosPersonalizados = () => {
                           <p className="text-muted small mb-2">{produto.descricao}</p>
                           <div className="d-flex align-items-center justify-content-between">
                             <Badge bg="primary" className="px-3 py-1">
-                              A partir de R$ {produto.precoBase.toFixed(2)}
+                              A partir de R$ {Number(produto.precoBase || 0).toFixed(2)}
                             </Badge>
                             <small className="text-muted">
                               {produto.categoria}
@@ -424,7 +424,7 @@ const PaginaProdutosPersonalizados = () => {
                           Valor Total
                         </h5>
                         <div className="display-6 fw-bold">
-                          R$ {precoFinal.toFixed(2)}
+                          R$ {Number(precoFinal || 0).toFixed(2)}
                         </div>
                         <small className="text-muted">
                           Produto personalizado

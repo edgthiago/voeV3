@@ -209,7 +209,7 @@ const DashboardHome = () => {
                   <ul className="list-unstyled">
                     <li>• Carrinhos ativos: {carrinho?.carrinho_ativos || 0}</li>
                     <li>• Total de itens: {carrinho?.total_itens || 0}</li>
-                    <li>• Valor médio: R$ {parseFloat(carrinho?.valor_medio_carrinho || 0).toFixed(2)}</li>
+                    <li>• Valor médio: R$ {Number(carrinho?.valor_medio_carrinho || 0).toFixed(2)}</li>
                   </ul>
                 </Col>
                 <Col md={6}>
@@ -226,7 +226,7 @@ const DashboardHome = () => {
                   <ul className="list-unstyled">
                     <li>• Ativas: {promocoes?.promocoes_ativas || 0}</li>
                     <li>• Total: {promocoes?.promocoes_totais || 0}</li>
-                    <li>• Desconto médio: {promocoes?.desconto_medio ? `${parseFloat(promocoes.desconto_medio).toFixed(0)}%` : '0%'}</li>
+                    <li>• Desconto médio: {promocoes?.desconto_medio ? `${Number(promocoes.desconto_medio).toFixed(0)}%` : '0%'}</li>
                   </ul>
                 </Col>
               </Row>

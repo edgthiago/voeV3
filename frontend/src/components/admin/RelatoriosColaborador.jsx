@@ -10,11 +10,11 @@ const RelatoriosColaborador = () => {
   useEffect(() => {
     // Simular dados de vendas
     const vendasMock = [
-      { produto: 'Tênis Nike Air Max', quantidade: 15, total: 2250.00, data: '2025-07-08' },
-      { produto: 'Tênis Adidas Ultraboost', quantidade: 8, total: 1600.00, data: '2025-07-08' },
-      { produto: 'Tênis Puma RS-X', quantidade: 12, total: 1080.00, data: '2025-07-07' },
-      { produto: 'Tênis Vans Old Skool', quantidade: 20, total: 1400.00, data: '2025-07-07' },
-      { produto: 'Tênis Converse All Star', quantidade: 25, total: 1875.00, data: '2025-07-06' }
+      { produto: 'Caderno Universitário 100 folhas', quantidade: 15, total: 2250.00, data: '2025-07-08' },
+      { produto: 'Caneta Esferográfica Azul', quantidade: 8, total: 1600.00, data: '2025-07-08' },
+      { produto: 'Papel A4 Sulfite 500 folhas', quantidade: 12, total: 1080.00, data: '2025-07-07' },
+      { produto: 'Marcador Permanente Preto', quantidade: 20, total: 1400.00, data: '2025-07-07' },
+      { produto: 'Lápis HB Kit 12 unidades', quantidade: 25, total: 1875.00, data: '2025-07-06' }
     ];
     
     setVendas(vendasMock);
@@ -57,7 +57,7 @@ const RelatoriosColaborador = () => {
         <Col md={4}>
           <Card className="text-center border-success">
             <Card.Body>
-              <h3 className="text-success">R$ {totalVendas.toFixed(2)}</h3>
+              <h3 className="text-success">R$ {Number(totalVendas || 0).toFixed(2)}</h3>
               <p className="mb-0">Total em Vendas</p>
               <small className="text-muted">Últimos 7 dias</small>
             </Card.Body>
@@ -106,7 +106,7 @@ const RelatoriosColaborador = () => {
                 </thead>
                 <tbody>
                   {vendas.map((venda, index) => {
-                    const percentual = (venda.total / totalVendas * 100).toFixed(1);
+                    const percentual = Number((venda.total || 0) / (totalVendas || 1) * 100).toFixed(1);
                     return (
                       <tr key={index}>
                         <td>
@@ -116,7 +116,7 @@ const RelatoriosColaborador = () => {
                           <span className="badge bg-primary">{venda.quantidade}</span>
                         </td>
                         <td>
-                          <strong>R$ {venda.total.toFixed(2)}</strong>
+                          <strong>R$ {Number(venda.total || 0).toFixed(2)}</strong>
                         </td>
                         <td>
                           {new Date(venda.data).toLocaleDateString('pt-BR')}

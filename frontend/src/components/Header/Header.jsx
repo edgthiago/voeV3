@@ -115,6 +115,15 @@ const Header = () => {
                 )}
               </span>
               <ul className="dropdown-menu">
+                {isAdmin && (
+                  <>
+                    <li><Link className="dropdown-item" to="/admin/colaborador">
+                      <i className="bi bi-gear me-2"></i>
+                      Painel do Colaborador
+                    </Link></li>
+                    <li><hr className="dropdown-divider" /></li>
+                  </>
+                )}
                 <li><Link className="dropdown-item" to="/meus-dados">Minha Conta</Link></li>
                 <li><hr className="dropdown-divider" /></li>
                 <li>

@@ -1,7 +1,7 @@
 /**
  * @fileoverview Script para criar tabelas do sistema de notificações
  * @description Executa o schema SQL para notificações no banco de dados
- * @author Sistema de Loja de Tênis
+ * @author Sistema de Papelaria
  * @version 1.0
  */
 

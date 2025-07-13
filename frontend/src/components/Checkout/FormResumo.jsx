@@ -10,7 +10,7 @@ const FormResumo = ({ carrinho = [], subtotal = 0, frete = 0, desconto = 0, tota
       console.warn('Valor inválido para formatação:', valor);
       return 'R$ 0,00';
     }
-    return `R$ ${numero.toFixed(2).replace('.', ',')}`;
+    return `R$ ${Number(numero).toFixed(2).replace('.', ',')}`;
   });
 
   return (

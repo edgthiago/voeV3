@@ -39,29 +39,29 @@ const GerenciarEstoque = () => {
     const produtosMock = [
       {
         id: 1,
-        nome: 'Tênis Nike Air Max',
-        categoria: 'Tênis Esportivo',
+        nome: 'Caderno Universitário 100 folhas',
+        categoria: 'Cadernos',
         estoque: 15,
         imagem: 'https://via.placeholder.com/40x40'
       },
       {
         id: 2,
-        nome: 'Tênis Adidas Ultraboost',
-        categoria: 'Tênis Corrida',
+        nome: 'Caneta Esferográfica Azul',
+        categoria: 'Lápis',
         estoque: 3,
         imagem: 'https://via.placeholder.com/40x40'
       },
       {
         id: 3,
-        nome: 'Tênis Vans Old Skool',
-        categoria: 'Tênis Casual',
+        nome: 'Marcador Permanente Preto',
+        categoria: 'Canetas',
         estoque: 0,
         imagem: 'https://via.placeholder.com/40x40'
       },
       {
         id: 4,
-        nome: 'Tênis Converse All Star',
-        categoria: 'Tênis Casual',
+        nome: 'Lápis HB Kit 12 unidades',
+        categoria: 'Canetas',
         estoque: 25,
         imagem: 'https://via.placeholder.com/40x40'
       }

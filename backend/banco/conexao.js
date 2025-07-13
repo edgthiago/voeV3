@@ -45,7 +45,7 @@ class ConexaoBanco {
     async testarConexao() {
         try {
             const conexao = await this.pool.getConnection();
-            console.log('✅ Conectado ao MySQL - Loja de Tênis!');
+            console.log('✅ Conectado ao MySQL - Papelaria Digital!');
             conexao.release();
         } catch (erro) {
             console.error('❌ Erro ao conectar ao MySQL:', erro.message);
@@ -106,6 +106,35 @@ class ConexaoBanco {
         } catch (erro) {
             console.error('❌ Erro ao obter estatísticas:', erro);
             throw erro;
+        }
+    }
+
+    // Método para health check
+    async verificarSaude() {
+        try {
+            // Teste simples de conexão
+            const result = await this.executarConsulta('SELECT 1 as status');
+            
+            if (result && result.length > 0 && result[0].status === 1) {
+                return {
+                    status: 'healthy',
+                    message: 'Database connection is working',
+                    timestamp: new Date().toISOString()
+                };
+            } else {
+                return {
+                    status: 'unhealthy',
+                    message: 'Database query returned unexpected result',
+                    timestamp: new Date().toISOString()
+                };
+            }
+        } catch (erro) {
+            console.error('❌ Health check failed:', erro.message);
+            return {
+                status: 'unhealthy',
+                message: `Database error: ${erro.message}`,
+                timestamp: new Date().toISOString()
+            };
         }
     }
 

@@ -14,7 +14,13 @@ let PaginaDetalhesProduto = () => {
   let [carregando, setCarregando] = useState(true);
   let [quantidade, setQuantidade] = useState(1);
   let [imagemAtiva, setImagemAtiva] = useState(0);
-  let [mostrarMensagemSucesso, setMostrarMensagemSucesso] = useState(false);  // Buscar dados do produto
+  let [mostrarMensagemSucesso, setMostrarMensagemSucesso] = useState(false);
+  let [mostrarFormularioAvaliacao, setMostrarFormularioAvaliacao] = useState(false);
+  let [novaAvaliacao, setNovaAvaliacao] = useState({
+    estrelas: 5,
+    comentario: '',
+    nome: ''
+  });  // Buscar dados do produto
   useEffect(() => {
     let estaMontado = true;
     
@@ -100,18 +106,36 @@ let PaginaDetalhesProduto = () => {
     
     // Adiciona estrelas cheias
     for (let i = 0; i < estrelasCompletas; i++) {
-      estrelas.push(<i key={`star-${i}`} className="bi bi-star-fill"></i>);
+      estrelas.push(
+        <i 
+          key={`star-${i}`} 
+          className="bi bi-star-fill" 
+          style={{ color: '#ffc107', fontSize: '1.2rem', marginRight: '2px' }}
+        ></i>
+      );
     }
     
     // Adiciona meia estrela, se necessário
     if (temMeiaEstrela) {
-      estrelas.push(<i key="half-star" className="bi bi-star-half"></i>);
+      estrelas.push(
+        <i 
+          key="half-star" 
+          className="bi bi-star-half" 
+          style={{ color: '#ffc107', fontSize: '1.2rem', marginRight: '2px' }}
+        ></i>
+      );
     }
     
     // Completa com estrelas vazias
     const estrelasVazias = 5 - estrelas.length;
     for (let i = 0; i < estrelasVazias; i++) {
-      estrelas.push(<i key={`empty-${i}`} className="bi bi-star"></i>);
+      estrelas.push(
+        <i 
+          key={`empty-${i}`} 
+          className="bi bi-star" 
+          style={{ color: '#dee2e6', fontSize: '1.2rem', marginRight: '2px' }}
+        ></i>
+      );
     }
     
     return estrelas;
@@ -195,17 +219,23 @@ let PaginaDetalhesProduto = () => {
             <p className="marca-produto mb-1">{produto.marca}</p>
             <h1 className="titulo-produto mb-3">{produto.nome}</h1>
               <div className="avaliacao-produto mb-4">
-              <div className="estrelas-produto">
+              <div className="estrelas-produto" style={{ fontSize: '1.2rem', color: '#ffc107' }}>
                 {renderizarEstrelas(produto.avaliacao)}
-              </div>              <span className="contagem-avaliacao-produto">({produto.numero_avaliacoes} avaliações)</span>
+                <span className="ms-2 fw-bold text-dark">
+                  {Number(produto.avaliacao || 0).toFixed(1)}
+                </span>
+              </div>
+              <span className="contagem-avaliacao-produto text-muted">
+                ({produto.numero_avaliacoes || produto.total_avaliacoes || 0} avaliações)
+              </span>
             </div>
               <div className="preco-produto mb-4">
               {produto.preco_antigo && (
-                <span className="preco-antigo-produto">R$ {Number(produto.preco_antigo).toFixed(2).replace('.', ',')}</span>
+                <span className="preco-antigo-produto">R$ {Number(produto.preco_antigo || 0).toFixed(2).replace('.', ',')}</span>
               )}
-              <span className="preco-atual-produto">R$ {Number(produto.preco_atual).toFixed(2).replace('.', ',')}</span>
+              <span className="preco-atual-produto">R$ {Number(produto.preco_atual || 0).toFixed(2).replace('.', ',')}</span>
               <span className="parcelas-produto">
-                ou 10x de R$ {Number(produto.preco_atual / 10).toFixed(2).replace('.', ',')}
+                ou 10x de R$ {Number((produto.preco_atual || 0) / 10).toFixed(2).replace('.', ',')}
               </span>
             </div>
               <div className="descricao-produto mb-4">
@@ -479,7 +509,7 @@ let PaginaDetalhesProduto = () => {
           </Tab>
           <Tab eventKey="reviews" title={`Avaliações (${produto.numero_avaliacoes})`}>
             <div className="p-4 bg-light rounded">              <div className="d-flex align-items-center mb-4">                <div className="avaliacao-geral me-4">
-                  <div className="numero-avaliacao">{Number(produto.avaliacao).toFixed(1)}</div>
+                  <div className="numero-avaliacao">{Number(produto.avaliacao || 0).toFixed(1)}</div>
                   <div className="estrelas-avaliacao">
                     {renderizarEstrelas(produto.avaliacao)}
                   </div>
@@ -524,11 +554,76 @@ let PaginaDetalhesProduto = () => {
                 </div>
               </div>
               
-              <Button variant="outline-primary" className="btn-escrever-avaliacao">
+              <Button 
+                variant="primary" 
+                className="btn-escrever-avaliacao mb-3"
+                onClick={() => setMostrarFormularioAvaliacao(!mostrarFormularioAvaliacao)}
+              >
                 <i className="bi bi-pencil me-2"></i>
-                Escrever avaliação
+                {mostrarFormularioAvaliacao ? 'Cancelar Avaliação' : 'Escrever Avaliação'}
               </Button>
-                <hr className="my-4" />
+
+              {/* Formulário de Nova Avaliação */}
+              {mostrarFormularioAvaliacao && (
+                <div className="formulario-avaliacao mb-4 p-4 border rounded bg-white">
+                  <h6 className="mb-3">
+                    <i className="bi bi-star me-2"></i>
+                    Deixe sua avaliação sobre este produto
+                  </h6>
+                  
+                  <form onSubmit={handleSubmitAvaliacao}>
+                    <div className="mb-3">
+                      <label className="form-label">Sua avaliação:</label>
+                      <div className="d-flex align-items-center">
+                        {renderizarEstrelasClicaveis(novaAvaliacao.estrelas)}
+                        <span className="ms-2 text-muted">
+                          ({novaAvaliacao.estrelas} de 5 estrelas)
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div className="mb-3">
+                      <label className="form-label">Seu nome:</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={novaAvaliacao.nome}
+                        onChange={(e) => setNovaAvaliacao(prev => ({...prev, nome: e.target.value}))}
+                        placeholder="Digite seu nome"
+                        required
+                      />
+                    </div>
+                    
+                    <div className="mb-3">
+                      <label className="form-label">Seu comentário:</label>
+                      <textarea
+                        className="form-control"
+                        rows="4"
+                        value={novaAvaliacao.comentario}
+                        onChange={(e) => setNovaAvaliacao(prev => ({...prev, comentario: e.target.value}))}
+                        placeholder="Conte sobre sua experiência com este produto..."
+                        required
+                      ></textarea>
+                    </div>
+                    
+                    <div className="d-flex gap-2">
+                      <button type="submit" className="btn btn-primary">
+                        <i className="bi bi-send me-2"></i>
+                        Enviar Avaliação
+                      </button>
+                      <button 
+                        type="button" 
+                        className="btn btn-outline-secondary"
+                        onClick={() => setMostrarFormularioAvaliacao(false)}
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              )}
+
+              <hr className="my-4" />
               
               {/* Integração do sistema de comentários */}
               <ComentariosProduto produtoId={id} />

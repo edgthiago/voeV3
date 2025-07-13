@@ -47,29 +47,47 @@ export const authService = {  // Login
   async verificarToken() {
     try {
       const token = api.getToken();
-      console.log('Verificando token:', token ? 'Token encontrado' : 'Token não encontrado');
+      console.log('🔍 Verificando token:', token ? 'Token encontrado' : 'Token não encontrado');
       
       if (!token) {
-        console.warn('Verificação de token falhou: Token não encontrado no localStorage');
+        console.warn('❌ Verificação falhou: Token não encontrado');
+        this.logout(); // Limpar dados inconsistentes
         return { sucesso: false, mensagem: 'Token não encontrado' };
       }
       
-      // Em vez de enviar o token no corpo, vamos confiar no mecanismo de autorização
-      // que já coloca o token no cabeçalho Authorization automaticamente
-      const response = await api.get('/auth/verificar-token');
-      console.log('Resposta da verificação de token:', response);
-      
-      // Se chegou aqui, o token é válido
-      return { sucesso: true, mensagem: 'Token válido' };
-    } catch (error) {
-      console.error('Erro ao verificar token:', error);
-      // Tentar uma abordagem alternativa para não deslogar o usuário imediatamente em caso de falha temporária
-      const usuario = this.getCurrentUser();
-      if (usuario && usuario.id) {
-        console.warn('Falha na verificação de token, mas usuário existe no localStorage. Confiando no armazenamento local temporariamente.');
-        return { sucesso: true, mensagem: 'Token presumidamente válido (baseado em armazenamento local)' };
+      // Validação básica do formato JWT
+      const parts = token.split('.');
+      if (parts.length !== 3) {
+        console.warn('❌ Token malformado detectado');
+        this.logout(); // Limpar token malformado
+        return { sucesso: false, mensagem: 'Token malformado' };
       }
-      return { sucesso: false, mensagem: 'Token inválido ou expirado' };
+      
+      // Verificar se o token é válido fazendo uma chamada para o backend
+      const response = await api.get('/auth/verificar-token');
+      console.log('✅ Resposta da verificação:', response);
+      
+      return { sucesso: true, mensagem: 'Token válido', dados: response.dados };
+    } catch (error) {
+      console.error('❌ Erro ao verificar token:', error);
+      
+      // Se for erro 401 ou 403, o token é definitivamente inválido
+      if (error.message && (error.message.includes('401') || error.message.includes('403'))) {
+        console.warn('❌ Token inválido ou expirado (401/403)');
+        this.logout(); // Limpar token inválido
+        return { sucesso: false, mensagem: 'Token inválido ou expirado' };
+      }
+      
+      // Para erros de rede, não invalidar imediatamente
+      if (error.message && (error.message.includes('fetch') || error.message.includes('Failed to fetch'))) {
+        console.warn('⚠️ Erro de rede na verificação, assumindo token válido temporariamente');
+        return { sucesso: true, mensagem: 'Assumindo token válido (erro de rede)' };
+      }
+      
+      // Para outros erros, ser conservador e invalidar
+      console.warn('❌ Erro desconhecido na verificação, invalidando token');
+      this.logout();
+      return { sucesso: false, mensagem: 'Erro na verificação do token' };
     }
   }
 };

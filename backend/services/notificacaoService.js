@@ -1,7 +1,7 @@
 /**
  * @fileoverview Serviço de notificações (Email, SMS, Push)
  * @description Gerencia envio de notificações para eventos do sistema
- * @author Sistema de Loja de Tênis
+ * @author Sistema de Papelaria
  * @version 1.0
  */
 
@@ -31,7 +31,7 @@ class NotificacaoService {
         this.templates = {
             email: {
                 pedido_criado: {
-                    subject: '🛍️ Pedido Confirmado - Loja de Tênis',
+                    subject: '🛍️ Pedido Confirmado - Papelaria',
                     html: (dados) => `
                         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                             <h2 style="color: #333;">Pedido Confirmado!</h2>
@@ -52,12 +52,12 @@ class NotificacaoService {
                             <p>Obrigado por comprar conosco!</p>
                             
                             <hr style="margin: 30px 0;">
-                            <p style="color: #666; font-size: 12px;">Loja de Tênis - O melhor em calçados esportivos</p>
+                            <p style="color: #666; font-size: 12px;">Papelaria - Os melhores produtos para escritório e escola</p>
                         </div>
                     `
                 },
                 pagamento_aprovado: {
-                    subject: '✅ Pagamento Aprovado - Loja de Tênis',
+                    subject: '✅ Pagamento Aprovado - Papelaria',
                     html: (dados) => `
                         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                             <h2 style="color: #27ae60;">Pagamento Aprovado!</h2>
@@ -76,12 +76,12 @@ class NotificacaoService {
                             <p>Seu pedido já está sendo preparado para envio!</p>
                             
                             <hr style="margin: 30px 0;">
-                            <p style="color: #666; font-size: 12px;">Loja de Tênis - O melhor em calçados esportivos</p>
+                            <p style="color: #666; font-size: 12px;">Papelaria - Os melhores produtos para escritório e escola</p>
                         </div>
                     `
                 },
                 pedido_enviado: {
-                    subject: '📦 Pedido Enviado - Loja de Tênis',
+                    subject: '📦 Pedido Enviado - Papelaria',
                     html: (dados) => `
                         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                             <h2 style="color: #3498db;">Pedido Enviado!</h2>
@@ -100,12 +100,12 @@ class NotificacaoService {
                             <p>Você pode rastrear seu pedido através do código acima ou em nosso site.</p>
                             
                             <hr style="margin: 30px 0;">
-                            <p style="color: #666; font-size: 12px;">Loja de Tênis - O melhor em calçados esportivos</p>
+                            <p style="color: #666; font-size: 12px;">Papelaria - Os melhores produtos para escritório e escola</p>
                         </div>
                     `
                 },
                 pedido_entregue: {
-                    subject: '🎉 Pedido Entregue - Loja de Tênis',
+                    subject: '🎉 Pedido Entregue - Papelaria',
                     html: (dados) => `
                         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                             <h2 style="color: #e74c3c;">Pedido Entregue!</h2>
@@ -124,16 +124,16 @@ class NotificacaoService {
                             <p>Não se esqueça de avaliar os produtos e deixar seu comentário.</p>
                             
                             <hr style="margin: 30px 0;">
-                            <p style="color: #666; font-size: 12px;">Loja de Tênis - O melhor em calçados esportivos</p>
+                            <p style="color: #666; font-size: 12px;">Papelaria - Os melhores produtos para escritório e escola</p>
                         </div>
                     `
                 }
             },
             sms: {
-                pedido_criado: (dados) => `Loja de Tênis: Pedido #${dados.pedido_id} confirmado! Valor: R$ ${dados.valor_total}. Acompanhe em nosso site.`,
-                pagamento_aprovado: (dados) => `Loja de Tênis: Pagamento aprovado para pedido #${dados.pedido_id}! Seu pedido está sendo preparado.`,
-                pedido_enviado: (dados) => `Loja de Tênis: Pedido #${dados.pedido_id} enviado! Rastreamento: ${dados.codigo_rastreamento}`,
-                pedido_entregue: (dados) => `Loja de Tênis: Pedido #${dados.pedido_id} entregue com sucesso! Obrigado pela preferência.`
+                pedido_criado: (dados) => `Papelaria: Pedido #${dados.pedido_id} confirmado! Valor: R$ ${dados.valor_total}. Acompanhe em nosso site.`,
+                pagamento_aprovado: (dados) => `Papelaria: Pagamento aprovado para pedido #${dados.pedido_id}! Seu pedido está sendo preparado.`,
+                pedido_enviado: (dados) => `Papelaria: Pedido #${dados.pedido_id} enviado! Rastreamento: ${dados.codigo_rastreamento}`,
+                pedido_entregue: (dados) => `Papelaria: Pedido #${dados.pedido_id} entregue com sucesso! Obrigado pela preferência.`
             },
             push: {
                 pedido_criado: (dados) => ({
@@ -183,7 +183,7 @@ class NotificacaoService {
             }
 
             const mailOptions = {
-                from: `"Loja de Tênis" <${process.env.EMAIL_USER}>`,
+                from: `"Papelaria" <${process.env.EMAIL_USER}>`,
                 to: email,
                 subject: templateData.subject,
                 html: templateData.html(dados)

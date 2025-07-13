@@ -80,7 +80,7 @@ const ListaProdutos = () => {
         {/* Imagem do produto */}
         <div className="position-relative">
           <img
-            src={produto.imagem_url || '/img/tenis_produtos.png'}
+            src={produto.imagem_url || '/papelaria_produtos.png'}
             className="card-img-top"
             alt={produto.nome}
             style={{ height: '200px', objectFit: 'cover' }}
@@ -205,7 +205,7 @@ const ListaProdutos = () => {
       <div className="row mb-4">
         <div className="col">
           <h2 className="mb-0">Nossos Produtos</h2>
-          <p className="text-muted">Encontre os melhores tênis para você</p>
+          <p className="text-muted">Encontre os melhores produtos de papelaria para você</p>
         </div>
       </div>
 

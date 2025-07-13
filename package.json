@@ -1,6 +1,20 @@
 {
+  "name": "voe-papelaria-v3",
+  "version": "1.0.0",
+  "description": "Sistema completo de e-commerce para papelaria",
+  "scripts": {
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "backend": "cd backend && npm run start",
+    "frontend": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "setup": "npm run install-all"
+  },
   "dependencies": {
     "axios": "^1.9.0",
     "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }

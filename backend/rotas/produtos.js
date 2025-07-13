@@ -98,8 +98,8 @@ router.post('/', verificarAutenticacao, middleware.verificarAcessoAdmin(PERMISSO
       numero_avaliacoes: req.body.numero_avaliacoes ? parseInt(req.body.numero_avaliacoes) : undefined,
       categoria: req.body.categoria,
       genero: req.body.genero,
-      condicao: req.body.condicao,
-      estoque: parseInt(req.body.estoque) || 0,
+      condicao: 'novo', // Sempre novo para papelaria
+      quantidade_estoque: parseInt(req.body.estoque || req.body.quantidade_estoque) || 0,
       descricao: req.body.descricao,
       tamanhos_disponiveis: req.body.tamanhos_disponiveis,
       cores_disponiveis: req.body.cores_disponiveis,
@@ -153,8 +153,8 @@ router.put('/:id', verificarAutenticacao, verificarPermissao('colaborador'), asy
     // Campos que podem ser atualizados
     const camposPermitidos = [
       'marca', 'nome', 'imagem', 'preco_antigo', 'preco_atual', 'desconto',
-      'avaliacao', 'numero_avaliacoes', 'categoria', 'genero', 'condicao',
-      'estoque', 'descricao', 'tamanhos_disponiveis', 'cores_disponiveis',
+      'avaliacao', 'numero_avaliacoes', 'categoria', 'genero',
+      'quantidade_estoque', 'descricao', 'tamanhos_disponiveis', 'cores_disponiveis',
       'peso', 'material', 'origem', 'garantia_meses'
     ];
 
@@ -163,6 +163,9 @@ router.put('/:id', verificarAutenticacao, verificarPermissao('colaborador'), asy
         dadosAtualizacao[campo] = req.body[campo];
       }
     });
+
+    // Sempre definir condição como "novo" para papelaria
+    dadosAtualizacao.condicao = 'novo';
 
     const produtoAtualizado = await produto.atualizar(dadosAtualizacao);
     
@@ -195,7 +198,7 @@ router.patch('/:id/estoque', verificarAutenticacao, middleware.verificarAcessoAd
       });
     }
 
-    const novaQuantidade = parseInt(req.body.estoque);
+    const novaQuantidade = parseInt(req.body.estoque || req.body.quantidade);
     
     if (isNaN(novaQuantidade) || novaQuantidade < 0) {
       return res.status(400).json({
@@ -206,12 +209,28 @@ router.patch('/:id/estoque', verificarAutenticacao, middleware.verificarAcessoAd
 
     const produtoAtualizado = await produto.atualizarEstoque(novaQuantidade);
     
-    // Log da ação
-    req.logAcao('estoque_atualizado', { 
-      produto_id: produto.id, 
-      estoque_anterior: produto.estoque,
-      estoque_novo: novaQuantidade 
-    });
+    // Invalidar cache de produtos após atualização de estoque
+    try {
+      const cacheService = require('../services/cacheService');
+      await cacheService.invalidatePattern('produtos:*');
+      await cacheService.invalidatePattern('product:*');
+      console.log('✅ Cache de produtos invalidado após atualização de estoque');
+    } catch (cacheError) {
+      console.warn('⚠️ Erro ao invalidar cache:', cacheError.message);
+    }
+    
+    // Log da ação (se disponível)
+    try {
+      if (req.logAcao && typeof req.logAcao === 'function') {
+        req.logAcao('estoque_atualizado', { 
+          produto_id: produto.id, 
+          estoque_anterior: produto.estoque,
+          estoque_novo: novaQuantidade 
+        });
+      }
+    } catch (logError) {
+      console.warn('⚠️ Erro ao registrar log da ação:', logError.message);
+    }
     
     res.json({
       sucesso: true,

@@ -49,7 +49,7 @@ router.post('/pix', verificarAutenticacao, async (req, res) => {
 
         const dadosPagamento = {
             valor: parseFloat(valor),
-            descricao: descricao || `Pedido #${pedido_id} - Loja de Tênis`,
+            descricao: descricao || `Pedido #${pedido_id} - Papelaria`,
             email_pagador: req.usuario.email,
             nome_pagador: req.usuario.nome,
             pedido_id: pedido_id
@@ -118,7 +118,7 @@ router.post('/cartao', verificarAutenticacao, async (req, res) => {
 
         const dadosPagamento = {
             valor: parseFloat(valor),
-            descricao: `Pedido #${pedido_id} - Loja de Tênis`,
+            descricao: `Pedido #${pedido_id} - Papelaria`,
             email_pagador: req.usuario.email,
             nome_pagador: req.usuario.nome,
             pedido_id: pedido_id,

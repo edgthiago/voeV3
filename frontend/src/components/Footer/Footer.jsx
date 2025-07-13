@@ -241,6 +241,10 @@ const Footer = () => {
                   <Link to="/termos">Termos de Uso</Link>
                   <Link to="/privacidade">Privacidade</Link>
                   <Link to="/cookies">Cookies</Link>
+                  <Link to="/login-colaborador" className="text-primary">
+                    <i className="bi bi-gear me-1"></i>
+                    Admin
+                  </Link>
                 </div>
               </Col>
               

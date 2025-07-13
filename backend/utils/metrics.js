@@ -1,7 +1,7 @@
 /**
  * @fileoverview Sistema de métricas e monitoramento para pedidos
  * @description Coleta e análise de métricas de performance e uso
- * @author Sistema de Loja de Tênis
+ * @author Sistema de Papelaria
  * @version 1.0
  * @since 2025-01-30
  */

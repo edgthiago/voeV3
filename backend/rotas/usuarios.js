@@ -1,7 +1,7 @@
 /**
  * @fileoverview Rotas de Usuários
  * @description Gerenciamento de usuários do sistema
- * @author Sistema de Loja de Tênis
+ * @author Sistema de Papelaria
  * @version 1.0
  */
 

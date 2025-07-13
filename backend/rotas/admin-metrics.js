@@ -1,7 +1,7 @@
 /**
  * @fileoverview Rotas administrativas para visualização de métricas
  * @description Endpoints para monitoramento e análise do sistema de pedidos
- * @author Sistema de Loja de Tênis
+ * @author Sistema de Papelaria
  * @version 1.0
  * @since 2025-01-30
  */

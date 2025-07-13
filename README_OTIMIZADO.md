@@ -51,8 +51,8 @@ cd frontend && npm run dev
 
 ### **URLs de Acesso:**
 - **Frontend:** http://localhost:3000
-- **Backend API:** http://localhost:30011
-- **Documentação:** http://localhost:30011/api/docs
+- **Backend API:** http://localhost:3001
+- **Documentação:** http://localhost:3001/api/docs
 
 ## 📁 **Estrutura do Projeto (Otimizada)**
 

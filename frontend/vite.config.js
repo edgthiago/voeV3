@@ -17,8 +17,34 @@ export default defineConfig({
       disableDotRule: true,
       index: '/',
     },
-    port: 3000,
+    port: 5173,
     open: true,
+    // Desabilitar cache durante desenvolvimento
+    headers: {
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0'
+    },
+    // Proxy para API
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path,
+        configure: (proxy, _options) => {
+          proxy.on('error', (err, _req, _res) => {
+            console.log('🔴 Proxy error:', err);
+          });
+          proxy.on('proxyReq', (proxyReq, req, _res) => {
+            console.log('🔄 Sending Request to the Target:', req.method, req.url);
+          });
+          proxy.on('proxyRes', (proxyRes, req, _res) => {
+            console.log('✅ Received Response from the Target:', proxyRes.statusCode, req.url);
+          });
+        }
+      }
+    }
   },  // Configuração para produção
   build: {
     rollupOptions: {

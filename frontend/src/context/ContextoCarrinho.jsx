@@ -17,13 +17,19 @@ export const ProvedorCarrinho = ({ children }) => {
 
     const carregarCarrinho = async () => {
       try {
-        // Verificar se o usuário está autenticado
-        if (authService.isAuthenticated()) {
+        // Verificar se o usuário está autenticado antes de tentar
+        const token = localStorage.getItem('token');
+        if (token && authService.isAuthenticated()) {
           // Se autenticado, carregar do backend
-          const resposta = await carrinhoService.obter();
-          if (resposta.sucesso && estaMontado) {
-            setItensCarrinho(resposta.dados?.itens || []);
-            return;
+          try {
+            const resposta = await carrinhoService.obter();
+            if (resposta.sucesso && estaMontado) {
+              setItensCarrinho(resposta.dados?.itens || []);
+              return;
+            }
+          } catch (erroApi) {
+            // Se falhar na API (ex: 401), não mostrar erro, apenas usar localStorage
+            console.log('Carrinho não encontrado no backend, usando localStorage');
           }
         }
         
@@ -117,7 +123,7 @@ export const ProvedorCarrinho = ({ children }) => {
             // Garantir que o nome esteja disponível
             name: produto.name || produto.nome || "Produto sem nome",
             // Garantir que a imagem esteja disponível
-            image: produto.image || produto.imagem || produto.imagem_url || "/tenis_produtos.png"
+            image: produto.image || produto.imagem || produto.imagem_url || "/img/papelaria_produtos.png"
           };
           return [...itensPrevios, produtoNormalizado];
         }

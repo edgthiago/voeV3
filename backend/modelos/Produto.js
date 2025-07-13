@@ -171,16 +171,15 @@ class Produto {  constructor(dados) {
     try {
       const sql = `        INSERT INTO produtos (
           marca, nome, imagem, preco_antigo, preco_atual, desconto,
-          avaliacao, numero_avaliacoes, categoria, genero, condicao,
-          estoque, descricao, tamanhos_disponiveis, cores_disponiveis,
-          peso, material, origem, garantia_meses
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          avaliacao, total_avaliacoes, categoria, genero, condicao,
+          quantidade_estoque, descricao
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
       
       const parametros = [
         dadosProduto.marca,
         dadosProduto.nome,
-        dadosProduto.imagem || '/tenis_produtos.png',
+        dadosProduto.imagem || '/papelaria_produtos.png',
         dadosProduto.preco_antigo,
         dadosProduto.preco_atual,
         dadosProduto.desconto || 0,
@@ -190,13 +189,7 @@ class Produto {  constructor(dados) {
         dadosProduto.genero,
         dadosProduto.condicao || 'novo',
         dadosProduto.estoque || 0,
-        dadosProduto.descricao || '',
-        dadosProduto.tamanhos_disponiveis || '',
-        dadosProduto.cores_disponiveis || '',
-        dadosProduto.peso || 0,
-        dadosProduto.material || '',
-        dadosProduto.origem || '',
-        dadosProduto.garantia_meses || 12
+        dadosProduto.descricao || ''
       ];
 
       const resultado = await conexao.executarConsulta(sql, parametros);
@@ -254,8 +247,9 @@ class Produto {  constructor(dados) {
 
   // Atualizar estoque
   async atualizarEstoque(quantidade) {
-    try {      await conexao.executarConsulta(
-        'UPDATE produtos SET estoque = ? WHERE id = ?',
+    try {
+      await conexao.executarConsulta(
+        'UPDATE produtos SET quantidade_estoque = ? WHERE id = ?',
         [quantidade, this.id]
       );
       this.estoque = quantidade;
@@ -327,19 +321,11 @@ class Produto {  constructor(dados) {
       // Verificar se existem produtos com estoque baixo (menos de 5 unidades)
       const produtosEstoqueBaixo = await conexao.executarConsulta('SELECT COUNT(*) as total FROM produtos WHERE quantidade_estoque > 0 AND quantidade_estoque < 5');
       
-      // Modificar pelo menos um produto para ter estoque baixo
-      const produtoNecessitaEstoqueBaixo = await conexao.executarConsulta('SELECT COUNT(*) as total FROM produtos WHERE quantidade_estoque < 5');
-      
-      if (produtoNecessitaEstoqueBaixo[0].total === 0) {
-        // Atualizar um produto para ter estoque baixo
-        await conexao.executarConsulta('UPDATE produtos SET quantidade_estoque = 2 WHERE id = 1 LIMIT 1');
-      }
-      
       return {
         total_produtos: totalProdutos[0].total,
         produtos_em_estoque: produtosEstoque[0].total,
         produtos_sem_estoque: produtosSemEstoque[0].total,
-        produtos_estoque_baixo: produtosEstoqueBaixo[0].total || 1, // Garantir que pelo menos um produto tenha estoque baixo
+        produtos_estoque_baixo: produtosEstoqueBaixo[0].total,
         valor_total_estoque: valorTotalEstoque[0].total || 0
       };
     } catch (erro) {

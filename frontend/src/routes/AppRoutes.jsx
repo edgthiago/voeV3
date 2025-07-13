@@ -21,9 +21,20 @@ import PaginaProdutosPersonalizados from '../pages/PaginaProdutosPersonalizados/
 
 // Componentes para funcionalidades do colaborador
 import GerenciarProdutos from '../components/admin/GerenciarProdutos';
+import AdicionarProduto from '../components/admin/AdicionarProduto';
+import EditarProduto from '../components/admin/EditarProdutoSimples';
+import TodosProdutos from '../components/admin/TodosProdutos';
 import GerenciarEstoque from '../components/admin/GerenciarEstoque';
+import AtualizarEstoque from '../components/admin/AtualizarEstoque';
 import GerenciarPedidos from '../components/admin/GerenciarPedidos';
+import PedidosPendentes from '../components/admin/PedidosPendentes';
+import TodosPedidos from '../components/admin/TodosPedidos';
 import RelatoriosColaborador from '../components/admin/RelatoriosColaborador';
+import RelatorioVendas from '../components/admin/RelatorioVendas';
+import RelatorioProdutos from '../components/admin/RelatorioProdutos';
+import LoginColaboradorTeste from '../components/admin/LoginColaboradorTeste';
+import ResumoFuncionalidades from '../components/admin/ResumoFuncionalidades';
+import TestAuth from '../components/TestAuth';
 
 
 const AppRoutes = () => {
@@ -36,6 +47,7 @@ const AppRoutes = () => {
       <Route path="/entrar" element={<Entrar/>} />
       <Route path="/cadastro" element={<Cadastro />} />
       <Route path="/criarConta" element={<CriarConta/>} />
+      <Route path="/test-auth" element={<TestAuth />} />
       <Route path="/produtos" element={<PaginaProdutos />} />
       <Route path="/produtos-personalizados" element={<PaginaProdutosPersonalizados />} />
       <Route path="/produto/:id" element={<PaginaDetalhesProduto />} />
@@ -63,6 +75,8 @@ const AppRoutes = () => {
       } />
       
       {/* Rotas Administrativas */}
+      <Route path="/login-colaborador" element={<LoginColaboradorTeste />} />
+      <Route path="/admin/resumo-funcionalidades" element={<ResumoFuncionalidades />} />
       <Route path="/admin/colaborador" element={
         <ProtecaoRota tipoUsuarioMinimo="colaborador" redirectTo="/entrar">
           <PaginaColaborador />
@@ -82,12 +96,17 @@ const AppRoutes = () => {
       {/* Rotas das funcionalidades do colaborador */}
       <Route path="/dashboard/produtos" element={
         <ProtecaoRota tipoUsuarioMinimo="colaborador" redirectTo="/entrar">
-          <GerenciarProdutos />
+          <TodosProdutos />
         </ProtecaoRota>
       } />
       <Route path="/dashboard/produtos/novo" element={
         <ProtecaoRota tipoUsuarioMinimo="colaborador" redirectTo="/entrar">
-          <GerenciarProdutos />
+          <AdicionarProduto />
+        </ProtecaoRota>
+      } />
+      <Route path="/dashboard/produtos/editar/:id" element={
+        <ProtecaoRota tipoUsuarioMinimo="colaborador" redirectTo="/entrar">
+          <EditarProduto />
         </ProtecaoRota>
       } />
       <Route path="/dashboard/estoque" element={
@@ -97,27 +116,27 @@ const AppRoutes = () => {
       } />
       <Route path="/dashboard/estoque/atualizar" element={
         <ProtecaoRota tipoUsuarioMinimo="colaborador" redirectTo="/entrar">
-          <GerenciarEstoque />
+          <AtualizarEstoque />
         </ProtecaoRota>
       } />
       <Route path="/dashboard/pedidos" element={
         <ProtecaoRota tipoUsuarioMinimo="colaborador" redirectTo="/entrar">
-          <GerenciarPedidos />
+          <TodosPedidos />
         </ProtecaoRota>
       } />
       <Route path="/dashboard/pedidos/pendentes" element={
         <ProtecaoRota tipoUsuarioMinimo="colaborador" redirectTo="/entrar">
-          <GerenciarPedidos />
+          <PedidosPendentes />
         </ProtecaoRota>
       } />
       <Route path="/dashboard/relatorios/vendas-basico" element={
         <ProtecaoRota tipoUsuarioMinimo="colaborador" redirectTo="/entrar">
-          <RelatoriosColaborador />
+          <RelatorioVendas />
         </ProtecaoRota>
       } />
       <Route path="/dashboard/relatorios/produtos" element={
         <ProtecaoRota tipoUsuarioMinimo="colaborador" redirectTo="/entrar">
-          <RelatoriosColaborador />
+          <RelatorioProdutos />
         </ProtecaoRota>
       } />
       

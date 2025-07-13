@@ -1,5 +1,5 @@
 // Configuração da API
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:30011/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 // Classe para gerenciar requisições à API
 class ApiService {
@@ -59,6 +59,11 @@ class ApiService {
     
     return this.request(url, {
       method: 'GET',
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      }
     });
   }
 
@@ -99,7 +104,27 @@ class ApiService {
     }
   }
   getToken() {
-    return this.token || localStorage.getItem('token') || sessionStorage.getItem('token');
+    // Verificar múltiplas fontes de token
+    const token = this.token || localStorage.getItem('token') || sessionStorage.getItem('token');
+    
+    // Validação básica do formato do token JWT
+    if (token) {
+      const parts = token.split('.');
+      if (parts.length !== 3) {
+        console.warn('❌ Token malformado detectado, removendo...');
+        this.clearToken();
+        return null;
+      }
+      
+      // Verificar se o token não está vazio ou só com espaços
+      if (!token.trim()) {
+        console.warn('❌ Token vazio detectado, removendo...');
+        this.clearToken();
+        return null;
+      }
+    }
+    
+    return token;
   }
   clearToken() {
     this.token = null;

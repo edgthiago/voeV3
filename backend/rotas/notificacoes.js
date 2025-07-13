@@ -1,7 +1,7 @@
 /**
  * @fileoverview Rotas para sistema de notificações
  * @description Gerencia envio e configuração de notificações
- * @author Sistema de Loja de Tênis
+ * @author Sistema de Papelaria
  * @version 1.0
  */
 

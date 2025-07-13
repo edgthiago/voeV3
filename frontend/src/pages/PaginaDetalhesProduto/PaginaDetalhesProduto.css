@@ -1,0 +1,110 @@
+/* Estilos para a página de detalhes do produto */
+
+/* Avaliações e Estrelas */
+.estrelas-produto i,
+.estrelas-avaliacao i {
+  color: #ffc107;
+  font-size: 1.2rem;
+  margin-right: 2px;
+}
+
+.estrela-clicavel {
+  transition: all 0.2s ease;
+}
+
+.estrela-clicavel:hover {
+  transform: scale(1.1);
+  filter: brightness(1.2);
+}
+
+.avaliacao-produto {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.numero-avaliacao {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.contagem-avaliacao {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Formulário de Avaliação */
+.formulario-avaliacao {
+  background: #f8f9fa;
+  border-left: 4px solid #007bff;
+}
+
+.formulario-avaliacao h6 {
+  color: #007bff;
+  font-weight: 600;
+}
+
+/* Barras de Avaliação */
+.barra-avaliacao {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.barra-avaliacao span:first-child {
+  min-width: 80px;
+  font-size: 0.9rem;
+}
+
+.barra-avaliacao .progress {
+  flex-grow: 1;
+  height: 8px;
+}
+
+.barra-avaliacao span:last-child {
+  min-width: 40px;
+  font-size: 0.9rem;
+  text-align: right;
+}
+
+/* Botões de Avaliação */
+.btn-escrever-avaliacao {
+  background: linear-gradient(45deg, #007bff, #0056b3);
+  border: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-escrever-avaliacao:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .avaliacao-geral {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .numero-avaliacao {
+    font-size: 2rem;
+  }
+  
+  .estrelas-produto i,
+  .estrelas-avaliacao i {
+    font-size: 1rem;
+  }
+}
+
+/* Efeitos visuais */
+.avaliacao-produto:hover .estrelas-produto i {
+  animation: sparkle 0.6s ease-in-out;
+}
+
+@keyframes sparkle {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}

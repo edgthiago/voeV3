@@ -86,53 +86,79 @@ export const AuthProvider = ({ children }) => {
         console.log('Verificando status de autenticação...');
         dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: true });
         
-        const isLoggedIn = authService.isLoggedIn();
-        const currentUser = authService.getCurrentUser();
+        // Primeiro, verificar se há dados no localStorage
+        const storedToken = localStorage.getItem('token');
+        const storedUser = localStorage.getItem('usuario');
         
-        console.log('isLoggedIn:', isLoggedIn);
-        console.log('currentUser:', currentUser);
+        console.log('🔍 Verificação inicial:');
+        console.log('📊 Token stored:', !!storedToken);
+        console.log('👤 User stored:', !!storedUser);
+        
+        // Se não há token ou usuário, limpar e sair
+        if (!storedToken || !storedUser) {
+          console.log('Dados incompletos no localStorage, limpando...');
+          authService.logout();
+          dispatch({ type: AUTH_ACTIONS.LOGOUT });
+          return;
+        }
+        
+        // Tentar parsear usuário
+        let currentUser;
+        try {
+          currentUser = JSON.parse(storedUser);
+        } catch (e) {
+          console.error('Erro ao parsear usuário do localStorage:', e);
+          authService.logout();
+          dispatch({ type: AUTH_ACTIONS.LOGOUT });
+          return;
+        }
+        
+        console.log('👤 currentUser:', currentUser);
+        console.log('🏷️ currentUser tipo_usuario:', currentUser?.tipo_usuario);
 
-        if (isLoggedIn && currentUser) {
-          console.log('Token e usuário encontrados no localStorage');
-          // Verificar se o token ainda é válido fazendo uma chamada para o backend
+        if (currentUser && currentUser.id) {
+          console.log('Dados encontrados, verificando validade do token...');
+          // Verificar se o token ainda é válido
           try {
-            console.log('Verificando validade do token com o backend...');
             const tokenValid = await authService.verificarToken();
             console.log('Resposta da verificação de token:', tokenValid);
             
             if (tokenValid && tokenValid.sucesso) {
-              console.log('Token válido, estabelecendo sessão');
+              console.log('✅ Token válido, estabelecendo sessão');
               dispatch({
                 type: AUTH_ACTIONS.LOGIN_SUCCESS,
                 payload: { usuario: currentUser }
               });
             } else {
-              console.warn('Token inválido ou expirado, fazendo logout');
+              console.warn('❌ Token inválido ou expirado, limpando dados');
               authService.logout();
               dispatch({ type: AUTH_ACTIONS.LOGOUT });
             }
           } catch (error) {
-            console.error('Erro ao verificar token:', error);
-            // Aqui decidimos ser mais tolerantes - se existir o usuário no localStorage,
-            // confiamos nessa informação mesmo que a verificação falhe (ex: problemas de rede)
-            if (currentUser && Object.keys(currentUser).length > 0) {
-              console.log('Usando dados armazenados localmente como contingência');
+            console.error('❌ Erro ao verificar token:', error);
+            // Se falhar por problemas de rede, manter sessão temporariamente
+            if (error.message && (error.message.includes('fetch') || error.message.includes('network'))) {
+              console.log('⚠️ Possível problema de rede, mantendo sessão temporariamente');
               dispatch({
                 type: AUTH_ACTIONS.LOGIN_SUCCESS,
                 payload: { usuario: currentUser }
               });
             } else {
-              console.warn('Falha na verificação sem dados locais válidos, fazendo logout');
+              console.warn('❌ Erro na verificação, limpando dados');
               authService.logout();
               dispatch({ type: AUTH_ACTIONS.LOGOUT });
             }
           }
         } else {
-          console.log('Usuário não está logado');
-          dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: false });
+          console.log('❌ Dados de usuário inválidos, limpando...');
+          authService.logout();
+          dispatch({ type: AUTH_ACTIONS.LOGOUT });
         }
       } catch (error) {
-        console.error('Erro ao verificar autenticação:', error);
+        console.error('❌ Erro geral ao verificar autenticação:', error);
+        authService.logout();
+        dispatch({ type: AUTH_ACTIONS.LOGOUT });
+      } finally {
         dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: false });
       }
     };
@@ -146,12 +172,17 @@ export const AuthProvider = ({ children }) => {
       
       const response = await authService.login(email, senha);
       
+      console.log('🔍 Resposta do authService.login:', response);
+      
       if (response.sucesso) {
+        const usuario = response.dados?.usuario || response.usuario;
+        console.log('✅ Usuário extraído para o contexto:', usuario);
+        
         dispatch({
           type: AUTH_ACTIONS.LOGIN_SUCCESS,
-          payload: { usuario: response.usuario }
+          payload: { usuario: usuario }
         });
-        return { sucesso: true, usuario: response.usuario };
+        return { sucesso: true, usuario: usuario };
       } else {
         dispatch({
           type: AUTH_ACTIONS.LOGIN_ERROR,

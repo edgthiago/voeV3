@@ -566,14 +566,18 @@ class MonitoringService {
                 if (process.env.DB_NAME && process.env.DB_HOST) {
                     const db = require('../banco/conexao');
                     
-                    // Usar Promise.race para timeout
-                    const dbCheck = Promise.race([
-                        db.execute('SELECT 1'),
+                    // Usar o método de health check do banco
+                    const dbHealthCheck = Promise.race([
+                        db.verificarSaude(),
                         new Promise((_, reject) => setTimeout(() => reject(new Error('Database timeout')), 5000))
                     ]);
                     
-                    await dbCheck;
-                    health.services.database = 'healthy';
+                    const dbHealth = await dbHealthCheck;
+                    health.services.database = dbHealth.status === 'healthy' ? 'healthy' : 'unhealthy';
+                    
+                    if (dbHealth.status !== 'healthy') {
+                        health.status = 'degraded';
+                    }
                 } else {
                     health.services.database = 'not_configured';
                 }

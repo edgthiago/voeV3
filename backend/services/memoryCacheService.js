@@ -39,7 +39,10 @@ class MemoryCacheService {
             }
             
             this.stats.sets++;
-            console.log(`✅ Cache SET: ${key} (TTL: ${ttl}s)`);
+            // Log reduzido - apenas para operações importantes
+            if (key.includes('product:') || key.includes('user:')) {
+                console.log(`✅ Cache SET: ${key.substring(0, 20)}... (TTL: ${ttl}s)`);
+            }
             return true;
         } catch (error) {
             console.error('❌ Erro ao salvar no cache:', error);
@@ -59,7 +62,10 @@ class MemoryCacheService {
                     this.cache.delete(key);
                     this.ttlMap.delete(key);
                     this.stats.misses++;
-                    console.log(`⚠️ Cache EXPIRED: ${key}`);
+                    // Log reduzido para expiração
+                    if (key.includes('product:') || key.includes('user:')) {
+                        console.log(`⚠️ Cache EXPIRED: ${key.substring(0, 20)}...`);
+                    }
                     return null;
                 }
             }
@@ -67,12 +73,18 @@ class MemoryCacheService {
             const data = this.cache.get(key);
             if (data) {
                 this.stats.hits++;
-                console.log(`⚡ Cache HIT: ${key}`);
+                // Log reduzido para hits - apenas produtos importantes
+                if (key.includes('product:') && Math.random() < 0.1) { // Log apenas 10% dos hits
+                    console.log(`⚡ Cache HIT: ${key.substring(0, 20)}...`);
+                }
                 return JSON.parse(data.value);
             }
             
             this.stats.misses++;
-            console.log(`⚠️ Cache MISS: ${key}`);
+            // Log reduzido para miss - apenas queries importantes
+            if (key.includes('query:') || key.includes('product:')) {
+                console.log(`⚠️ Cache MISS: ${key.substring(0, 30)}...`);
+            }
             return null;
         } catch (error) {
             console.error('❌ Erro ao buscar no cache:', error);

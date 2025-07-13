@@ -130,7 +130,7 @@ const CarrinhoIntegrado = () => {
                     {/* Imagem do produto */}
                     <div className="col-md-2 col-3">
                       <img
-                        src={item.imagem || '/img/tenis_produtos.png'}
+                        src={item.imagem || '/img/img/papelaria_produtos.png'}
                         alt={item.nome}
                         className="img-fluid rounded"
                         style={{ maxHeight: '80px', objectFit: 'cover' }}
@@ -251,7 +251,7 @@ const CarrinhoIntegrado = () => {
               <div className="d-flex justify-content-between mb-3">
                 <strong>Total:</strong>
                 <strong className="text-primary fs-5">
-                  R$ {totais.total.toFixed(2)}
+                  R$ {Number(totais.total || 0).toFixed(2)}
                 </strong>
               </div>
 

@@ -1,47 +1,38 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import './Entrar.css';
-import api from '../../services/api';
 
 export default function Login() {
+  const navigate = useNavigate();
+  const { login: loginAuth } = useAuth();
   const [login, setLogin] = useState('');
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState('');
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    console.log('Iniciando processo de login...');
-    console.log('Dados de login:', { email: login });
+    console.log('🚀 Iniciando processo de login...');
+    console.log('📧 Email:', login.trim());
 
     try {
-      // Remover espaços extras dos campos antes de enviar
-      const emailLimpo = login.trim();
-      const senhaLimpa = senha.trim();
+      setErro('');
       
-      // Usar o serviço de API configurado
-      const dados = await api.post('/auth/login', {
-        email: emailLimpo,
-        senha: senhaLimpa
-      });
-
-      console.log('Dados da resposta:', dados);      // Armazenar token e redirecionar
-      if (dados.dados && dados.dados.token) {
-        // Armazenar o token utilizando o serviço API
-        api.setToken(dados.dados.token);
+      // Usar o serviço de autenticação do contexto
+      const resultado = await loginAuth(login.trim(), senha.trim());
+      
+      console.log('📊 Resultado do login:', resultado);
+      
+      if (resultado.sucesso) {
+        console.log('✅ Login bem-sucedido!');
+        console.log('� Usuário:', resultado.usuario);
         
-        // Normalizar os dados do usuário garantindo que o campo tipo seja preenchido
-        const usuario = dados.dados.usuario;
-        // Garantir que haja um campo tipo para compatibilidade
-        if (usuario && !usuario.tipo && (usuario.tipo_usuario || usuario.nivel_acesso)) {
-          usuario.tipo = usuario.tipo_usuario || usuario.nivel_acesso;
-        }
-        
-        localStorage.setItem('usuario', JSON.stringify(usuario));
-        
-        // Redirecionar com base no nível de acesso
-        const tipoUsuario = dados.dados.usuario?.tipo_usuario || dados.dados.usuario?.nivel_acesso || 'usuario';
+        // Determinar destino baseado no tipo de usuário
+        const tipoUsuario = resultado.usuario?.tipo_usuario || resultado.usuario?.nivel_acesso || 'usuario';
         let destino = '/';
         
-        // Redirecionamento baseado no tipo de usuário
+        console.log('🎯 Tipo de usuário detectado:', tipoUsuario);
+        
         switch (tipoUsuario) {
           case 'diretor':
             destino = '/admin/diretor';
@@ -53,18 +44,24 @@ export default function Login() {
             destino = '/admin/colaborador';
             break;
           default:
-            destino = '/'; // usuário comum
+            destino = '/dashboard'; // usuário comum vai para dashboard
         }
         
-        alert('Login realizado com sucesso!');
-        window.location.href = destino;
+        console.log('🚀 Redirecionando para:', destino);
+        
+        // Pequeno delay para garantir que o contexto foi atualizado
+        setTimeout(() => {
+          navigate(destino, { replace: true });
+        }, 100);
+        
       } else {
-        throw new Error('Token não encontrado na resposta');
+        console.error('❌ Falha no login:', resultado.mensagem);
+        setErro(resultado.mensagem || 'Erro ao fazer login');
       }
-
-    } catch (erro) {
-      console.error('Erro ao fazer login:', erro);
-      setErro(erro.message);
+      
+    } catch (error) {
+      console.error('💥 Erro no processo de login:', error);
+      setErro(error.message || 'Erro inesperado ao fazer login');
     }
   };
 

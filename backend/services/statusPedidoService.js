@@ -1,7 +1,7 @@
 /**
  * @fileoverview Serviço de gerenciamento de status de pedidos
  * @description Controla o fluxo de status dos pedidos e notificações
- * @author Sistema de Loja de Tênis
+ * @author Sistema de Papelaria
  * @version 1.0
  */
 

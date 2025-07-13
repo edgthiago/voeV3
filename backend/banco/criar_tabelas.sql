@@ -1,4 +1,4 @@
--- Script para criar o banco de dados da loja de tênis
+-- Script para criar o banco de dados da papelaria
 -- Arquivo: criar_tabelas.sql
 
 CREATE DATABASE IF NOT EXISTS projetofgt;
@@ -9,7 +9,7 @@ CREATE TABLE produtos (
   id INT NOT NULL AUTO_INCREMENT,
   marca VARCHAR(100) NOT NULL,
   nome VARCHAR(255) NOT NULL,
-  imagem VARCHAR(500) NOT NULL DEFAULT '/tenis_produtos.png',
+  imagem VARCHAR(500) NOT NULL DEFAULT '/img/papelaria_produtos.png',
   preco_antigo DECIMAL(10,2) NOT NULL,
   preco_atual DECIMAL(10,2) NOT NULL,
   desconto INT NOT NULL,

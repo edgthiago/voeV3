@@ -1,9 +1,9 @@
-// Middleware de autenticação e autorização para loja de tênis
+// Middleware de autenticação e autorização para papelaria digital
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 require('dotenv').config();
-const JWT_SECRET = process.env.JWT_SECRET || 'chave_super_secreta_loja_tenis_2024';
+const JWT_SECRET = process.env.JWT_SECRET || 'chave_super_secreta_papelaria_2024';
 const SALT_ROUNDS = 12;
 
 // Níveis de permissão hierárquicos
@@ -50,8 +50,8 @@ function gerarToken(usuario) {
         
         return jwt.sign(payload, JWT_SECRET, { 
             expiresIn: '24h',
-            issuer: 'loja-tenis-api',
-            audience: 'loja-tenis-frontend'
+            issuer: 'papelaria-api',
+            audience: 'papelaria-frontend'
         });
     } catch (erro) {
         console.error('❌ Erro ao gerar token:', erro);
@@ -96,7 +96,12 @@ async function verificarAutenticacao(req, res, next) {
         
         next();
     } catch (erro) {
-        console.error('❌ Erro na verificação de autenticação:', erro);
+        // Log detalhado apenas para erros não relacionados a token
+        if (erro.name !== 'JsonWebTokenError' && erro.name !== 'TokenExpiredError') {
+            console.error('❌ Erro na verificação de autenticação:', erro);
+        } else {
+            console.warn(`❌ Token inválido: ${erro.message}`);
+        }
         
         if (erro.name === 'TokenExpiredError') {
             return res.status(401).json({

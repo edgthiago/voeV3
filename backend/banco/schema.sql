@@ -1,4 +1,4 @@
--- Schema completo para Loja de Tênis
+-- Schema completo para Papelaria
 -- Execute este script no seu MySQL
 
 USE projetofgt;
@@ -144,17 +144,17 @@ CREATE TABLE IF NOT EXISTS enderecos_usuario (
 
 -- Categorias
 INSERT IGNORE INTO categorias (id, nome, descricao) VALUES
-(1, 'Tênis Casual', 'Tênis para uso casual e dia a dia'),
-(2, 'Tênis Esportivo', 'Tênis para prática de esportes'),
+(1, 'Canetas', 'Tênis para uso casual e dia a dia'),
+(2, 'Cadernos', 'Tênis para prática de esportes'),
 (3, 'Tênis Running', 'Tênis específicos para corrida'),
 (4, 'Tênis Lifestyle', 'Tênis com foco em estilo e moda');
 
 -- Produtos de exemplo
 INSERT IGNORE INTO produtos (id, nome, descricao, preco, categoria_id, marca, cor, imagem_url, destaque) VALUES
-(1, 'Nike Air Max 270', 'Tênis Nike Air Max 270 com tecnologia de amortecimento', 499.99, 1, 'Nike', 'Preto', '/images/nike-air-max-270.jpg', TRUE),
+(1, 'Nike Air Max 270', 'Caderno Universitário 100 folhas 270 com tecnologia de amortecimento', 499.99, 1, 'Nike', 'Preto', '/images/nike-air-max-270.jpg', TRUE),
 (2, 'Adidas Ultraboost 22', 'Tênis de corrida com tecnologia Boost', 699.99, 3, 'Adidas', 'Branco', '/images/adidas-ultraboost.jpg', TRUE),
 (3, 'Vans Old Skool', 'Clássico tênis Vans Old Skool', 329.99, 4, 'Vans', 'Preto/Branco', '/images/vans-old-skool.jpg', FALSE),
-(4, 'Converse All Star', 'Tênis Converse All Star clássico', 199.99, 4, 'Converse', 'Vermelho', '/images/converse-all-star.jpg', FALSE);
+(4, 'Converse All Star', 'Lápis HB Kit 12 unidades clássico', 199.99, 4, 'Converse', 'Vermelho', '/images/converse-all-star.jpg', FALSE);
 
 -- Tamanhos para os produtos
 INSERT IGNORE INTO produto_tamanhos (produto_id, tamanho, estoque) VALUES

@@ -264,7 +264,7 @@ const GerenciarPedidos = () => {
                           <td>{new Date(pedido.data).toLocaleDateString('pt-BR')}</td>
                           <td>{pedido.itens} itens</td>
                           <td>
-                            <strong>R$ {pedido.total.toFixed(2)}</strong>
+                            <strong>R$ {Number(pedido.total || 0).toFixed(2)}</strong>
                           </td>
                           <td>
                             <Badge bg={statusInfo.variant}>{statusInfo.texto}</Badge>

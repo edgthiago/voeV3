@@ -24,7 +24,7 @@
         };
         
         // Fazer requisição de login
-        const response = await fetch('http://localhost:30011/api/auth/login', {
+        const response = await fetch('http://localhost:3001/api/auth/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -70,7 +70,7 @@ window.testeLogin = {
     // Função para fazer login manual
     async login(email, senha) {
         try {
-            const response = await fetch('http://localhost:30011/api/auth/login', {
+            const response = await fetch('http://localhost:3001/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, senha })
@@ -126,7 +126,7 @@ window.testeLogin = {
         }
         
         try {
-            const response = await fetch('http://localhost:30011/api/admin/usuarios', {
+            const response = await fetch('http://localhost:3001/api/admin/usuarios', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

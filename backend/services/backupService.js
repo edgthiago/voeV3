@@ -6,7 +6,7 @@
  */
 
 const cron = require('node-cron');
-const mysqldump = require('mysqldump');
+const mysql = require('mysql2/promise');
 const fs = require('fs');
 const path = require('path');
 const { exec } = require('child_process');
@@ -87,38 +87,57 @@ class BackupService {
                 throw new Error('Database credentials not configured in environment variables');
             }
 
-            const result = await mysqldump({
-                connection: {
-                    host: process.env.DB_HOST || 'localhost',
-                    user: process.env.DB_USER || 'root',
-                    password: process.env.DB_PASSWORD || '',
-                    database: process.env.DB_NAME || 'loja_tenis_fgt',
-                    port: process.env.DB_PORT || 3306
-                },
-                dumpToFile: backupPath,
-                compressFile: false // Desabilitar compressão por enquanto
-            });
+            // Fazer backup usando mysqldump do sistema
+            const dbConfig = {
+                host: process.env.DB_HOST || 'localhost',
+                user: process.env.DB_USER || 'root',
+                password: process.env.DB_PASSWORD || '',
+                database: process.env.DB_NAME || 'papelaria_fgt',
+                port: process.env.DB_PORT || 3306
+            };
 
-            // Verificar se o backup foi criado
-            if (fs.existsSync(backupPath)) {
-                const stats = fs.statSync(backupPath);
-                const sizeInMB = (stats.size / 1024 / 1024).toFixed(2);
+            // Comando mysqldump do sistema
+            const mysqldumpCmd = `mysqldump -h ${dbConfig.host} -P ${dbConfig.port} -u ${dbConfig.user} ${dbConfig.password ? `-p${dbConfig.password}` : ''} ${dbConfig.database}`;
+            
+            try {
+                // Executar mysqldump e salvar no arquivo
+                const { stdout } = await execAsync(mysqldumpCmd);
+                fs.writeFileSync(backupPath, stdout);
                 
-                loggers.database.info('Database backup completed successfully', {
-                    timestamp,
-                    backupPath,
-                    size: `${sizeInMB} MB`,
-                    tables: result.dump.schema?.length || 0
-                });
+                // Verificar se o backup foi criado
+                if (fs.existsSync(backupPath)) {
+                    const stats = fs.statSync(backupPath);
+                    const sizeInMB = (stats.size / 1024 / 1024).toFixed(2);
+                    
+                    // Contar tabelas no backup
+                    const content = fs.readFileSync(backupPath, 'utf8');
+                    const tableMatches = content.match(/CREATE TABLE/g) || [];
+                    const tableCount = tableMatches.length;
+                    
+                    loggers.database.info('Database backup completed successfully', {
+                        timestamp,
+                        backupPath,
+                        size: `${sizeInMB} MB`,
+                        tables: tableCount
+                    });
 
-                return {
-                    success: true,
-                    backupPath,
-                    size: sizeInMB,
-                    timestamp
-                };
-            } else {
-                throw new Error('Backup file was not created');
+                    return {
+                        success: true,
+                        backupPath,
+                        size: sizeInMB,
+                        timestamp,
+                        tables: tableCount
+                    };
+                } else {
+                    throw new Error('Backup file was not created');
+                }
+            } catch (cmdError) {
+                // Se mysqldump do sistema falhar, tentar backup via SQL queries
+                loggers.database.warn('System mysqldump failed, trying alternative method', {
+                    error: cmdError.message
+                });
+                
+                return await this.backupDatabaseAlternative(backupPath, dbConfig, timestamp);
             }
 
         } catch (error) {
@@ -159,19 +178,34 @@ class BackupService {
             // 1. Backup do banco de dados
             try {
                 const dbBackupPath = path.join(fullBackupDir, 'database.sql');
-                await mysqldump({
-                    connection: {
-                        host: process.env.DB_HOST || 'localhost',
-                        user: process.env.DB_USER || 'root',
-                        password: process.env.DB_PASSWORD || '',
-                        database: process.env.DB_NAME || 'loja_tenis_fgt',
-                        port: process.env.DB_PORT || 3306
-                    },
-                    dumpToFile: dbBackupPath,
-                    compressFile: true
-                });
+                
+                // Usar o mesmo método de backup da função backupDatabase
+                const dbConfig = {
+                    host: process.env.DB_HOST || 'localhost',
+                    user: process.env.DB_USER || 'root',
+                    password: process.env.DB_PASSWORD || '',
+                    database: process.env.DB_NAME || 'papelaria_fgt',
+                    port: process.env.DB_PORT || 3306
+                };
 
-                results.database = { success: true, path: dbBackupPath };
+                // Comando mysqldump do sistema
+                const mysqldumpCmd = `mysqldump -h ${dbConfig.host} -P ${dbConfig.port} -u ${dbConfig.user} ${dbConfig.password ? `-p${dbConfig.password}` : ''} ${dbConfig.database}`;
+                
+                try {
+                    // Executar mysqldump e salvar no arquivo
+                    const { stdout } = await execAsync(mysqldumpCmd);
+                    fs.writeFileSync(dbBackupPath, stdout);
+                    results.database = { success: true, path: dbBackupPath };
+                } catch (cmdError) {
+                    // Se mysqldump do sistema falhar, tentar backup via SQL queries
+                    loggers.database.warn('System mysqldump failed in full backup, trying alternative method', {
+                        error: cmdError.message
+                    });
+                    
+                    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+                    await this.backupDatabaseAlternative(dbBackupPath, dbConfig, timestamp);
+                    results.database = { success: true, path: dbBackupPath };
+                }
             } catch (error) {
                 results.database = { success: false, error: error.message };
             }
@@ -739,6 +773,105 @@ class BackupService {
         }
 
         return totalSize;
+    }
+
+    /**
+     * Método alternativo de backup usando conexão MySQL direta
+     * Usado quando mysqldump do sistema não está disponível
+     */
+    async backupDatabaseAlternative(backupPath, dbConfig, timestamp) {
+        try {
+            const connection = await mysql.createConnection(dbConfig);
+            
+            let sqlDump = `-- MySQL Database Backup\n-- Generated on: ${new Date().toISOString()}\n-- Database: ${dbConfig.database}\n\n`;
+            sqlDump += `SET FOREIGN_KEY_CHECKS=0;\n\n`;
+            
+            // Obter lista de tabelas
+            const [tables] = await connection.execute('SHOW TABLES');
+            const tableNames = tables.map(row => Object.values(row)[0]);
+            
+            for (const tableName of tableNames) {
+                try {
+                    // Obter estrutura da tabela
+                    const [createTable] = await connection.execute(`SHOW CREATE TABLE \`${tableName}\``);
+                    sqlDump += `-- Structure for table \`${tableName}\`\n`;
+                    sqlDump += `DROP TABLE IF EXISTS \`${tableName}\`;\n`;
+                    sqlDump += createTable[0]['Create Table'] + ';\n\n';
+                    
+                    // Obter dados da tabela
+                    const [rows] = await connection.execute(`SELECT * FROM \`${tableName}\``);
+                    
+                    if (rows.length > 0) {
+                        sqlDump += `-- Data for table \`${tableName}\`\n`;
+                        
+                        const columns = Object.keys(rows[0]);
+                        const columnNames = columns.map(col => `\`${col}\``).join(', ');
+                        
+                        for (const row of rows) {
+                            const values = columns.map(col => {
+                                const value = row[col];
+                                if (value === null) return 'NULL';
+                                if (typeof value === 'string') return `'${value.replace(/'/g, "''")}'`;
+                                if (value instanceof Date) return `'${value.toISOString().slice(0, 19).replace('T', ' ')}'`;
+                                return value;
+                            }).join(', ');
+                            
+                            sqlDump += `INSERT INTO \`${tableName}\` (${columnNames}) VALUES (${values});\n`;
+                        }
+                        sqlDump += '\n';
+                    }
+                } catch (tableError) {
+                    loggers.database.warn(`Failed to backup table ${tableName}`, {
+                        error: tableError.message
+                    });
+                }
+            }
+            
+            sqlDump += `SET FOREIGN_KEY_CHECKS=1;\n`;
+            
+            await connection.end();
+            
+            // Salvar backup
+            fs.writeFileSync(backupPath, sqlDump);
+            
+            if (fs.existsSync(backupPath)) {
+                const stats = fs.statSync(backupPath);
+                const sizeInMB = (stats.size / 1024 / 1024).toFixed(2);
+                
+                loggers.database.info('Alternative database backup completed successfully', {
+                    timestamp,
+                    backupPath,
+                    size: `${sizeInMB} MB`,
+                    tables: tableNames.length
+                });
+
+                return {
+                    success: true,
+                    backupPath,
+                    size: sizeInMB,
+                    timestamp,
+                    tables: tableNames.length
+                };
+            } else {
+                throw new Error('Alternative backup file was not created');
+            }
+            
+        } catch (error) {
+            loggers.database.error('Alternative database backup failed', {
+                error: error.message
+            });
+            throw error;
+        }
+    }
+
+    /**
+     * Instância única do serviço
+     */
+    static getInstance() {
+        if (!BackupService.instance) {
+            BackupService.instance = new BackupService();
+        }
+        return BackupService.instance;
     }
 }
 

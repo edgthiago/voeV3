@@ -1,7 +1,7 @@
 /**
  * @fileoverview Gerenciador de eventos do sistema
  * @description Coordena eventos e notificações automáticas
- * @author Sistema de Loja de Tênis
+ * @author Sistema de Papelaria
  * @version 1.0
  */
 

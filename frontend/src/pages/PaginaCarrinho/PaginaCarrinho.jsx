@@ -43,7 +43,7 @@ const PaginaCarrinho = () => {
     }
   };
   const formatarMoeda = (valor) => {
-    return `R$ ${Number(valor).toFixed(2).replace('.', ',')}`;
+    return `R$ ${Number(valor || 0).toFixed(2).replace('.', ',')}`;
   };
 
   return (
@@ -74,7 +74,7 @@ const PaginaCarrinho = () => {
                       <tr key={item.id} className="align-middle">                        <td className="text-center">
                           <Link to={`/produtos/${item.id}`}>
                             <img 
-                              src={item.imagem || item.image || '/tenis_produtos.png'} 
+                              src={item.imagem || item.image || '/img/papelaria_produtos.png'} 
                               alt={item.nome || item.name} 
                               className="cart-item-img" 
                               style={{ maxWidth: '80px', height: 'auto' }}

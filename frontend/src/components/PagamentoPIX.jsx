@@ -42,7 +42,7 @@ const PagamentoPIX = ({ pedidoId, valor, onPagamentoConfirmado, onCancelar }) =>
                 body: JSON.stringify({
                     pedido_id: pedidoId,
                     valor: valor,
-                    descricao: `Pedido #${pedidoId} - Loja de Tênis`
+                    descricao: `Pedido #${pedidoId} - Papelaria Digital`
                 })
             });
 

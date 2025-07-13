@@ -20,7 +20,7 @@ function App() {
         <FormProvider>
           <BrowserRouter>
             <MainLayout>
-              <LoginAutomaticoBanner />
+              {/* <LoginAutomaticoBanner /> */}
               <AppRoutes />
             </MainLayout>
           </BrowserRouter>

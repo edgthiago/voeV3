@@ -69,7 +69,7 @@ DB_HOST=localhost
 DB_PORT=3306
 DB_USER=root
 DB_PASSWORD=sua_senha_mysql
-DB_NAME=loja_tenis
+DB_NAME=papelaria
 
 # Configurações do Servidor
 PORT=5000

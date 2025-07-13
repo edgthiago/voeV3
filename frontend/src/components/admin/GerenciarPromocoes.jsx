@@ -154,7 +154,7 @@ const GerenciarPromocoes = ({ userPermissions }) => {
         setEditingPromocao(null);
     };
 
-    const promocoesFiltradas = promocoes.filter(promocao => {
+    const promocoesFiltradas = (promocoes || []).filter(promocao => {
         if (filtroStatus !== 'all' && promocao.ativo.toString() !== filtroStatus) return false;
         if (filtroTipo !== 'all' && promocao.tipo !== filtroTipo) return false;
         return true;
@@ -165,7 +165,7 @@ const GerenciarPromocoes = ({ userPermissions }) => {
             case 'desconto_percentual':
                 return `${valor}%`;
             case 'desconto_fixo':
-                return `R$ ${valor.toFixed(2)}`;
+                return `R$ ${Number(valor || 0).toFixed(2)}`;
             case 'frete_gratis':
                 return 'Frete Grátis';
             default:
@@ -402,7 +402,7 @@ const GerenciarPromocoes = ({ userPermissions }) => {
                                         onChange={(e) => setFormData({...formData, produto_id: e.target.value})}
                                     >
                                         <option value="">Todos os produtos</option>
-                                        {produtos.map(produto => (
+                                        {(produtos || []).map(produto => (
                                             <option key={produto.id} value={produto.id}>
                                                 {produto.nome}
                                             </option>

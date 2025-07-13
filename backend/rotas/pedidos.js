@@ -1,7 +1,7 @@
 /**
- * @fileoverview Rotas para gerenciamento de pedidos do sistema de loja de tênis
+ * @fileoverview Rotas para gerenciamento de pedidos do sistema de papelaria
  * @description Este módulo contém endpoints para consulta de pedidos realizados pelos usuários
- * @author Sistema de Loja de Tênis
+ * @author Sistema de Papelaria
  * @version 1.0
  * @since 2025-01-30
  */
@@ -47,8 +47,19 @@ router.get('/', verificarAutenticacao, async (req, res) => {
     
     logger.info('Iniciando busca de pedidos', { 
       usuarioId: req.usuario.id,
-      requestId: req.id 
+      requestId: req.id,
+      filtros: req.query
     }, req);
+
+    // Construir consulta SQL com filtros opcionais
+    let whereClause = 'WHERE usuario_id = ?';
+    let parametros = [req.usuario.id];
+    
+    // Filtro por status se fornecido
+    if (req.query.status) {
+      whereClause += ' AND status_pedido = ?';
+      parametros.push(req.query.status);
+    }
 
     // Consulta SQL para buscar pedidos do usuário ordenados por data
     // Limitado a 20 registros para otimizar performance
@@ -64,10 +75,10 @@ router.get('/', verificarAutenticacao, async (req, res) => {
         data_pedido,          -- Data e hora da criação
         itens_json            -- JSON com os produtos comprados
       FROM pedidos_simples 
-      WHERE usuario_id = ? 
+      ${whereClause}
       ORDER BY data_pedido DESC
       LIMIT 20
-    `, [req.usuario.id]);
+    `, parametros);
 
     // Processa os pedidos para deserializar o JSON dos itens
     // Cada pedido tem seus itens convertidos de JSON string para array

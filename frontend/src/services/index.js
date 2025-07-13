@@ -273,6 +273,19 @@ export const adminService = {
         throw error;
       }
     },
+
+    // Relatório de produtos (apenas colaborador+)
+    produtos: async () => {
+      try {
+        console.log('Solicitando relatório de produtos');
+        const response = await api.get('/admin/relatorios/produtos');
+        console.log('Resposta relatório de produtos:', response);
+        return response;
+      } catch (error) {
+        console.error('Erro ao obter relatório de produtos:', error);
+        throw error;
+      }
+    },
   },
   
   // Fazer backup dos dados (apenas diretor)
@@ -280,6 +293,30 @@ export const adminService = {
   
   // Obter informações do sistema (apenas diretor)
   obterInfoSistema: () => api.get('/admin/sistema/info'),
+};
+
+// Serviços relacionados a pedidos
+export const pedidosService = {
+  // Buscar todos os pedidos (apenas colaborador+)
+  buscarTodos: (filtros = {}) => api.get('/pedidos', filtros),
+  
+  // Buscar pedido por ID
+  buscarPorId: (id) => api.get(`/pedidos/${id}`),
+  
+  // Buscar pedidos pendentes (apenas colaborador+)
+  buscarPendentes: () => api.get('/pedidos', { status: 'pendente' }),
+  
+  // Atualizar status do pedido (apenas colaborador+)
+  atualizarStatus: (id, status) => api.patch(`/pedidos/${id}/status`, { status }),
+  
+  // Criar pedido (finalizarCompra transferido para cá)
+  criar: (dadosPedido) => api.post('/pedidos', dadosPedido),
+  
+  // Obter histórico do usuário
+  obterHistorico: () => api.get('/pedidos/historico'),
+  
+  // Admin: Obter estatísticas de pedidos (apenas supervisor+)
+  obterEstatisticas: () => api.get('/admin/pedidos/estatisticas'),
 };
 
 // Serviços gerais da API

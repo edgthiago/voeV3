@@ -467,4 +467,114 @@ router.get('/relatorios/vendas', verificarAutenticacao, verificarPermissao('supe
   }
 });
 
+// GET /api/admin/relatorios/produtos - Relatório de produtos (apenas colaborador+)
+router.get('/relatorios/produtos', verificarAutenticacao, verificarPermissao('colaborador'), async (req, res) => {
+  try {
+    console.log('📊 Gerando relatório de produtos...');
+    
+    // Produtos com estatísticas de vendas
+    const produtosComEstatisticas = await conexao.executarConsulta(`
+      SELECT 
+        p.id,
+        p.nome,
+        p.categoria,
+        p.marca,
+        p.preco_atual as preco,
+        p.quantidade_estoque as estoque,
+        COALESCE(10, 10) as estoque_minimo,
+        p.disponivel as ativo,
+        p.criado_em as data_cadastro,
+        COALESCE(vendas.total_vendido, 0) as vendas_total,
+        COALESCE(vendas.vendas_mes, 0) as vendas_mes,
+        COALESCE(vendas.ultima_venda, NULL) as ultima_venda,
+        CASE 
+          WHEN p.preco_atual > 0 THEN ROUND(((p.preco_atual - (p.preco_atual * 0.6)) / p.preco_atual) * 100, 1)
+          ELSE 0 
+        END as margem_lucro
+      FROM produtos p
+      LEFT JOIN (
+        SELECT 
+          ip.produto_id,
+          SUM(ip.quantidade) as total_vendido,
+          SUM(CASE WHEN ped.data_pedido >= DATE_SUB(NOW(), INTERVAL 30 DAY) THEN ip.quantidade ELSE 0 END) as vendas_mes,
+          MAX(ped.data_pedido) as ultima_venda
+        FROM itens_pedido ip
+        LEFT JOIN pedidos ped ON ip.pedido_id = ped.id
+        WHERE ped.status_pedido != 'cancelado'
+        GROUP BY ip.produto_id
+      ) vendas ON p.id = vendas.produto_id
+      ORDER BY p.nome
+    `);
+
+    // Estatísticas gerais
+    const estatisticasGerais = await conexao.executarConsulta(`
+      SELECT 
+        COUNT(*) as total_produtos,
+        COUNT(CASE WHEN disponivel = 1 THEN 1 END) as produtos_ativos,
+        COUNT(CASE WHEN quantidade_estoque = 0 THEN 1 END) as produtos_sem_estoque,
+        COUNT(CASE WHEN quantidade_estoque <= 10 THEN 1 END) as produtos_estoque_baixo,
+        COUNT(DISTINCT categoria) as total_categorias,
+        COALESCE(SUM(preco_atual * quantidade_estoque), 0) as valor_total_estoque
+      FROM produtos
+    `);
+
+    // Produtos mais vendidos (últimos 30 dias)
+    const produtosMaisVendidos = await conexao.executarConsulta(`
+      SELECT 
+        p.id,
+        p.nome,
+        p.categoria,
+        p.preco_atual as preco,
+        SUM(ip.quantidade) as total_vendido
+      FROM produtos p
+      LEFT JOIN itens_pedido ip ON p.id = ip.produto_id
+      LEFT JOIN pedidos ped ON ip.pedido_id = ped.id
+      WHERE ped.data_pedido >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+        AND ped.status_pedido != 'cancelado'
+      GROUP BY p.id, p.nome, p.categoria, p.preco_atual
+      ORDER BY total_vendido DESC
+      LIMIT 10
+    `);
+
+    // Produtos com estoque baixo
+    const produtosEstoqueBaixo = await conexao.executarConsulta(`
+      SELECT 
+        id,
+        nome,
+        categoria,
+        quantidade_estoque as estoque,
+        10 as estoque_minimo,
+        preco_atual as preco
+      FROM produtos
+      WHERE quantidade_estoque <= 10 AND quantidade_estoque > 0
+      ORDER BY quantidade_estoque ASC
+    `);
+
+    console.log(`✅ Relatório de produtos gerado: ${produtosComEstatisticas.length} produtos analisados`);
+
+    res.json({
+      sucesso: true,
+      dados: {
+        produtos: produtosComEstatisticas || [],
+        estatisticas: estatisticasGerais[0] || {
+          total_produtos: 0,
+          produtos_ativos: 0,
+          produtos_sem_estoque: 0,
+          produtos_estoque_baixo: 0,
+          total_categorias: 0,
+          valor_total_estoque: 0
+        },
+        mais_vendidos: produtosMaisVendidos || [],
+        estoque_baixo: produtosEstoqueBaixo || []
+      }
+    });
+  } catch (erro) {
+    console.error('❌ Erro ao gerar relatório de produtos:', erro);
+    res.status(500).json({
+      sucesso: false,
+      mensagem: 'Erro interno do servidor ao gerar relatório: ' + erro.message
+    });
+  }
+});
+
 module.exports = router;

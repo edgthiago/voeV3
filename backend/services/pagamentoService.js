@@ -1,7 +1,7 @@
 /**
  * @fileoverview Serviço de pagamento integrado com Mercado Pago
  * @description Gerencia pagamentos PIX, cartão e boleto
- * @author Sistema de Loja de Tênis
+ * @author Sistema de Papelaria
  * @version 1.0
  */
 

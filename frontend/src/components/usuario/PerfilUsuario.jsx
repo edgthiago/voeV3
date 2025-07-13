@@ -306,7 +306,7 @@ const PerfilUsuario = () => {
                               {getStatusBadge(pedido.status)}
                             </td>
                             <td>
-                              <strong>R$ {pedido.valor_total.toFixed(2)}</strong>
+                              <strong>R$ {(pedido.valor_total || 0).toFixed(2)}</strong>
                             </td>
                             <td>
                               <button

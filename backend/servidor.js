@@ -19,7 +19,16 @@ app.use(cors({
   origin: true,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+  allowedHeaders: [
+    'Content-Type', 
+    'Authorization', 
+    'X-Requested-With', 
+    'Accept', 
+    'Origin',
+    'Cache-Control',
+    'Pragma',
+    'Expires'
+  ],
   optionsSuccessStatus: 200
 }));
 
@@ -69,7 +78,7 @@ app.use((req, res, next) => {
     try {
       const conexao = require('./banco/conexao');
       await conexao.executarConsulta(
-        'INSERT INTO logs_sistema (usuario_id, acao, detalhes, ip_address, user_agent) VALUES (?, ?, ?, ?, ?)',
+        'INSERT INTO logs_sistema (usuario_id, acao, dados_novos, ip_usuario, navegador) VALUES (?, ?, ?, ?, ?)',
         [
           req.usuario?.id || null,
           acao,
@@ -129,6 +138,15 @@ console.log('✅ Rota /api/promocoes carregada');
 
 app.use('/api/comentarios', require('./rotas/comentarios'));
 console.log('✅ Rota /api/comentarios carregada');
+
+// Rota de upload de imagens
+app.use('/api/upload', require('./rotas/upload'));
+app.use('/api', require('./rotas/upload')); // Para endpoints /api/produtos/:id/imagens
+console.log('✅ Rota /api/upload carregada');
+
+// Servir arquivos de upload
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+console.log('✅ Pasta /uploads configurada');
 
 // Carregar rotas de monitoramento
 try {
@@ -879,9 +897,9 @@ app.get('/api/info', (req, res) => {
   res.json({
     sucesso: true,
     dados: {
-      nome: 'API Loja de Tênis FGT',
+      nome: 'API Papelaria FGT',
       versao: '1.0.0',
-      descricao: 'Backend completo para loja de tênis com sistema de autenticação',
+      descricao: 'Backend completo para papelaria com sistema de autenticação',
       endpoints: {
         produtos: '/api/produtos',
         autenticacao: '/api/auth',
@@ -938,17 +956,24 @@ const verificarPorta = (porta) => {
 const iniciarServidor = async () => {
   try {
     // Verificar se a porta está disponível
-    const PORT = process.env.PORT || 3001;
+    let PORT = parseInt(process.env.PORT) || 3001;
+    
+    // Garantir que a porta seja um número válido
+    if (isNaN(PORT) || PORT < 1 || PORT > 65535) {
+      console.warn(`⚠️ Porta inválida: ${process.env.PORT}, usando 3001`);
+      PORT = 3001;
+    }
+    
     const portaDisponivel = await verificarPorta(PORT);
     
     if (!portaDisponivel) {
       console.log(`⚠️ Porta ${PORT} já está em uso. Tentando encontrar uma porta disponível...`);
       
-      // Tentar portas alternativas
-      for (let novaPorta = PORT + 1; novaPorta <= PORT + 10; novaPorta++) {
+      // Tentar portas alternativas (3002, 3003, etc.)
+      for (let novaPorta = 3002; novaPorta <= 3010; novaPorta++) {
         const disponivel = await verificarPorta(novaPorta);
         if (disponivel) {
-          process.env.PORT = novaPorta;
+          PORT = novaPorta;
           console.log(`✅ Porta ${novaPorta} está disponível, usando esta porta.`);
           break;
         }
@@ -973,16 +998,16 @@ const iniciarServidor = async () => {
     }
 
     // Iniciar servidor
-    const servidor = app.listen(process.env.PORT, () => {
+    const servidor = app.listen(PORT, () => {
       console.log(`\n🚀 ===== BACKEND REAL COMPLETO FUNCIONANDO =====`);
-      console.log(`📍 Porta: ${process.env.PORT}`);
+      console.log(`📍 Porta: ${PORT}`);
       console.log(`🌍 Ambiente: ${process.env.NODE_ENV || 'development'}`);
-      console.log(`🎯 URL: http://localhost:${process.env.PORT}`);
-      console.log(`📋 API: http://localhost:${process.env.PORT}/api`);
-      console.log(`🔍 Health: http://localhost:${process.env.PORT}/api/health`);
-      console.log(`📋 Info: http://localhost:${process.env.PORT}/api/info`);
-      console.log(`🔑 Login: POST http://localhost:${process.env.PORT}/api/auth/login`);
-      console.log(`📦 Produtos: GET http://localhost:${process.env.PORT}/api/produtos`);
+      console.log(`🎯 URL: http://localhost:${PORT}`);
+      console.log(`📋 API: http://localhost:${PORT}/api`);
+      console.log(`🔍 Health: http://localhost:${PORT}/api/health`);
+      console.log(`📋 Info: http://localhost:${PORT}/api/info`);
+      console.log(`🔑 Login: POST http://localhost:${PORT}/api/auth/login`);
+      console.log(`📦 Produtos: GET http://localhost:${PORT}/api/produtos`);
       console.log(`🛒 Carrinho: /api/carrinho`);
       console.log(`📦 Pedidos: /api/pedidos`);
       console.log(`🎁 Promoções: /api/promocoes`);

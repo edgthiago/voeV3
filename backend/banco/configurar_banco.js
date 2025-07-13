@@ -4,7 +4,7 @@ const path = require('path');
 require('dotenv').config();
 
 /**
- * Script para configurar o banco de dados MySQL da loja de tênis
+ * Script para configurar o banco de dados MySQL da papelaria
  * Suporta diferentes tipos de instalação MySQL
  */
 
@@ -75,7 +75,7 @@ class ConfiguradorBanco {
 
     async criarBancoDeDados(config) {
         try {
-            console.log('\n📊 Criando banco de dados "loja_tenis"...');
+            console.log('\n📊 Criando banco de dados "papelaria"...');
             const conexao = await mysql.createConnection({
                 host: config.host,
                 port: config.port,
@@ -86,7 +86,7 @@ class ConfiguradorBanco {
 
             // Criar banco se não existir
             await conexao.execute(`
-                CREATE DATABASE IF NOT EXISTS loja_tenis 
+                CREATE DATABASE IF NOT EXISTS papelaria 
                 CHARACTER SET utf8mb4 
                 COLLATE utf8mb4_unicode_ci
             `);
@@ -111,7 +111,7 @@ class ConfiguradorBanco {
                 port: config.port,
                 user: config.user,
                 password: config.password,
-                database: 'loja_tenis',
+                database: 'papelaria',
                 charset: config.charset,
                 multipleStatements: true
             });
@@ -177,7 +177,7 @@ class ConfiguradorBanco {
     }
 
     async configurar() {
-        console.log('🚀 CONFIGURADOR DO BANCO DE DADOS - LOJA DE TÊNIS\n');
+        console.log('🚀 CONFIGURADOR DO BANCO DE DADOS - PAPELARIA\n');
         console.log('Este script irá configurar automaticamente o banco MySQL.\n');
 
         // 1. Encontrar configuração válida

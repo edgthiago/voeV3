@@ -1,7 +1,7 @@
 /**
  * @fileoverview Serviço de cálculo de frete e rastreamento
  * @description Integração com API dos Correios para frete e rastreamento
- * @author Sistema de Loja de Tênis
+ * @author Sistema de Papelaria
  * @version 1.0
  */
 

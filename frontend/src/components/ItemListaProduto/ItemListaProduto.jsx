@@ -102,10 +102,10 @@ const ItemListaProduto = ({ produto }) => {
               )}              
               <Link to={`/produto/${id}`}>
                 <img 
-                  src={imagem || '/tenis_produtos.png'}
+                  src={imagem || '/img/papelaria_produtos.png'}
                   alt={nome}
                   className="item-lista-produto__imagem img-fluid rounded"
-                  onError={e => { e.target.src = '/tenis_produtos.png'; }}
+                  onError={e => { e.target.src = '/img/papelaria_produtos.png'; }}
                 />
                 <div className="item-lista-produto__imagem-overlay"></div>
               </Link>

@@ -20,24 +20,21 @@ class CacheService {
 
     async init() {
         try {
+            // Verificar se Redis deve ser usado
+            const useRedis = process.env.USE_REDIS === 'true' || false;
+            
+            if (!useRedis) {
+                console.log('🔥 MemoryCache: Usando cache em memória (Redis desabilitado)');
+                this.useMemoryFallback = true;
+                return;
+            }
+
             // Configuração do cliente Redis
             this.client = redis.createClient({
                 host: process.env.REDIS_HOST || 'localhost',
                 port: process.env.REDIS_PORT || 6379,
                 password: process.env.REDIS_PASSWORD || undefined,
-                retry_strategy: (options) => {
-                    if (options.error && options.error.code === 'ECONNREFUSED') {
-                        console.warn('⚠️ Redis não disponível, usando Memory Cache como fallback');
-                        this.useMemoryFallback = true;
-                        return false; // Não tentar reconectar
-                    }
-                    if (options.total_retry_time > 1000 * 10) { // 10 segundos
-                        console.warn('⚠️ Redis timeout, usando Memory Cache como fallback');
-                        this.useMemoryFallback = true;
-                        return false;
-                    }
-                    return Math.min(options.attempt * 100, 3000);
-                }
+                retry_strategy: () => false // Não tentar reconectar automaticamente
             });
 
             // Event listeners
@@ -48,34 +45,45 @@ class CacheService {
             });
 
             this.client.on('error', (err) => {
-                console.warn('⚠️ Redis Error, usando Memory Cache:', err.message);
+                // Log silencioso apenas uma vez
+                if (!this.useMemoryFallback) {
+                    console.warn('⚠️ Redis Error, usando Memory Cache como fallback');
+                    this.useMemoryFallback = true;
+                }
                 this.isConnected = false;
-                this.useMemoryFallback = true;
             });
 
             this.client.on('end', () => {
-                console.log('🔚 Redis: Conexão encerrada, usando Memory Cache');
+                if (!this.useMemoryFallback) {
+                    console.log('🔚 Redis: Conexão encerrada, usando Memory Cache');
+                }
                 this.isConnected = false;
                 this.useMemoryFallback = true;
             });
 
-            // Tentar conectar com timeout
+            // Tentar conectar com timeout curto
             const connectTimeout = setTimeout(() => {
-                console.warn('⚠️ Redis timeout, usando Memory Cache como fallback');
+                if (!this.useMemoryFallback) {
+                    console.warn('⚠️ Redis timeout, usando Memory Cache como fallback');
+                }
                 this.useMemoryFallback = true;
-            }, 3000);
+            }, 1000); // Timeout reduzido para 1 segundo
 
             try {
                 await this.client.connect();
                 clearTimeout(connectTimeout);
             } catch (error) {
                 clearTimeout(connectTimeout);
-                console.warn('⚠️ Redis não disponível, usando Memory Cache como fallback');
+                if (!this.useMemoryFallback) {
+                    console.warn('⚠️ Redis não disponível, usando Memory Cache como fallback');
+                }
                 this.useMemoryFallback = true;
             }
             
         } catch (error) {
-            console.warn('⚠️ Erro ao inicializar Redis, usando Memory Cache:', error.message);
+            if (!this.useMemoryFallback) {
+                console.warn('⚠️ Erro ao inicializar Redis, usando Memory Cache:', error.message);
+            }
             this.isConnected = false;
             this.useMemoryFallback = true;
         }

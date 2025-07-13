@@ -1,5 +1,5 @@
 import styles from './FormResumo.module.css'
-import Sneakers from "../../assets/finalizarCompra/Sneakers.svg"
+// import Sneakers from "../../assets/finalizarCompra/Sneakers.svg" // Removido para papelaria
 import {useNavigate} from 'react-router-dom'
 
 const FormSucessoResumo = () => {
@@ -16,10 +16,10 @@ const FormSucessoResumo = () => {
           <hr />
           <div className="d-flex flex-column flex-md-row align-items-center gap-3">
             <div className={styles.imgResumo}>
-              <img src={Sneakers} alt="img de tenis" />
+              <img src="/papelaria_produtos.png" alt="produtos de papelaria" />
             </div>
             <div>
-              <p>Tênis Nike Revolution 6 Next Nature Masculino</p>
+              <p>Kit Escolar Completo Premium</p>
             </div>
           </div>
 

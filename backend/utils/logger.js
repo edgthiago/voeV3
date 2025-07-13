@@ -1,7 +1,7 @@
 /**
  * @fileoverview Sistema de logs avançado para monitoramento de pedidos
  * @description Utilitário para logging estruturado com níveis e contexto
- * @author Sistema de Loja de Tênis
+ * @author Sistema de Papelaria
  * @version 1.0
  * @since 2025-01-30
  */

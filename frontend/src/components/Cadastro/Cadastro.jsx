@@ -26,7 +26,7 @@ export default function Cadastro() {
 
     console.log('Enviando dados para cadastro:', { nome, email });
     try {
-      const resposta = await fetch('http://localhost:30011/api/auth/registrar', {
+      const resposta = await fetch('http://localhost:3001/api/auth/registrar', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

@@ -100,19 +100,19 @@ CREATE TABLE IF NOT EXISTS eventos_log (
 
 -- Inserir templates padrão
 INSERT IGNORE INTO notificacoes_templates (nome, tipo, assunto, conteudo) VALUES 
-('pedido_criado_email', 'email', 'Pedido Confirmado - Loja de Tênis', 
+('pedido_criado_email', 'email', 'Pedido Confirmado - Papelaria', 
 '<h2>Pedido Confirmado!</h2><p>Seu pedido #{pedido_id} foi confirmado com sucesso!</p>'),
 
 ('pedido_criado_sms', 'sms', NULL, 
-'Loja de Tênis: Pedido #{pedido_id} confirmado! Valor: R$ {valor_total}'),
+'Papelaria: Pedido #{pedido_id} confirmado! Valor: R$ {valor_total}'),
 
-('pagamento_aprovado_email', 'email', 'Pagamento Aprovado - Loja de Tênis',
+('pagamento_aprovado_email', 'email', 'Pagamento Aprovado - Papelaria',
 '<h2>Pagamento Aprovado!</h2><p>O pagamento do pedido #{pedido_id} foi aprovado!</p>'),
 
-('pedido_enviado_email', 'email', 'Pedido Enviado - Loja de Tênis',
+('pedido_enviado_email', 'email', 'Pedido Enviado - Papelaria',
 '<h2>Pedido Enviado!</h2><p>Seu pedido #{pedido_id} foi enviado! Código: {codigo_rastreamento}</p>'),
 
-('pedido_entregue_email', 'email', 'Pedido Entregue - Loja de Tênis',
+('pedido_entregue_email', 'email', 'Pedido Entregue - Papelaria',
 '<h2>Pedido Entregue!</h2><p>Seu pedido #{pedido_id} foi entregue com sucesso!</p>');
 
 -- View para estatísticas de notificações

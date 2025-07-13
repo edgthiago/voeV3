@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useAuth } from '../../context/AuthContext';
 
 const ComentariosProduto = ({ produtoId }) => {
@@ -8,23 +8,56 @@ const ComentariosProduto = ({ produtoId }) => {
   const [avaliacao, setAvaliacao] = useState(5);
   const [loading, setLoading] = useState(false);
   const [podeAvaliar, setPodeAvaliar] = useState(false);
+  const [lastFetch, setLastFetch] = useState(null);
 
-  useEffect(() => {
-    carregarComentarios();
-    verificarPermissaoAvaliar();
-  }, [produtoId, usuario]);
+  // Cache simples para evitar requisições duplicadas
+  const shouldFetch = useMemo(() => {
+    const now = Date.now();
+    const CACHE_TIME = 30000; // 30 segundos
+    return !lastFetch || (now - lastFetch) > CACHE_TIME;
+  }, [lastFetch]);
 
-  const carregarComentarios = async () => {
+  // Debounce para carregamento de comentários
+  const carregarComentarios = useCallback(async () => {
+    if (!shouldFetch) {
+      console.log('📦 Usando cache de comentários');
+      return;
+    }
+
     try {
+      console.log('🔄 Carregando comentários do servidor...');
       const response = await fetch(`/api/produtos/${produtoId}/comentarios`);
       if (response.ok) {
         const data = await response.json();
-        setComentarios(data);
+        console.log('Dados de comentários recebidos:', data);
+        
+        // Verificar se a resposta tem a estrutura esperada
+        if (data && data.sucesso && Array.isArray(data.dados)) {
+          setComentarios(data.dados);
+        } else if (Array.isArray(data)) {
+          // Caso retorne diretamente um array
+          setComentarios(data);
+        } else {
+          console.warn('Formato de resposta inesperado para comentários:', data);
+          setComentarios([]);
+        }
+        setLastFetch(Date.now());
+      } else {
+        console.error('Erro na resposta da API:', response.status);
+        setComentarios([]);
       }
     } catch (error) {
       console.error('Erro ao carregar comentários:', error);
+      setComentarios([]);
     }
-  };
+  }, [produtoId, shouldFetch]);
+
+  useEffect(() => {
+    if (produtoId) {
+      carregarComentarios();
+      verificarPermissaoAvaliar();
+    }
+  }, [produtoId, carregarComentarios, usuario]);
 
   const verificarPermissaoAvaliar = async () => {
     if (!usuario || !hasPermission('COMENTAR_PRODUTO')) {
@@ -33,7 +66,7 @@ const ComentariosProduto = ({ produtoId }) => {
     }
 
     try {
-      const response = await fetch(`/api/usuarios/${usuario.id}/pode-avaliar/${produtoId}`, {
+      const response = await fetch(`/api/comentarios/usuarios/${usuario.id}/pode-avaliar/${produtoId}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -42,6 +75,9 @@ const ComentariosProduto = ({ produtoId }) => {
       if (response.ok) {
         const { podeAvaliar } = await response.json();
         setPodeAvaliar(podeAvaliar);
+      } else {
+        console.warn('Erro ao verificar permissão:', response.status);
+        setPodeAvaliar(false);
       }
     } catch (error) {
       console.error('Erro ao verificar permissão:', error);
@@ -74,7 +110,14 @@ const ComentariosProduto = ({ produtoId }) => {
 
       if (response.ok) {
         const novoComentarioData = await response.json();
-        setComentarios(prev => [novoComentarioData, ...prev]);
+        console.log('Novo comentário criado:', novoComentarioData);
+        
+        // Garantir que comentarios seja um array antes de atualizar
+        setComentarios(prev => {
+          const prevArray = Array.isArray(prev) ? prev : [];
+          return [novoComentarioData, ...prevArray];
+        });
+        
         setNovoComentario('');
         setAvaliacao(5);
         alert('Comentário enviado com sucesso!');
@@ -188,7 +231,7 @@ const ComentariosProduto = ({ produtoId }) => {
 
       {/* Lista de comentários */}
       <div className="mt-4">
-        {comentarios.length === 0 ? (
+        {!Array.isArray(comentarios) || comentarios.length === 0 ? (
           <div className="text-center py-4">
             <i className="bi bi-chat display-1 text-muted"></i>
             <p className="text-muted mt-3">Ainda não há avaliações para este produto.</p>
@@ -203,9 +246,9 @@ const ComentariosProduto = ({ produtoId }) => {
                   <div className="card-body">
                     <div className="d-flex justify-content-between align-items-start mb-2">
                       <div>
-                        <h6 className="mb-1">{comentario.usuario_nome}</h6>
+                        <h6 className="mb-1">{comentario.usuario_nome || 'Usuário'}</h6>
                         <div className="d-flex align-items-center">
-                          {renderEstrelas(comentario.avaliacao)}
+                          {renderEstrelas(comentario.avaliacao || 0)}
                           <small className="text-muted ms-2">
                             {formatarData(comentario.data_criacao)}
                           </small>
@@ -218,7 +261,7 @@ const ComentariosProduto = ({ produtoId }) => {
                         </span>
                       )}
                     </div>
-                    <p className="mb-0">{comentario.comentario}</p>
+                    <p className="mb-0">{comentario.comentario || ''}</p>
                   </div>
                 </div>
               ))}
